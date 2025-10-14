@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:giao_tiep_sv_user/Screen_member_group/view/Add_member.dart';
-import 'package:giao_tiep_sv_user/Screen_member_group/widget/customMember.dart';
+import 'Home_screen/home.dart'; // import trang Home bạn tạo
 
 void main() {
   runApp(const MyApp());
@@ -9,15 +8,15 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false, // ẩn banner debug
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home:AddMemberScreen(),
+      home: const Home(), // Trang mặc định
     );
   }
 }
