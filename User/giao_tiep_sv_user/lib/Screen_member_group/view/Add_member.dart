@@ -57,7 +57,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
           CustommemberWidget(
             id: 1,
             url: "assets/images/avatar.png",
-            fullname: "LE Dai Hiep",
+            fullname: "Le Dai Hiep",
           ),
         ],
       ),)
