@@ -1,4 +1,4 @@
-import '../Home_screen/Home/TrangChu.dart';
+import 'Home/Home_screen/TrangChu.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
