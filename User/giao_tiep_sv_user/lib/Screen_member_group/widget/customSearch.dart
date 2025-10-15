@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 class Customsearch extends StatelessWidget {
-  final ValueChanged<String>? onChanged;
-  Customsearch({super.key, this.onChanged});
+  final ValueChanged<String>? onTap;
 
-  TextEditingController controller_search = TextEditingController();
+  Customsearch({super.key, this.onTap});
+
+    TextEditingController controller_search = TextEditingController();
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +20,11 @@ class Customsearch extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
           border: Border.all(color: Colors.black),
         ),
-        child: TextField(
+        child: Row(
+          children: [
+            Expanded(child: TextField(
           controller: controller_search,
-          onChanged: (value) => onChanged?.call(value),
+          // onChanged: (value) => onChanged?.call(value),
           decoration: InputDecoration(
             hint: Text(
               "Tìm kiếm user",
@@ -31,9 +36,16 @@ class Customsearch extends StatelessWidget {
 
             border: InputBorder.none,
 
-            suffixIcon: Icon(Icons.search), //icon ben phai
+            // suffixIcon: Icon(Icons.search), //icon ben phai
           ),
         ),
+        ),
+        IconButton(onPressed: () {
+          onTap?.call(controller_search.text);
+          print(controller_search.text);
+        }, icon: Icon(Icons.search))
+          ],
+        )
       ),
     );
   }

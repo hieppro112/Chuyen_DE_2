@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustommemberWidget extends StatefulWidget {
-  final int id;
+  final String id;
   final String url;
   final String fullname;
   final ValueChanged<bool?>? ontap;
