@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../left_panel.dart';
+import 'tao_nhom_page.dart';
 
 class ThamGiaNhomPage extends StatefulWidget {
   const ThamGiaNhomPage({super.key});
@@ -8,6 +10,8 @@ class ThamGiaNhomPage extends StatefulWidget {
 }
 
 class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
+  bool _isOpen = false; // trạng thái menu trái
+
   final List<Map<String, dynamic>> groups = [
     {
       "name": "Mạng máy tính Khóa 23",
@@ -19,113 +23,173 @@ class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
     },
   ];
 
+  void toggleMenu() {
+    setState(() {
+      _isOpen = !_isOpen;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0.5,
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: Colors.black),
-          onPressed: () {},
-        ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Text(
-              "Tham Gia Nhóm",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(width: 8),
-            Icon(Icons.group, color: Colors.black),
-          ],
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add, color: Colors.black),
-            onPressed: () {
-              // TODO: xử lý khi bấm thêm nhóm
-            },
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: ListView.builder(
-          itemCount: groups.length,
-          itemBuilder: (context, index) {
-            final group = groups[index];
-            return Container(
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey.shade300),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Row(
-                  children: [
-                    // Ảnh nhóm
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        group["image"],
-                        width: 60,
-                        height: 60,
-                        fit: BoxFit.contain,
+      body: Stack(
+        children: [
+          // 🔹 Nội dung chính
+          SafeArea(
+            child: Column(
+              children: [
+                AppBar(
+                  backgroundColor: Colors.white,
+                  elevation: 0.5,
+                  leading: IconButton(
+                    icon: const Icon(Icons.menu, color: Colors.black),
+                    onPressed: toggleMenu, // mở/đóng menu trái
+                  ),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Tham Gia Nhóm",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 16),
+                      const SizedBox(width: 8),
 
-                    // Tên nhóm và nút tham gia
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            group["name"],
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          ElevatedButton.icon(
-                            onPressed: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Đã gửi yêu cầu tham gia "${group["name"]}"',
-                                  ),
-                                  duration: const Duration(seconds: 2),
-                                ),
-                              );
-                            },
-                            icon: const Icon(Icons.handshake),
-                            label: const Text("Tham Gia"),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blueAccent,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
+                      // 🔹 Nút "Group"
+                      IconButton(
+                        icon: const Icon(Icons.group, color: Colors.black),
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "Mở danh sách nhóm của bạn 🧑‍🤝‍🧑",
                               ),
+                              duration: Duration(seconds: 2),
                             ),
-                          ),
-                        ],
+                          );
+                        },
                       ),
+                    ],
+                  ),
+                  centerTitle: true,
+                  actions: [
+                    IconButton(
+                      icon: const Icon(Icons.add, color: Colors.black),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const TaoNhomPage(),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: ListView.builder(
+                      itemCount: groups.length,
+                      itemBuilder: (context, index) {
+                        final group = groups[index];
+                        return Container(
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.grey.shade300),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Row(
+                              children: [
+                                // Ảnh nhóm
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.network(
+                                    group["image"],
+                                    width: 60,
+                                    height: 60,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+
+                                // Tên nhóm và nút tham gia
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        group["name"],
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      ElevatedButton.icon(
+                                        onPressed: () {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'Đã gửi yêu cầu tham gia "${group["name"]}"',
+                                              ),
+                                              duration: const Duration(
+                                                seconds: 2,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        icon: const Icon(Icons.handshake),
+                                        label: const Text("Tham Gia"),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.blueAccent,
+                                          foregroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              30,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // 🔹 LeftPanel (menu trái)
+          if (_isOpen)
+            GestureDetector(
+              onTap: toggleMenu, // bấm ra ngoài để đóng
+              child: Container(
+                color: Colors.black.withOpacity(0.3),
+                child: Row(
+                  children: [
+                    LeftPanel(onClose: toggleMenu),
+                    Expanded(child: Container()), // bắt tap ngoài panel
+                  ],
+                ),
               ),
-            );
-          },
-        ),
+            ),
+        ],
       ),
     );
   }
