@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="giao_tiep_sv_user"
+        android:label="Giao Tiếp SV"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
