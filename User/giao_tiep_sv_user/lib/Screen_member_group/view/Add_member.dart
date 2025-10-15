@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:giao_tiep_sv_user/Data/Users.dart';
 import 'package:giao_tiep_sv_user/Screen_member_group/widget/customMember.dart';
 import 'package:giao_tiep_sv_user/Screen_member_group/widget/customSearch.dart';
 
@@ -10,28 +11,35 @@ class AddMemberScreen extends StatefulWidget {
 }
 
 class _AddMemberScreenState extends State<AddMemberScreen> {
-  List<CustommemberWidget> Listsearch = [];
-  List<CustommemberWidget> ListMember = [
-    CustommemberWidget(
-      id: 1,
-      url: "assets/images/avatar.png",
-      fullname: "Le Dai Hiep",
-    ),
-    CustommemberWidget(
-      id: 2,
-      url: "assets/images/avatar.png",
-      fullname: "Le Dinh Thuan",
-    ),
-    CustommemberWidget(
-      id: 3,
-      url: "assets/images/avatar.png",
-      fullname: "Cao Quang Khanh",
-    ),
-    CustommemberWidget(
-      id: 4,
-      url: "assets/images/avatar.png",
-      fullname: "Pham Thang",
-    ),
+  List<Users> Listsearch = [];
+  List<Users> ListMember = [
+
+    Users(id_user: "23211TT3598@mail.tdc.edu.vn", email: "23211TT3598@mail.tdc.edu.vn", pass: "123456", fullname: "Lê Đại Hiệp", phone: "0898415185", url_avt: "assets/images/avatar.png", role: 0, faculty_id: 1),
+    Users(id_user: "23211TT3599@mail.tdc.edu.vn", email: "23211TT3599@mail.tdc.edu.vn", pass: "123456", fullname: "Lê Đình Thuận", phone: "0898415185", url_avt: "assets/images/avatar.png", role: 0, faculty_id: 1),
+    Users(id_user: "23211TT3597@mail.tdc.edu.vn", email: "23211TT3597@mail.tdc.edu.vn", pass: "123456", fullname: "Cao Quang Khánh", phone: "0898415185", url_avt: "assets/images/avatar.png", role: 0, faculty_id: 1),
+    Users(id_user: "23211TT3596@mail.tdc.edu.vn", email: "23211TT3596@mail.tdc.edu.vn", pass: "123456", fullname: "Phạm Thắng", phone: "0898415185", url_avt: "assets/images/avatar.png", role: 0, faculty_id: 1),
+    Users(id_user: "23211TT3595@mail.tdc.edu.vn", email: "23211TT3595@mail.tdc.edu.vn", pass: "123456", fullname: "Lê Van Tủn", phone: "0898415185", url_avt: "assets/images/avatar.png", role: 0, faculty_id: 1),
+
+    // CustommemberWidget(
+    //   id: 1,
+    //   url: "assets/images/avatar.png",
+    //   fullname: "Le Dai Hiep",
+    // ),
+    // CustommemberWidget(
+    //   id: 2,
+    //   url: "assets/images/avatar.png",
+    //   fullname: "Le Dinh Thuan",
+    // ),
+    // CustommemberWidget(
+    //   id: 3,
+    //   url: "assets/images/avatar.png",
+    //   fullname: "Cao Quang Khanh",
+    // ),
+    // CustommemberWidget(
+    //   id: 4,
+    //   url: "assets/images/avatar.png",
+    //   fullname: "Pham Thang",
+    // ),
   ];
 
   @override
@@ -74,13 +82,30 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            //search member
             Customsearch(
-              onChanged: (value) {
-                Listsearch = ListMember.where((element) {
+              onTap: (value) {
+                setState(() {
+                  bool checkSearchMail = value.contains("@mail.tdc.edu.vn");
+                  if(checkSearchMail==true){
+                    Listsearch = ListMember.where((element) {
+                      // print("e: ${element.email}");
+                  return element.email.toLowerCase().contains(
+                    value.toLowerCase(),
+                  );
+                }).toList();
+                print(Listsearch.length);}
+                else{
+                  Listsearch = ListMember.where((element) {
+                    
                   return element.fullname.toLowerCase().contains(
                     value.toLowerCase(),
                   );
                 }).toList();
+                }
+                  print(checkSearchMail);
+                });
+                print("length : ${Listsearch.length}");
                 print("$value");
               },
             ),
@@ -108,8 +133,8 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
       itemBuilder: (context, index) {
         var value = Listsearch[index];
         return CustommemberWidget(
-          id: value.id,
-          url: value.url,
+          id: value.id_user,
+          url: value.url_avt,
           fullname: value.fullname,
         );
       },
