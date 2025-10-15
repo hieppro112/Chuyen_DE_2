@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'Group_create/tham_gia_nhom.dart';
 
 class LeftPanel extends StatelessWidget {
   final VoidCallback onClose; // 🔹 callback khi nhấn ra ngoài để đóng menu
@@ -23,7 +24,16 @@ class LeftPanel extends StatelessWidget {
                 ),
                 const Spacer(),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ThamGiaNhomPage(),
+                      ),
+                    );
+                    onClose(); // 🔹 đóng menu trái sau khi chuyển trang
+                  },
+
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.lightGreenAccent,
                     shape: RoundedRectangleBorder(
