@@ -104,7 +104,9 @@ class _TrangChuState extends State<TrangChu> {
                           children: [
                             const CircleAvatar(
                               radius: 16,
-                              backgroundImage: AssetImage("assets/avatar.png"),
+                              backgroundImage: NetworkImage(
+                                "https://jbagy.me/wp-content/uploads/2025/03/Hinh-anh-avatar-dragon-ball-super-cool-ngau-1.png",
+                              ),
                             ),
                             const SizedBox(width: 8),
                             Text(
@@ -125,9 +127,8 @@ class _TrangChuState extends State<TrangChu> {
                           onPressed: () {
                             showDialog(
                               context: context,
-                              builder:
-                                  (_) =>
-                                      GroupInfoDialog(groupName: currentGroup),
+                              builder: (_) =>
+                                  GroupInfoDialog(groupName: currentGroup),
                             );
                           },
                         ),
@@ -203,59 +204,57 @@ class _TrangChuState extends State<TrangChu> {
 
     showDialog(
       context: context,
-      builder:
-          (_) => AlertDialog(
-            title: const Text("Bình luận"),
-            content: SizedBox(
-              width: 400,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: 150,
-                    child: ListView(
-                      children:
-                          post["comments"].map<Widget>((c) {
-                            return ListTile(
-                              leading: const CircleAvatar(
-                                backgroundImage: AssetImage(
-                                  "assets/avatar.png",
-                                ),
-                              ),
-                              title: Text(c["name"]),
-                              subtitle: Text(c["text"]),
-                            );
-                          }).toList(),
-                    ),
-                  ),
-                  TextField(
-                    controller: commentCtrl,
-                    decoration: const InputDecoration(
-                      hintText: "Thêm bình luận...",
-                      suffixIcon: Icon(Icons.send),
-                    ),
-                    onSubmitted: (val) {
-                      if (val.isNotEmpty) {
-                        setState(() {
-                          post["comments"].add({
-                            "name": "Cao Quang Khánh",
-                            "text": val,
-                          });
-                        });
-                        commentCtrl.clear();
-                      }
-                    },
-                  ),
-                ],
+      builder: (_) => AlertDialog(
+        title: const Text("Bình luận"),
+        content: SizedBox(
+          width: 400,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                height: 150,
+                child: ListView(
+                  children: post["comments"].map<Widget>((c) {
+                    return ListTile(
+                      leading: const CircleAvatar(
+                        backgroundImage: NetworkImage(
+                          "https://cdn.eva.vn/upload/3-2022/images/2022-08-10/untitled-3-1660097402-436-width640height480.jpg",
+                        ),
+                      ),
+                      title: Text(c["name"]),
+                      subtitle: Text(c["text"]),
+                    );
+                  }).toList(),
+                ),
               ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("Đóng"),
+              TextField(
+                controller: commentCtrl,
+                decoration: const InputDecoration(
+                  hintText: "Thêm bình luận...",
+                  suffixIcon: Icon(Icons.send),
+                ),
+                onSubmitted: (val) {
+                  if (val.isNotEmpty) {
+                    setState(() {
+                      post["comments"].add({
+                        "name": "Cao Quang Khánh",
+                        "text": val,
+                      });
+                    });
+                    commentCtrl.clear();
+                  }
+                },
               ),
             ],
           ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Đóng"),
+          ),
+        ],
+      ),
     );
   }
 }

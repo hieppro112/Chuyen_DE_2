@@ -28,7 +28,9 @@ class PostCard extends StatelessWidget {
               children: [
                 const CircleAvatar(
                   radius: 18,
-                  backgroundImage: AssetImage("assets/avatar.png"),
+                  backgroundImage: NetworkImage(
+                    "https://cdn.eva.vn/upload/3-2022/images/2022-08-10/untitled-3-1660097402-436-width640height480.jpg",
+                  ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -51,11 +53,10 @@ class PostCard extends StatelessWidget {
                 ),
                 PopupMenuButton<String>(
                   onSelected: onMenuSelected,
-                  itemBuilder:
-                      (context) => const [
-                        PopupMenuItem(value: "report", child: Text("Báo cáo")),
-                        PopupMenuItem(value: "save", child: Text("Lưu")),
-                      ],
+                  itemBuilder: (context) => const [
+                    PopupMenuItem(value: "report", child: Text("Báo cáo")),
+                    PopupMenuItem(value: "save", child: Text("Lưu")),
+                  ],
                 ),
               ],
             ),
