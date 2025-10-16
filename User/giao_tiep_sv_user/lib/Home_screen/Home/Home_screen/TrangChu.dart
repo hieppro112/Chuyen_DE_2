@@ -3,6 +3,7 @@ import 'port_card.dart';
 import 'dang_bai_dialog.dart';
 import 'left_panel.dart';
 import 'group_info_dialog.dart';
+import 'search_page.dart';
 
 class TrangChu extends StatefulWidget {
   const TrangChu({super.key});
@@ -61,19 +62,41 @@ class _TrangChuState extends State<TrangChu> {
 
                         // Ô tìm kiếm
                         Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: "Tìm kiếm",
-                              prefixIcon: const Icon(Icons.search),
-                              filled: true,
-                              fillColor: Colors.grey.shade200,
-                              border: OutlineInputBorder(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SearchPage(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 10,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade200,
                                 borderRadius: BorderRadius.circular(30),
-                                borderSide: BorderSide.none,
+                              ),
+                              child: Row(
+                                children: const [
+                                  Icon(Icons.search, color: Colors.grey),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    "Tìm kiếm",
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
+
                         const SizedBox(width: 10),
 
                         // Nút đăng bài
