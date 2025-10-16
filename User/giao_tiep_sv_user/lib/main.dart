@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_user/Screen_member_group/view/Add_member.dart';
+import 'package:giao_tiep_sv_user/maneger_member_group_Screens/view/maneger_member_group.dart';
 import 'Home_screen/home.dart'; // import trang Home bạn tạo
 
 void main() {
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: AddMemberScreen(), // Trang mặc định
+      home: ManegerMemberGroupScreen(), // Trang mặc định
     );
   }
 }
+
