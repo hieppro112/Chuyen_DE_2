@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_user/Data/Users.dart';
 import 'package:giao_tiep_sv_user/Screen_member_group/view/Add_member.dart';
 import 'package:giao_tiep_sv_user/Screen_member_group/widget/customSearch.dart';
-import 'package:giao_tiep_sv_user/maneger_member_group_Screens/widget/MyButton.dart';
+import 'package:giao_tiep_sv_user/Widget/MyButton.dart';
 import 'package:giao_tiep_sv_user/maneger_member_group_Screens/widget/custom_member_group.dart';
 
 class ManegerMemberGroupScreen extends StatefulWidget {
@@ -146,11 +146,12 @@ class _ManegerMemberGroupScreenState extends State<ManegerMemberGroupScreen> {
               children: [
                 //xu ly hien tat ca thanh vien
                 Mybutton(
-                  url_icon: "assets/icons/ic_tabAll.png",
+                  Mycolor: Color(0xffecf3e5)
+                  ,url_icon: "assets/icons/ic_tabAll.png",
                   nameButton: "Tất cả",
-                  ontap: (value) {
+                  ontap: () {
                     setState(() {
-                      selecAll = value;
+                      selecAll = true;
 
                       if (selecAll == true) {
                         Listsearch = ListMember;
@@ -161,11 +162,12 @@ class _ManegerMemberGroupScreenState extends State<ManegerMemberGroupScreen> {
 
                 // xu ly hien thi chi quan tri vien
                 Mybutton(
+                  Mycolor: Color(0xffffe5e5),
                   url_icon: "assets/icons/ic_group.png",
                   nameButton: "Quản trị",
-                  ontap: (value) {
+                  ontap: () {
                     setState(() {
-                      selecAll = !value;
+                      selecAll = false;
                       if (selecAll == false) {
                         Listsearch = ListMember.where((element) {
                           return element.role == 1;
