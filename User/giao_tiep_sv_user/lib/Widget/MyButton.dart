@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 class Mybutton extends StatelessWidget {
   final String url_icon;
   final String nameButton;
-  final ValueChanged<bool>? ontap;
+  final void Function()? ontap;
+  final Color Mycolor;
   const Mybutton({
     super.key,
     required this.url_icon,
     required this.nameButton,
-    this.ontap,
+    this.ontap, required this.Mycolor, 
   });
 
 
@@ -18,19 +19,16 @@ class Mybutton extends StatelessWidget {
   }
 
   Widget createButton() {
-      var selected = true;
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 25,),
       decoration: BoxDecoration(
+        color: Mycolor,
         border: Border.all(color: Colors.black),
         borderRadius: BorderRadius.circular(12)
       ),
       child: GestureDetector(
-        onTap: () {
-          
-          ontap?.call(selected);
-          print(selected);
-        },
+        onTap: () => ontap?.call(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
