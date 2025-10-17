@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:giao_tiep_sv_user/Screens_chatMember/view/chatMemberScreens.dart';
+import 'package:giao_tiep_sv_user/Home_screen/home.dart';
+import 'package:giao_tiep_sv_user/Screens_chatMember/view/chatMessage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,9 +18,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
 
-      home: ChatMemberScreen(), // Trang mặc định
+      home: Home(), // Trang mặc định
 
     );
   }
 }
-

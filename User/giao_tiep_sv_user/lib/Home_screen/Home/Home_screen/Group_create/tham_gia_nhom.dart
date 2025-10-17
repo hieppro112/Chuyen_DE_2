@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../left_panel.dart';
+import '../left_panel.dart'; // Đảm bảo đúng đường dẫn
 import 'tao_nhom_page.dart';
+// import 'nhom_cua_toi.dart';
 
 class ThamGiaNhomPage extends StatefulWidget {
   const ThamGiaNhomPage({super.key});
@@ -44,7 +45,7 @@ class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
                   elevation: 0.5,
                   leading: IconButton(
                     icon: const Icon(Icons.menu, color: Colors.black),
-                    onPressed: toggleMenu, // mở/đóng menu trái
+                    onPressed: toggleMenu,
                   ),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -57,17 +58,15 @@ class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
                         ),
                       ),
                       const SizedBox(width: 8),
-
                       // 🔹 Nút "Group"
                       IconButton(
                         icon: const Icon(Icons.group, color: Colors.black),
                         onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                "Mở danh sách nhóm của bạn 🧑‍🤝‍🧑",
-                              ),
-                              duration: Duration(seconds: 2),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              // 🔹 ĐÃ SỬA LỖI CHÍNH TẢ
+                              builder: (context) => Container(),
                             ),
                           );
                         },
@@ -175,16 +174,20 @@ class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
             ),
           ),
 
-          // 🔹 LeftPanel (menu trái)
+          // 🔹 LeftPanel (menu trái) - Đã thêm tham số onGroupSelected
           if (_isOpen)
             GestureDetector(
-              onTap: toggleMenu, // bấm ra ngoài để đóng
+              onTap: toggleMenu,
               child: Container(
                 color: Colors.black.withOpacity(0.3),
                 child: Row(
                   children: [
-                    LeftPanel(onClose: toggleMenu),
-                    Expanded(child: Container()), // bắt tap ngoài panel
+                    LeftPanel(
+                      onClose: toggleMenu,
+                      isGroupPage: true,
+                      onGroupSelected: (_) {}, // 🔹 Thêm callback rỗng
+                    ),
+                    Expanded(child: Container()),
                   ],
                 ),
               ),

@@ -1,7 +1,6 @@
 // import '../Home_screen/Home/TrangChu.dart';
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_user/Home_screen/Home/Home_screen/TrangChu.dart';
-import 'package:giao_tiep_sv_user/Profile/profile.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -16,7 +15,7 @@ class _HomeState extends State<Home> {
   final List<Widget> _pages = [
     const TrangChu(),
     Center(child: Text("Chat Page")),
-    const ProfileScreen(),
+    Center(child: Text("Profile Page")),
   ];
 
   @override
