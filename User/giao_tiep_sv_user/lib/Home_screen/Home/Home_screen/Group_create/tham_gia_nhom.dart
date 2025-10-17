@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../left_panel.dart';
+import '../left_panel.dart'; // Đảm bảo đúng đường dẫn
 import 'tao_nhom_page.dart';
 import 'nhom_cua_toi.dart';
 
@@ -13,6 +13,7 @@ class ThamGiaNhomPage extends StatefulWidget {
 class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
   bool _isOpen = false; // trạng thái menu trái
 
+  // ... (Danh sách groups và hàm toggleMenu giữ nguyên)
   final List<Map<String, dynamic>> groups = [
     {
       "name": "Mạng máy tính Khóa 23",
@@ -36,7 +37,7 @@ class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
       backgroundColor: Colors.grey[100],
       body: Stack(
         children: [
-          // 🔹 Nội dung chính
+          // 🔹 Nội dung chính (Giữ nguyên)
           SafeArea(
             child: Column(
               children: [
@@ -45,7 +46,7 @@ class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
                   elevation: 0.5,
                   leading: IconButton(
                     icon: const Icon(Icons.menu, color: Colors.black),
-                    onPressed: toggleMenu, // mở/đóng menu trái
+                    onPressed: toggleMenu,
                   ),
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +59,6 @@ class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
                         ),
                       ),
                       const SizedBox(width: 8),
-
                       // 🔹 Nút "Group"
                       IconButton(
                         icon: const Icon(Icons.group, color: Colors.black),
@@ -174,16 +174,17 @@ class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
             ),
           ),
 
-          // 🔹 LeftPanel (menu trái)
+          //  LeftPanel (menu trái) - Cập nhật để truyền isGroupPage = true
           if (_isOpen)
             GestureDetector(
-              onTap: toggleMenu, // bấm ra ngoài để đóng
+              onTap: toggleMenu,
               child: Container(
                 color: Colors.black.withOpacity(0.3),
                 child: Row(
                   children: [
-                    LeftPanel(onClose: toggleMenu),
-                    Expanded(child: Container()), // bắt tap ngoài panel
+                    // isGroupPage: true
+                    LeftPanel(onClose: toggleMenu, isGroupPage: true),
+                    Expanded(child: Container()),
                   ],
                 ),
               ),

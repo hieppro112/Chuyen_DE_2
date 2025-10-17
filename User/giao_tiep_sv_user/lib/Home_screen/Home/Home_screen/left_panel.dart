@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'Group_create/tham_gia_nhom.dart';
-import 'TrangChu.dart'; // 🔹 import file trang chủ (đảm bảo đúng đường dẫn)
+import 'package:giao_tiep_sv_user/Home_screen/home.dart';
 
 class LeftPanel extends StatelessWidget {
-  final VoidCallback onClose; // callback khi nhấn ra ngoài để đóng menu
+  final VoidCallback onClose;
+  //  thuộc tính để xác định menu có đang ở trang nhóm hay không
+  final bool isGroupPage;
 
-  const LeftPanel({super.key, required this.onClose});
+  const LeftPanel({
+    super.key,
+    required this.onClose,
+    this.isGroupPage = false, //  Giá trị mặc định là false
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,35 +30,42 @@ class LeftPanel extends StatelessWidget {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ThamGiaNhomPage(),
+
+                //  LOGIC ẨN/HIỆN NÚT "Mở rộng" DỰA TRÊN isGroupPage
+                if (!isGroupPage)
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ThamGiaNhomPage(),
+                        ),
+                      );
+                      onClose();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.lightGreenAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                    );
-                    onClose(); // 🔹 đóng menu trái sau khi chuyển trang
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.lightGreenAccent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 6,
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("Mở rộng", style: TextStyle(color: Colors.black)),
+                        SizedBox(width: 6),
+                        Icon(
+                          Icons.arrow_forward,
+                          color: Colors.black,
+                          size: 18,
+                        ),
+                      ],
                     ),
                   ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text("Mở rộng", style: TextStyle(color: Colors.black)),
-                      SizedBox(width: 6),
-                      Icon(Icons.arrow_forward, color: Colors.black, size: 18),
-                    ],
-                  ),
-                ),
               ],
             ),
             const SizedBox(height: 12),
@@ -70,16 +83,16 @@ class LeftPanel extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            // 🔹 Nút "Trang chủ" có sự kiện điều hướng
+            // Nút "Trang chủ" có sự kiện điều hướng
             ListTile(
               leading: const Icon(Icons.home),
               title: const Text("Trang chủ"),
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const TrangChu()),
+                  MaterialPageRoute(builder: (context) => const Home()),
                 );
-                onClose(); // đóng menu
+                onClose();
               },
             ),
 
