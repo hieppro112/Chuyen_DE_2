@@ -4,29 +4,17 @@ import 'package:giao_tiep_sv_user/Home_screen/home.dart';
 
 class LeftPanel extends StatelessWidget {
   final VoidCallback onClose;
-  //  thuộc tính để xác định menu có đang ở trang nhóm hay không
+  //  thuộc tính để xác định menu có đang ở trang nhóm hay không
   final bool isGroupPage;
-  // 🔹 HÀM GỌI LẠI KHI CHỌN NHÓM
-  final void Function(String) onGroupSelected;
 
   const LeftPanel({
     super.key,
     required this.onClose,
-    required this.onGroupSelected, // 🔹 Bắt buộc phải truyền vào
-    this.isGroupPage = false, //  Giá trị mặc định là false
+    this.isGroupPage = false, //  Giá trị mặc định là false
   });
 
   @override
   Widget build(BuildContext context) {
-    // 🔹 DANH SÁCH NHÓM CẦN HIỂN THỊ
-    const List<Map<String, dynamic>> groups = [
-      {"name": "Tất cả", "icon": Icons.public},
-      {"name": "Mobile - (Flutter, Kotlin)", "icon": Icons.phone_android},
-      {"name": "Thiết kế đồ họa", "icon": Icons.computer},
-      {"name": "DEV - vui vẻ", "icon": Icons.developer_mode},
-      {"name": "CNTT", "icon": Icons.school},
-    ];
-
     return SafeArea(
       child: Container(
         width: 260,
@@ -43,14 +31,13 @@ class LeftPanel extends StatelessWidget {
                 ),
                 const Spacer(),
 
-                //  LOGIC ẨN/HIỆN NÚT "Mở rộng" DỰA TRÊN isGroupPage
+                //  LOGIC ẨN/HIỆN NÚT "Mở rộng" DỰA TRÊN isGroupPage
                 if (!isGroupPage)
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          // 🔹 Đã sửa lỗi: ThiamGiaNhom() -> const ThamGiaNhomPage()
                           builder: (context) => const ThamGiaNhomPage(),
                         ),
                       );
@@ -96,7 +83,7 @@ class LeftPanel extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            // Nút "Trang chủ"
+            // Nút "Trang chủ" có sự kiện điều hướng
             ListTile(
               leading: const Icon(Icons.home),
               title: const Text("Trang chủ"),
@@ -108,25 +95,20 @@ class LeftPanel extends StatelessWidget {
                 onClose();
               },
             ),
-            const Divider(), // Phân cách
-            // 🔹 DANH SÁCH CÁC NHÓM
-            Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: groups.length,
-                itemBuilder: (context, index) {
-                  final group = groups[index];
-                  return ListTile(
-                    leading: Icon(group["icon"]),
-                    title: Text(group["name"]),
-                    onTap: () {
-                      // 🔹 GỌI HÀM CALLBACK VÀ TRUYỀN TÊN NHÓM
-                      onGroupSelected(group["name"]);
-                    },
-                  );
-                },
-              ),
+
+            const ListTile(
+              leading: Icon(Icons.phone_android),
+              title: Text("Mobile - (Flutter, Kotlin)"),
             ),
+            const ListTile(
+              leading: Icon(Icons.computer),
+              title: Text("Thiết kế đồ họa"),
+            ),
+            const ListTile(
+              leading: Icon(Icons.developer_mode),
+              title: Text("DEV - vui vẻ"),
+            ),
+            const ListTile(leading: Icon(Icons.school), title: Text("CNTT")),
           ],
         ),
       ),
