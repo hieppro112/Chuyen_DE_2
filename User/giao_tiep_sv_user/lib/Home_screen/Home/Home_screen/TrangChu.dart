@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'port_card.dart';
 import 'dang_bai_dialog.dart';
-import 'left_panel.dart'; // Đảm bảo đã cập nhật LeftPanel.dart
+import 'left_panel.dart';
 import 'group_info_dialog.dart';
 import 'search_page.dart';
 
@@ -14,43 +14,20 @@ class TrangChu extends StatefulWidget {
 
 class _TrangChuState extends State<TrangChu> {
   bool _isOpen = false; // trạng thái mở menu trái
-  String currentGroup =
-      "Tất cả"; // 🔹 Nhóm hiện tại hiển thị, mặc định là "Tất cả"
-  List<Map<String, dynamic>> allPosts = []; // Dữ liệu bài viết gốc
-  List<Map<String, dynamic>> filteredPosts = []; // Dữ liệu bài viết hiển thị
-
-  // 🔹 HÀM CẬP NHẬT NHÓM VÀ LỌC BÀI VIẾT
-  void _changeGroup(String newGroup) {
-    setState(() {
-      currentGroup = newGroup;
-      _isOpen = false; // Đóng panel sau khi chọn nhóm
-      _filterPosts(); // Gọi hàm lọc bài viết
-    });
-  }
-
-  // 🔹 HÀM LỌC BÀI VIẾT DỰA TRÊN currentGroup
-  void _filterPosts() {
-    if (currentGroup == "Tất cả") {
-      filteredPosts = allPosts;
-    } else {
-      // Lọc bài viết có tên nhóm khớp với currentGroup
-      filteredPosts = allPosts
-          .where((post) => post["group"] == currentGroup)
-          .toList();
-    }
-  }
+  String currentGroup = "Nhóm CNTT"; // 🔹 nhóm hiện tại hiển thị
+  List<Map<String, dynamic>> posts = [];
 
   @override
   void initState() {
     super.initState();
 
-    //  Tạo dữ liệu mẫu (Sử dụng tên nhóm chính xác từ LeftPanel)
-    allPosts = [
-      {
+    //  Tạm dữ liệu mẫu
+    posts = List.generate(2, (i) {
+      return {
         "user": "Cao Quang Khánh",
-        "group": "CNTT",
+        "group": i == 0 ? "Khoa CNTT" : "Dev vui vẻ",
         "title": "Em xin tài liệu tiếng anh như này",
-        "image": "https://picsum.photos/seed/1/400/200",
+        "image": "https://picsum.photos/seed/${i + 1}/400/200",
         "comments": [
           {
             "name": "Nguyễn Văn A",
@@ -60,34 +37,13 @@ class _TrangChuState extends State<TrangChu> {
             "name": "Lê Thị B",
             "text": "Mình có một số tài liệu, bạn gửi email cho mình nhé.",
           },
+          {
+            "name": "Trần Văn C",
+            "text": "Alo 123, tài liệu này cũ rồi bạn ơi!",
+          },
         ],
-      },
-      {
-        "user": "Trần Văn Dũng",
-        "group": "DEV - vui vẻ",
-        "title": "Chia sẻ kinh nghiệm làm việc với Flutter",
-        "image": "https://picsum.photos/seed/2/400/200",
-        "comments": [
-          {"name": "Phan Thị E", "text": "Cảm ơn bài viết hữu ích!"},
-        ],
-      },
-      {
-        "user": "Phạm Văn F",
-        "group": "CNTT",
-        "title": "Cần người làm chung project cuối kì",
-        "image": "https://picsum.photos/seed/3/400/200",
-        "comments": [],
-      },
-      {
-        "user": "Lý Văn G",
-        "group": "Thiết kế đồ họa",
-        "title": "Mẫu thiết kế UI mới nhất 2024",
-        "image": "https://picsum.photos/seed/4/400/200",
-        "comments": [],
-      },
-    ];
-
-    _filterPosts(); // Khởi tạo lần đầu
+      };
+    });
   }
 
   @override
@@ -231,12 +187,12 @@ class _TrangChuState extends State<TrangChu> {
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount:
-                        filteredPosts.length, // 🔹 Sử dụng danh sách đã lọc
+                    itemCount: posts.length,
                     itemBuilder: (context, i) {
-                      final post = filteredPosts[i];
+                      final post = posts[i];
                       return PostCard(
                         post: post,
+                        // Thay thế dialog cũ bằng showModalBottomSheet mới
                         onCommentPressed: () => _showCommentSheet(post),
                         onLikePressed: () {},
                         onMenuSelected: (value) {
@@ -250,7 +206,7 @@ class _TrangChuState extends State<TrangChu> {
             ),
           ),
 
-          //  Overlay mờ khi mở menu
+          //  Overlay mờ khi mở menu
           if (_isOpen)
             GestureDetector(
               onTap: () => setState(() => _isOpen = false),
@@ -263,11 +219,7 @@ class _TrangChuState extends State<TrangChu> {
             top: 0,
             bottom: 0,
             left: _isOpen ? 0 : -260,
-            child: LeftPanel(
-              onClose: () => setState(() => _isOpen = false),
-              // 🔹 TRUYỀN HÀM CẬP NHẬT NHÓM
-              onGroupSelected: _changeGroup,
-            ),
+            child: LeftPanel(onClose: () => setState(() => _isOpen = false)),
           ),
         ],
       ),
@@ -280,19 +232,22 @@ class _TrangChuState extends State<TrangChu> {
     setState(() {});
   }
 
-  // Hàm hiển thị BOTTOM SHEET BÌNH LUẬN MỚI
+  //Hàm hiển thị BOTTOM SHEET BÌNH LUẬN MỚI
   void _showCommentSheet(Map<String, dynamic> post) {
     TextEditingController commentCtrl = TextEditingController();
 
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
+      isScrollControlled: true, // Cho phép sheet chiếm gần hết màn hình
       useSafeArea: true,
       builder: (context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
             final double screenHeight = MediaQuery.of(context).size.height;
+            // Chiều cao tối đa của bottom sheet (ví dụ: 90% màn hình)
             final double sheetHeight = screenHeight * 0.85;
+
+            // Chia thành 3 phần: (1) Bài đăng tóm tắt, (2) Danh sách bình luận, (3) Ô nhập liệu
             return Container(
               height: sheetHeight,
               decoration: const BoxDecoration(
@@ -327,7 +282,7 @@ class _TrangChuState extends State<TrangChu> {
                   ),
                   const Divider(height: 1),
 
-                  // Bài đăng tóm tắt
+                  // 1. Bài đăng tóm tắt (Giống như trên Facebook)
                   ListTile(
                     leading: const CircleAvatar(
                       radius: 20,
@@ -352,7 +307,7 @@ class _TrangChuState extends State<TrangChu> {
                   ),
                   const Divider(height: 1),
 
-                  // Danh sách Bình luận
+                  // 2. Danh sách Bình luận
                   Expanded(
                     child: ListView.builder(
                       itemCount: post["comments"].length,
@@ -407,12 +362,13 @@ class _TrangChuState extends State<TrangChu> {
                     ),
                   ),
 
-                  // Ô nhập liệu Bình luận (luôn ở dưới cùng)
+                  // 3. Ô nhập liệu Bình luận (luôn ở dưới cùng)
                   Padding(
                     padding: EdgeInsets.only(
                       left: 10,
                       right: 10,
                       top: 8,
+                      // Đẩy thanh nhập liệu lên trên bàn phím ảo
                       bottom: MediaQuery.of(context).viewInsets.bottom + 8,
                     ),
                     child: TextField(
@@ -442,7 +398,7 @@ class _TrangChuState extends State<TrangChu> {
                                   "text": val,
                                 });
                               });
-                              //  Cập nhật giao diện trang chủ
+                              //  Cập nhật giao diện trang chủ (để đếm bình luận)
                               this.setState(() {});
 
                               commentCtrl.clear();

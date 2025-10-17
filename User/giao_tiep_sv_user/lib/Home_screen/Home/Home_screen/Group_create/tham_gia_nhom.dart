@@ -13,6 +13,7 @@ class ThamGiaNhomPage extends StatefulWidget {
 class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
   bool _isOpen = false; // trạng thái menu trái
 
+  // ... (Danh sách groups và hàm toggleMenu giữ nguyên)
   final List<Map<String, dynamic>> groups = [
     {
       "name": "Mạng máy tính Khóa 23",
@@ -36,7 +37,7 @@ class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
       backgroundColor: Colors.grey[100],
       body: Stack(
         children: [
-          // 🔹 Nội dung chính
+          // 🔹 Nội dung chính (Giữ nguyên)
           SafeArea(
             child: Column(
               children: [
@@ -65,7 +66,6 @@ class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              // 🔹 ĐÃ SỬA LỖI CHÍNH TẢ
                               builder: (context) => const NhomCuaToi(),
                             ),
                           );
@@ -174,7 +174,7 @@ class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
             ),
           ),
 
-          // 🔹 LeftPanel (menu trái) - Đã thêm tham số onGroupSelected
+          //  LeftPanel (menu trái) - Cập nhật để truyền isGroupPage = true
           if (_isOpen)
             GestureDetector(
               onTap: toggleMenu,
@@ -182,11 +182,8 @@ class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
                 color: Colors.black.withOpacity(0.3),
                 child: Row(
                   children: [
-                    LeftPanel(
-                      onClose: toggleMenu,
-                      isGroupPage: true,
-                      onGroupSelected: (_) {}, // 🔹 Thêm callback rỗng
-                    ),
+                    // isGroupPage: true
+                    LeftPanel(onClose: toggleMenu, isGroupPage: true),
                     Expanded(child: Container()),
                   ],
                 ),
