@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:giao_tiep_sv_user/Screen_member_group/view/Add_member.dart';
-import 'Home_screen/home.dart'; // import trang Home bạn tạo
+import 'package:giao_tiep_sv_user/Home_screen/home.dart';
+import 'package:giao_tiep_sv_user/Screens_chatMember/view/chatMessage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +17,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
+
       home: Home(), // Trang mặc định
+
     );
   }
 }

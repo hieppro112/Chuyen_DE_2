@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../left_panel.dart'; // Đảm bảo đúng đường dẫn
 import 'tao_nhom_page.dart';
-import 'nhom_cua_toi.dart';
+// import 'nhom_cua_toi.dart';
 
 class ThamGiaNhomPage extends StatefulWidget {
   const ThamGiaNhomPage({super.key});
@@ -66,7 +66,7 @@ class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
                             context,
                             MaterialPageRoute(
                               // 🔹 ĐÃ SỬA LỖI CHÍNH TẢ
-                              builder: (context) => const NhomCuaToi(),
+                              builder: (context) => Container(),
                             ),
                           );
                         },
