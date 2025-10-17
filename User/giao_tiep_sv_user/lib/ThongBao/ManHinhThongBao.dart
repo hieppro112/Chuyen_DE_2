@@ -12,9 +12,9 @@ class ManHinhThongBao extends StatelessWidget {
   Widget build(BuildContext context) {
     // dữ liệu giả
     final List<Map<String, String>> danhSachThongBao = [
-      {"nguoiGui": "Đình Thuận", "noiDung": "Cảnh báo Hiệp về hành vi ấu dâm"},
-      {"nguoiGui": "Quang Khánh", "noiDung": "Cảnh báo Hiệp về hành vi biến thái"},
-      {"nguoiGui": "Phạm Thắng", "noiDung": "Cảnh báo Hiệp về hành vi quấy rối tình dục"},
+      {"nguoiGui": "Admin", "noiDung": "Cảnh báo Hiệp về hành vi ..."},
+      {"nguoiGui": "Admin", "noiDung": "Cảnh báo Hiệp về hành vi ..."},
+      {"nguoiGui": "Admin", "noiDung": "Cảnh báo Hiệp về hành vi ..."},
       
     ];
 

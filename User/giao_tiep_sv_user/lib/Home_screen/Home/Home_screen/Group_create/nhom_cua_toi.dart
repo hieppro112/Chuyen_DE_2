@@ -19,7 +19,7 @@ class _NhomCuaToiState extends State<NhomCuaToi> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       drawer: Drawer(
         child: LeftPanel(
           onClose: () {
@@ -28,7 +28,7 @@ class _NhomCuaToiState extends State<NhomCuaToi> {
         ),
       ),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 218, 213, 213),
         elevation: 0.5,
         leading: Builder(
           builder: (context) => IconButton(
@@ -46,7 +46,6 @@ class _NhomCuaToiState extends State<NhomCuaToi> {
       ),
       body: Column(
         children: [
-
           // Danh sách nhóm ở dưới panel
           Expanded(
             child: Padding(
