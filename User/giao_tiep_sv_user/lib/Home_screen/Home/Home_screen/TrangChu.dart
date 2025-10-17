@@ -293,170 +293,179 @@ class _TrangChuState extends State<TrangChu> {
           builder: (BuildContext context, StateSetter setModalState) {
             final double screenHeight = MediaQuery.of(context).size.height;
             final double sheetHeight = screenHeight * 0.85;
-            return Container(
-              height: sheetHeight,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-              ),
-              child: Column(
-                children: [
-                  // Thanh kéo và Tiêu đề
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 5,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          "Bình luận",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Divider(height: 1),
 
-                  // Bài đăng tóm tắt
-                  ListTile(
-                    leading: const CircleAvatar(
-                      radius: 20,
-                      backgroundImage: NetworkImage(
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTaXZWZglx63-gMfBzslxSUQdqqvCp0QJiOA&s",
+            return SafeArea(
+              // BẮT ĐẦU: Widget SafeArea được thêm vào
+              child: Container(
+                height: sheetHeight,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                ),
+                child: Column(
+                  children: [
+                    // Thanh kéo và Tiêu đề
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 40,
+                            height: 5,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            "Bình luận",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    title: Text(
-                      post["user"],
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text(
-                      post["title"],
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                    trailing: Text(
-                      "trong ${post["group"]}",
-                      style: const TextStyle(color: Colors.grey, fontSize: 12),
-                    ),
-                  ),
-                  const Divider(height: 1),
+                    const Divider(height: 1),
 
-                  // Danh sách Bình luận
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: post["comments"].length,
-                      itemBuilder: (context, index) {
-                        final comment = post["comments"][index];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0,
-                            vertical: 8.0,
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const CircleAvatar(
-                                radius: 15,
-                                backgroundImage: NetworkImage(
-                                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTaXZWZglx63-gMfBzslxSUQdqqvCp0QJiOA&s",
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[100],
-                                    borderRadius: BorderRadius.circular(15),
+                    // Bài đăng tóm tắt
+                    ListTile(
+                      leading: const CircleAvatar(
+                        radius: 20,
+                        backgroundImage: NetworkImage(
+                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTaXZWZglx63-gMfBzslxSUQdqqvCp0QJiOA&s",
+                        ),
+                      ),
+                      title: Text(
+                        post["user"],
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        post["title"],
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                      trailing: Text(
+                        "trong ${post["group"]}",
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    const Divider(height: 1),
+
+                    // Danh sách Bình luận
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: post["comments"].length,
+                        itemBuilder: (context, index) {
+                          final comment = post["comments"][index];
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 8.0,
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const CircleAvatar(
+                                  radius: 15,
+                                  backgroundImage: NetworkImage(
+                                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTaXZWZglx63-gMfBzslxSUQdqqvCp0QJiOA&s",
                                   ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        comment["name"],
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Container(
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[100],
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          comment["name"],
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 2),
-                                      Text(
-                                        comment["text"],
-                                        style: const TextStyle(fontSize: 14),
-                                      ),
-                                    ],
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          comment["text"],
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-
-                  // Ô nhập liệu Bình luận (luôn ở dưới cùng)
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: 10,
-                      right: 10,
-                      top: 8,
-                      bottom: MediaQuery.of(context).viewInsets.bottom + 8,
-                    ),
-                    child: TextField(
-                      controller: commentCtrl,
-                      decoration: InputDecoration(
-                        hintText: "Viết bình luận...",
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 15,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide.none,
-                        ),
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.send, color: Colors.blue),
-                          onPressed: () {
-                            String val = commentCtrl.text.trim();
-                            if (val.isNotEmpty) {
-                              // 1. Cập nhật dữ liệu tạm thời
-                              setModalState(() {
-                                post["comments"].add({
-                                  "name":
-                                      "Cao Quang Khánh", // Giả định là user hiện tại
-                                  "text": val,
-                                });
-                              });
-                              //  Cập nhật giao diện trang chủ
-                              this.setState(() {});
-
-                              commentCtrl.clear();
-                              FocusScope.of(context).unfocus(); // Đóng bàn phím
-                            }
-                          },
-                        ),
+                              ],
+                            ),
+                          );
+                        },
                       ),
-                      onSubmitted: (val) {},
                     ),
-                  ),
-                ],
+
+                    // Ô nhập liệu Bình luận (luôn ở dưới cùng)
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                        top: 8,
+                        bottom: MediaQuery.of(context).viewInsets.bottom + 8,
+                      ),
+                      child: TextField(
+                        controller: commentCtrl,
+                        decoration: InputDecoration(
+                          hintText: "Viết bình luận...",
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 15,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.send, color: Colors.blue),
+                            onPressed: () {
+                              String val = commentCtrl.text.trim();
+                              if (val.isNotEmpty) {
+                                // 1. Cập nhật dữ liệu tạm thời
+                                setModalState(() {
+                                  post["comments"].add({
+                                    "name":
+                                        "Cao Quang Khánh", // Giả định là user hiện tại
+                                    "text": val,
+                                  });
+                                });
+                                //  Cập nhật giao diện trang chủ
+                                this.setState(() {});
+
+                                commentCtrl.clear();
+                                FocusScope.of(
+                                  context,
+                                ).unfocus(); // Đóng bàn phím
+                              }
+                            },
+                          ),
+                        ),
+                        onSubmitted: (val) {},
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            );
+            ); // KẾT THÚC: Widget SafeArea
           },
         );
       },
