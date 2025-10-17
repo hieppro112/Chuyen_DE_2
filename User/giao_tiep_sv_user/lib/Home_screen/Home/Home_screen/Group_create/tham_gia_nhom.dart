@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../left_panel.dart';
 import 'tao_nhom_page.dart';
+import 'nhom_cua_toi.dart';
 
 class ThamGiaNhomPage extends StatefulWidget {
   const ThamGiaNhomPage({super.key});
@@ -62,12 +63,10 @@ class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
                       IconButton(
                         icon: const Icon(Icons.group, color: Colors.black),
                         onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                "Mở danh sách nhóm của bạn 🧑‍🤝‍🧑",
-                              ),
-                              duration: Duration(seconds: 2),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const NhomCuaToi(),
                             ),
                           );
                         },
