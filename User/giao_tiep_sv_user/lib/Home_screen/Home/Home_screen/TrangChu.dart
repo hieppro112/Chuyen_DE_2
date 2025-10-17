@@ -128,7 +128,7 @@ class _TrangChuState extends State<TrangChu> {
                             const CircleAvatar(
                               radius: 16,
                               backgroundImage: NetworkImage(
-                                "https://jbagy.me/wp-content/uploads/2025/03/Hinh-anh-avatar-dragon-ball-super-cool-ngau-1.png",
+                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTaXZWZglx63-gMfBzslxSUQdqqvCp0QJiOA&s",
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -241,7 +241,7 @@ class _TrangChuState extends State<TrangChu> {
                     return ListTile(
                       leading: const CircleAvatar(
                         backgroundImage: NetworkImage(
-                          "https://cdn.eva.vn/upload/3-2022/images/2022-08-10/untitled-3-1660097402-436-width640height480.jpg",
+                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTaXZWZglx63-gMfBzslxSUQdqqvCp0QJiOA&s",
                         ),
                       ),
                       title: Text(c["name"]),
