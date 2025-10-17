@@ -13,11 +13,11 @@ class Headerwidget extends StatelessWidget {
     return Container(
       height: 70,
       width: width,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black.withOpacity(0.4),
-        width: 3),
-        borderRadius: BorderRadius.circular(3.2)
-      ),
+      // decoration: BoxDecoration(
+      //   border: Border.all(color: Colors.black.withOpacity(0.4),
+      //   width: 3),
+      //   borderRadius: BorderRadius.circular(3.2)
+      // ),
       // padding: EdgeInsets.symmetric(horizontal: 30,),
       child: Center(
         child: createHeader(),

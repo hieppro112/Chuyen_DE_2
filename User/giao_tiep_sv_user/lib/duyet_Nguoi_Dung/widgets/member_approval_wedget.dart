@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_user/duyet_Nguoi_Dung/models/MemberApprovalModel.dart';
-import '../models/User_post_approval_model.dart';
 
 class MemberApprovalWidget extends StatelessWidget {
   final MemberApprovalModel user;
