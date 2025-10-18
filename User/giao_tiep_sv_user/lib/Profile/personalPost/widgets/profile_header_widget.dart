@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class ProfileHeaderWidget extends StatelessWidget {
   final String avatarUrl;
+  final File? avatarFile;
   final String name;
   final String faculty;
   final String academicYear;
@@ -14,7 +17,17 @@ class ProfileHeaderWidget extends StatelessWidget {
     required this.faculty,
     required this.academicYear,
     required this.postCount,
+    this.avatarFile,
   });
+  Widget _buildAvatar() {
+    if (avatarFile != null) {
+      // Hiển thị ảnh local
+      return CircleAvatar(radius: 30, backgroundImage: FileImage(avatarFile!));
+    } else {
+      // Hiển thị ảnh network
+      return CircleAvatar(radius: 30, backgroundImage: NetworkImage(avatarUrl));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +35,7 @@ class ProfileHeaderWidget extends StatelessWidget {
       children: [
         Row(
           children: [
-            CircleAvatar(radius: 35, backgroundImage: NetworkImage(avatarUrl)),
+            _buildAvatar(),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
