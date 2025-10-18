@@ -18,9 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-
-      home: ScreenMessage(), // Trang mặc định
-
+      home: Home(), // Trang mặc định
     );
   }
 }
