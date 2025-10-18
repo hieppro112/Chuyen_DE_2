@@ -1,12 +1,32 @@
 import 'package:flutter/material.dart';
+import 'Group_create/tham_gia_nhom.dart';
+import 'package:giao_tiep_sv_user/Home_screen/home.dart';
 
 class LeftPanel extends StatelessWidget {
-  final VoidCallback onClose; // 🔹 callback khi nhấn ra ngoài để đóng menu
+  final VoidCallback onClose;
+  //  thuộc tính để xác định menu có đang ở trang nhóm hay không
+  final bool isGroupPage;
+  // 🔹 HÀM GỌI LẠI KHI CHỌN NHÓM
+  final void Function(String) onGroupSelected;
 
-  const LeftPanel({super.key, required this.onClose});
+  const LeftPanel({
+    super.key,
+    required this.onClose,
+    required this.onGroupSelected, // 🔹 Bắt buộc phải truyền vào
+    this.isGroupPage = false, //  Giá trị mặc định là false
+  });
 
   @override
   Widget build(BuildContext context) {
+    // 🔹 DANH SÁCH NHÓM CẦN HIỂN THỊ
+    const List<Map<String, dynamic>> groups = [
+      {"name": "Tất cả", "icon": Icons.public},
+      {"name": "Mobile - (Flutter, Kotlin)", "icon": Icons.phone_android},
+      {"name": "Thiết kế đồ họa", "icon": Icons.computer},
+      {"name": "DEV - vui vẻ", "icon": Icons.developer_mode},
+      {"name": "CNTT", "icon": Icons.school},
+    ];
+
     return SafeArea(
       child: Container(
         width: 260,
@@ -22,27 +42,43 @@ class LeftPanel extends StatelessWidget {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.lightGreenAccent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
+
+                //  LOGIC ẨN/HIỆN NÚT "Mở rộng" DỰA TRÊN isGroupPage
+                if (!isGroupPage)
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          // 🔹 Đã sửa lỗi: ThiamGiaNhom() -> const ThamGiaNhomPage()
+                          builder: (context) => const ThamGiaNhomPage(),
+                        ),
+                      );
+                      onClose();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.lightGreenAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
                     ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 6,
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("Mở rộng", style: TextStyle(color: Colors.black)),
+                        SizedBox(width: 6),
+                        Icon(
+                          Icons.arrow_forward,
+                          color: Colors.black,
+                          size: 18,
+                        ),
+                      ],
                     ),
                   ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text("Mở rộng", style: TextStyle(color: Colors.black)),
-                      SizedBox(width: 6),
-                      Icon(Icons.arrow_forward, color: Colors.black, size: 18),
-                    ],
-                  ),
-                ),
               ],
             ),
             const SizedBox(height: 12),
@@ -59,20 +95,38 @@ class LeftPanel extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            const ListTile(leading: Icon(Icons.home), title: Text("Trang chủ")),
-            const ListTile(
-              leading: Icon(Icons.phone_android),
-              title: Text("Mobile - (Flutter, Kotlin)"),
+
+            // Nút "Trang chủ"
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text("Trang chủ"),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Home()),
+                );
+                onClose();
+              },
             ),
-            const ListTile(
-              leading: Icon(Icons.computer),
-              title: Text("Thiết kế đồ họa"),
+            const Divider(), // Phân cách
+            // 🔹 DANH SÁCH CÁC NHÓM
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: groups.length,
+                itemBuilder: (context, index) {
+                  final group = groups[index];
+                  return ListTile(
+                    leading: Icon(group["icon"]),
+                    title: Text(group["name"]),
+                    onTap: () {
+                      // 🔹 GỌI HÀM CALLBACK VÀ TRUYỀN TÊN NHÓM
+                      onGroupSelected(group["name"]);
+                    },
+                  );
+                },
+              ),
             ),
-            const ListTile(
-              leading: Icon(Icons.developer_mode),
-              title: Text("DEV - vui vẻ"),
-            ),
-            const ListTile(leading: Icon(Icons.school), title: Text("CNTT")),
           ],
         ),
       ),
