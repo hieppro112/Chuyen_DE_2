@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:giao_tiep_sv_user/Profile/Widget/avatarWidget.dart';
 import '../models/personal_post_model.dart';
 
 class PersonalPostItemWidget extends StatefulWidget {
@@ -7,6 +10,8 @@ class PersonalPostItemWidget extends StatefulWidget {
   final VoidCallback onLike;
   final VoidCallback onDelete;
   final VoidCallback? onEdit;
+  final String avatarUrl; // THÊM: avatar từ profile
+  final File? avatarFile; // THÊM: avatar file từ profile
 
   const PersonalPostItemWidget({
     super.key,
@@ -15,6 +20,8 @@ class PersonalPostItemWidget extends StatefulWidget {
     required this.onLike,
     required this.onDelete,
     this.onEdit,
+    required this.avatarUrl,
+    this.avatarFile,
   });
 
   @override
@@ -72,9 +79,10 @@ class _PersonalPostItemWidgetState extends State<PersonalPostItemWidget> {
               children: [
                 Row(
                   children: [
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundImage: NetworkImage(widget.post.image),
+                    AvatarWidget(
+                      avatarUrl: widget.avatarUrl,
+                      avatarFile: widget.avatarFile,
+                      radius: 35,
                     ),
                     const SizedBox(width: 8),
                     Column(
@@ -110,34 +118,33 @@ class _PersonalPostItemWidgetState extends State<PersonalPostItemWidget> {
                       widget.onEdit!();
                     }
                   },
-                  itemBuilder:
-                      (context) => [
-                        if (widget.onEdit != null)
-                          const PopupMenuItem(
-                            value: 'edit',
-                            child: Row(
-                              children: [
-                                Icon(Icons.edit, size: 18),
-                                SizedBox(width: 8),
-                                Text('Chỉnh sửa'),
-                              ],
-                            ),
-                          ),
-                        const PopupMenuItem(
-                          value: 'delete',
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.delete_outline,
-                                size: 18,
-                                color: Colors.red,
-                              ),
-                              SizedBox(width: 8),
-                              Text('Xóa', style: TextStyle(color: Colors.red)),
-                            ],
-                          ),
+                  itemBuilder: (context) => [
+                    if (widget.onEdit != null)
+                      const PopupMenuItem(
+                        value: 'edit',
+                        child: Row(
+                          children: [
+                            Icon(Icons.edit, size: 18),
+                            SizedBox(width: 8),
+                            Text('Chỉnh sửa'),
+                          ],
                         ),
-                      ],
+                      ),
+                    const PopupMenuItem(
+                      value: 'delete',
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.delete_outline,
+                            size: 18,
+                            color: Colors.red,
+                          ),
+                          SizedBox(width: 8),
+                          Text('Xóa', style: TextStyle(color: Colors.red)),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
