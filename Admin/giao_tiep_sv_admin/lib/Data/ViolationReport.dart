@@ -18,7 +18,6 @@ class ViolationReport {
   });
 }
 
-// Dữ liệu ảo (Mock Data) đã cập nhật đầy đủ các trường
 final List<ViolationReport> mockReports = [
   ViolationReport(
     name: 'Lê Đình Thuận',
