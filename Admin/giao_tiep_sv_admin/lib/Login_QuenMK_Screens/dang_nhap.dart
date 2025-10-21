@@ -1,8 +1,4 @@
-
 import 'package:flutter/material.dart';
-import 'dang_ki.dart';
-import 'quen_mk.dart';
-import 'package:giao_tiep_sv_user/Home_screen/home.dart';
 
 class DangNhap extends StatelessWidget {
   const DangNhap({super.key});
@@ -20,12 +16,10 @@ class DangNhap extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset('assets/images/logo.png', width: 150),
-                  const SizedBox(height: 20),
-
+                  const SizedBox(height: 24),
                   const Text(
-                    "ĐĂNG NHẬP",
+                    'ĐĂNG NHẬP ADMIN',
                     style: TextStyle(
-                      fontStyle: FontStyle.italic,
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
                       color: Colors.blue,
@@ -33,8 +27,7 @@ class DangNhap extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 30),
-
-                  // Email
+                  // Email TextField
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.transparent,
@@ -44,7 +37,7 @@ class DangNhap extends StatelessWidget {
                     child: const TextField(
                       style: TextStyle(color: Colors.black),
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.email, color: Colors.black),
+                        prefixIcon: Icon(Icons.email, color: Colors.black54),
                         hintText: 'Email',
                         hintStyle: TextStyle(color: Colors.black54),
                         border: InputBorder.none,
@@ -56,8 +49,7 @@ class DangNhap extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-
-                  // Password
+                  // Password TextField
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.transparent,
@@ -68,7 +60,7 @@ class DangNhap extends StatelessWidget {
                       obscureText: true,
                       style: TextStyle(color: Colors.black),
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.lock, color: Colors.black),
+                        prefixIcon: Icon(Icons.lock, color: Colors.black54),
                         hintText: 'Mật khẩu',
                         hintStyle: TextStyle(color: Colors.black54),
                         border: InputBorder.none,
@@ -79,30 +71,21 @@ class DangNhap extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 15),
-
+                  const SizedBox(height: 30),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
                         onPressed: () {
-                          // Xử lý khi người dùng quên mật khẩu
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const QuenMatKhau(),
-                            ),
-                          );
+                          // Xử lý sự kiện quên mật khẩu
                         },
                         child: const Text(
-                          "Quên mật khẩu?",
+                          'Quên mật khẩu?',
                           style: TextStyle(color: Colors.red),
                         ),
                       ),
                     ],
                   ),
-
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -115,10 +98,10 @@ class DangNhap extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                         Navigator.push(
-                           context,
-                           MaterialPageRoute(builder: (context) => const Home()),
-                         );
+                        //  Navigator.push(
+                        //    context,
+                        //    MaterialPageRoute(builder: (context) => const Home()),
+                        //  );
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Đăng nhập thành công!'),
@@ -137,33 +120,6 @@ class DangNhap extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Bạn chưa có tài khoản? ",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const DangKi(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          "Đăng ký",
-                          style: TextStyle(
-                            color: Color(0xFF1F65DE), // xanh nước biển
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),

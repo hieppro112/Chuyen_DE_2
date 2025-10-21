@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
-import 'ThongTinNguoiDung.dart';
+import 'package:giao_tiep_sv_user/Widget/headerWidget.dart';
 import 'TieuDe.dart';
 import 'OThongBao.dart';
 
 class ManHinhThongBao extends StatelessWidget {
-  const ManHinhThongBao({super.key});
-
-
+  ManHinhThongBao({super.key});
+  // dữ liệu giả
+  final List<Map<String, String>> danhSachThongBao = [
+    {"nguoiGui": "Admin", "noiDung": "Cảnh báo về hành vi ..."},
+    {"nguoiGui": "Admin", "noiDung": "Cảnh báo về hành vi ..."},
+    {"nguoiGui": "Admin", "noiDung": "Cảnh báo về hành vi ..."},
+  ];
 
   @override
   Widget build(BuildContext context) {
-    // dữ liệu giả
-    final List<Map<String, String>> danhSachThongBao = [
-      {"nguoiGui": "Đình Thuận", "noiDung": "Cảnh báo Hiệp về hành vi ấu dâm"},
-      {"nguoiGui": "Quang Khánh", "noiDung": "Cảnh báo Hiệp về hành vi biến thái"},
-      {"nguoiGui": "Phạm Thắng", "noiDung": "Cảnh báo Hiệp về hành vi quấy rối tình dục"},
-      
-    ];
+    double widthScreen = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -25,7 +23,22 @@ class ManHinhThongBao extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           child: Column(
             children: [
-              const ThongTinNguoiDung(),
+              Headerwidget(
+                url_avt: "assets/images/avatar.png",
+                fullname: "Lê Đình Thuận",
+                email: "23211TT1371@gmail.com",
+                width: widthScreen,
+                chucnang: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Image.asset(
+                    "assets/icons/ic_back.png",
+                    width: 24,
+                    height: 24,
+                  ),
+                ),
+              ),
               const SizedBox(height: 30),
               const TieuDeThongBao(),
               const SizedBox(height: 20),
