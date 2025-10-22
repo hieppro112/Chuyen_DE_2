@@ -65,7 +65,6 @@ class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              // 🔹 ĐÃ SỬA LỖI CHÍNH TẢ
                               builder: (context) => const NhomCuaToi(),
                             ),
                           );
