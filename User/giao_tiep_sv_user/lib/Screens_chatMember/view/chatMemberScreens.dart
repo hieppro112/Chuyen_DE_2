@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_user/Data/room_chat.dart';
 import 'package:giao_tiep_sv_user/Screen_member_group/widget/customSearch.dart';
+import 'package:giao_tiep_sv_user/Screens_chatMember/view/chatMessage.dart';
 import 'package:giao_tiep_sv_user/Screens_chatMember/widget/custom_chat_member.dart';
 import 'package:giao_tiep_sv_user/Widget/MyButton.dart';
 import 'package:giao_tiep_sv_user/Widget/headerWidget.dart';
@@ -131,12 +132,12 @@ class _ChatMemberScreenState extends State<ChatMemberScreen> {
             //search Message
             SizedBox(height: 8),
             createSearchMessage(),
-            //2 button bạn bè và nhóm
-            SizedBox(height: 8),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: createButtonMessage(),
             ),
+
+            //2 button bạn bè và nhóm
 
             //danh sach tin nhắn
             Expanded(child: createListMessage()),
@@ -152,16 +153,21 @@ class _ChatMemberScreenState extends State<ChatMemberScreen> {
     String content = "xin chào bạn";
     bool isnew = true;
     return ListView.builder(
-      // physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: listMessageSearch.length,
       itemBuilder: (context, index) {
         var value = listMessageSearch[index];
         return CustomChatMember(
+          id_chat: "hiep",
           url_avt: value.avt_url,
           fullname: value.name,
           content: content,
           isnew: isnew,
+          ontap: (value) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return ScreenMessage();
+            },));
+          },
         );
       },
     );
