@@ -10,6 +10,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  // 1. Khai báo PageController
+  late PageController _pageController;
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
@@ -18,12 +20,32 @@ class _HomeState extends State<Home> {
     const ProfileScreen(),
   ];
 
-  // Hiệu ứng khi chọn icon
+  @override
+  void initState() {
+    super.initState();
+    // 2. Khởi tạo PageController
+    _pageController = PageController(initialPage: _currentIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _onNavigate(int index) {
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300), // Thời gian trượt
+      curve: Curves.easeInOut, // Đường cong chuyển động
+    );
+  }
+
   Widget _buildAnimatedNavItem(IconData icon, String label, int index) {
     final bool isSelected = _currentIndex == index;
 
     return GestureDetector(
-      onTap: () => setState(() => _currentIndex = index),
+      onTap: () => _onNavigate(index),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeInOut,
@@ -70,7 +92,15 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_currentIndex],
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        children: _pages,
+      ),
       backgroundColor: Colors.grey.shade100,
       bottomNavigationBar: Container(
         margin: const EdgeInsets.all(12),
