@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:giao_tiep_sv_admin/Admin/duyet_bai_viet_admin/duyet_bai_viet_admin.dart';
 import 'bao_cao_vi_pham.dart';
 
 class AdminScreen extends StatelessWidget {
@@ -88,8 +89,12 @@ class AdminScreen extends StatelessWidget {
                 color: const Color(0xFFFFF3E0), // Màu cam nhạt
                 iconColor: Colors.red, // Màu icon đỏ
                 onPressed: () {
-                  // Xử lý khi nhấn nút
-                  print('Quản lý bài viết và báo cáo pressed');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AdminPostManagementScreen(),
+                    ),
+                  );
                 },
               ),
             ],
