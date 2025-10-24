@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:giao_tiep_sv_user/duyet_Nguoi_Dung/member_post_screen.dart';
+import 'package:giao_tiep_sv_user/maneger_member_group_Screens/view/maneger_member_group.dart';
 
 class GroupInfoDialog extends StatelessWidget {
   final String groupName;
@@ -50,10 +52,16 @@ class GroupInfoDialog extends StatelessWidget {
       leading: Icon(icon, color: color),
       title: Text(text),
       onTap: () {
-        Navigator.pop(context);
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text("Đã chọn: $text")));
+        // Navigator.pop(context);
+        // ScaffoldMessenger.of(
+        //   context,
+        // ).showSnackBar(SnackBar(content: Text("Đã chọn: $text")));
+        if(text.toLowerCase().contains("Duyệt".trim().toLowerCase())){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => MemberPostScreen(),));
+        }
+        else if(text.toLowerCase().contains("Thành viên".trim().toLowerCase())){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ManegerMemberGroupScreen(),));
+        }
       },
     );
   }

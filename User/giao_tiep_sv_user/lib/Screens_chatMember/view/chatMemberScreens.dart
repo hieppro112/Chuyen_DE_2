@@ -3,6 +3,7 @@ import 'package:giao_tiep_sv_user/Data/room_chat.dart';
 import 'package:giao_tiep_sv_user/Screen_member_group/widget/customSearch.dart';
 import 'package:giao_tiep_sv_user/Screens_chatMember/view/chatMessage.dart';
 import 'package:giao_tiep_sv_user/Screens_chatMember/widget/custom_chat_member.dart';
+import 'package:giao_tiep_sv_user/ThongBao/ManHinhThongBao.dart';
 import 'package:giao_tiep_sv_user/Widget/MyButton.dart';
 import 'package:giao_tiep_sv_user/Widget/headerWidget.dart';
 
@@ -124,7 +125,8 @@ class _ChatMemberScreenState extends State<ChatMemberScreen> {
               width: width.toDouble(),
               chucnang: IconButton(
                 onPressed: () {
-                  print("notifycation");
+                  // print("notifycation");
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ManHinhThongBao(),));
                 },
                 icon: Icon(Icons.notifications, color: Colors.amber, size: 45),
               ),
