@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:giao_tiep_sv_admin/Admin/duyet_bai_viet_admin/duyet_bai_viet_admin.dart';
+import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/view/Create_group_community.dart';
 import 'bao_cao_vi_pham.dart';
 
 class AdminScreen extends StatelessWidget {
@@ -76,7 +76,7 @@ class AdminScreen extends StatelessWidget {
                 iconColor: Colors.purple, // Màu icon tím
                 onPressed: () {
                   // Xử lý khi nhấn nút
-                  print('Tạo nhóm cộng đồng pressed');
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenCommunityGroup(),));
                 },
               ),
               const SizedBox(height: 15),
