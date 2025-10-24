@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:giao_tiep_sv_user/Home_screen/Home/Home_screen/Group_create/nhom_cua_toi.dart';
 import '../left_panel.dart'; // Đảm bảo đúng đường dẫn
 import 'tao_nhom_page.dart';
 // import 'nhom_cua_toi.dart';
@@ -65,8 +66,7 @@ class _ThamGiaNhomPageState extends State<ThamGiaNhomPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              // 🔹 ĐÃ SỬA LỖI CHÍNH TẢ
-                              builder: (context) => Container(),
+                              builder: (context) => NhomCuaToi(),
                             ),
                           );
                         },
