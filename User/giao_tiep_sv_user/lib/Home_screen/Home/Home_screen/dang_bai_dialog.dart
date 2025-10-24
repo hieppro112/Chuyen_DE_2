@@ -382,7 +382,7 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
                       elevation: 5,
                     ),
                     onPressed: () {
-                      // Xử lý đăng bài ở đây
+                      // Lưu ý!: Xử lý đăng bài ở đây
                       // final postData = {
                       //   'content': contentController.text,
                       //   'group': selectedGroup,
