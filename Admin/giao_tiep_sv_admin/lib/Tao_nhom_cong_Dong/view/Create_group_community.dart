@@ -1,0 +1,182 @@
+import 'package:flutter/material.dart';
+import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/view/Screen_uyquyen.dart';
+import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/widget/custom_all_khoa.dart';
+import 'package:giao_tiep_sv_admin/widget/MyButton.dart';
+
+class ScreenCommunityGroup extends StatefulWidget {
+  const ScreenCommunityGroup({super.key});
+
+  @override
+  State<ScreenCommunityGroup> createState() => _ScreenCommunityGroupState();
+}
+
+class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
+  List<String> khoa= [
+    "CNTT","Kế Toán","Điện","Ô Tô","Cơ khí",
+  ];
+  TextEditingController nameGroup = TextEditingController();
+  TextEditingController descriptionGroup = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xfff5f5f5),
+      appBar: AppBar(
+        backgroundColor: Color(0xfff5f5f5),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back),
+          color: Colors.black,
+          iconSize: 25,
+        ),
+        title: Text(
+          "Tạo nhóm cộng đồng",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
+
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            createNameGroup(),
+            SizedBox(height: 10),
+            createDescription(),
+            SizedBox(height: 10),
+            create_avt(),
+            SizedBox(height: 10),
+            createButton(),
+            SizedBox(height: 30),
+            complate_create(),
+            
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget complate_create() {
+    return Center(
+      child: Container(
+      padding: EdgeInsets.symmetric(horizontal: 25,vertical: 5),
+      decoration: BoxDecoration(
+        color: Color(0xff55B9F6),
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.grey,
+        width: 0.9),
+      ),
+      child: Text("Tạo nhóm",style: TextStyle(
+        fontSize: 20,
+        color: Colors.white
+      ),)
+    ),
+    );
+  }
+
+  Widget createButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Mybutton(
+          url_icon: 'assets/images/admin.png',
+          nameButton: "Ủy quyền",
+          Mycolor: Colors.white,
+          ontap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Screen_uyquyen(),)),
+        ),
+        Mybutton(
+          url_icon: 'assets/images/group.png',
+          nameButton: "Khoa",
+          Mycolor: Colors.white,
+          ontap: () {
+            print("chon khoa");
+            CustomAllKhoa.show(context);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget createNameGroup() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+
+      children: [
+        Text("Tên Nhóm:", style: TextStyle(fontSize: 25)),
+        SizedBox(height: 5),
+        TextField(
+          controller: nameGroup,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.grey)
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.lightBlueAccent)
+            )
+            //border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget createDescription() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Mô Tả:", style: TextStyle(fontSize: 25)),
+        SizedBox(height: 5),
+        TextField(
+          textAlignVertical: TextAlignVertical.top,
+          minLines: 3,
+          maxLines: 5,
+          controller: nameGroup,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.grey)
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.lightBlueAccent)
+            )
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget create_avt() {
+    return Row(
+      children: [
+        Expanded(
+          child: Text("Chọn ảnh đại diện:", style: TextStyle(fontSize: 20)),
+        ),
+        Expanded(
+          child: InkWell(
+            onTap: () {
+              print("image");
+            },
+            child: Image.asset(
+              'assets/images/picked_avt_group.png',
+              fit: BoxFit.contain,
+              width: 45,
+              height: 45,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+}
