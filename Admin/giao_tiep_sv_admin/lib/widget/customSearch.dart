@@ -6,9 +6,6 @@ class Customsearch extends StatelessWidget {
   Customsearch({super.key, this.onTap});
 
     TextEditingController controller_search = TextEditingController();
-
-  
-
   @override
   Widget build(BuildContext context) {
     return Padding(

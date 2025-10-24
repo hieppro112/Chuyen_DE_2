@@ -20,26 +20,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
     Users(id_user: "23211TT3596@mail.tdc.edu.vn", email: "23211TT3596@mail.tdc.edu.vn", pass: "123456", fullname: "Phạm Thắng", phone: "0898415185", url_avt: "assets/images/avatar.png", role: 0, faculty_id: 1),
     Users(id_user: "23211TT3595@mail.tdc.edu.vn", email: "23211TT3595@mail.tdc.edu.vn", pass: "123456", fullname: "Lê Van Tủn", phone: "0898415185", url_avt: "assets/images/avatar.png", role: 0, faculty_id: 1),
 
-    // CustommemberWidget(
-    //   id: 1,
-    //   url: "assets/images/avatar.png",
-    //   fullname: "Le Dai Hiep",
-    // ),
-    // CustommemberWidget(
-    //   id: 2,
-    //   url: "assets/images/avatar.png",
-    //   fullname: "Le Dinh Thuan",
-    // ),
-    // CustommemberWidget(
-    //   id: 3,
-    //   url: "assets/images/avatar.png",
-    //   fullname: "Cao Quang Khanh",
-    // ),
-    // CustommemberWidget(
-    //   id: 4,
-    //   url: "assets/images/avatar.png",
-    //   fullname: "Pham Thang",
-    // ),
+    
   ];
 
   @override
@@ -64,7 +45,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         ),
         leading: GestureDetector(
           onTap: () {
-            print("Exit");
+            Navigator.pop(context);
           },
           child: Padding(
             padding: EdgeInsets.all(12),
