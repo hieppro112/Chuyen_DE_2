@@ -29,6 +29,8 @@ class CustomAllKhoaState extends State<CustomAllKhoa> {
     Faculty(id: "KS", name_faculty: "khách sạn"),
     Faculty(id: "NA", name_faculty: "Nấu ăn"),
     Faculty(id: "QT", name_faculty: "Quản trị kinh doanh"),
+    Faculty(id: "QT", name_faculty: "Quản trị kinh kk"),
+    
   ];
 
   @override
