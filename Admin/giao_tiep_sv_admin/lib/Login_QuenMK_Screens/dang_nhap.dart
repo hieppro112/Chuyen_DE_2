@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:giao_tiep_sv_admin/Login_QuenMK_Screens/quen_mk.dart';
+import 'package:giao_tiep_sv_admin/Admin/Home.dart';
 
 class DangNhap extends StatelessWidget {
   const DangNhap({super.key});
@@ -77,7 +79,13 @@ class DangNhap extends StatelessWidget {
                     children: [
                       TextButton(
                         onPressed: () {
-                          // Xử lý sự kiện quên mật khẩu
+                          // Xử lý khi nhấn nút
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const QuenMatKhau(),
+                            ),
+                          );
                         },
                         child: const Text(
                           'Quên mật khẩu?',
@@ -98,10 +106,12 @@ class DangNhap extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        //  Navigator.push(
-                        //    context,
-                        //    MaterialPageRoute(builder: (context) => const Home()),
-                        //  );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AdminScreen(),
+                          ),
+                        );
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Đăng nhập thành công!'),

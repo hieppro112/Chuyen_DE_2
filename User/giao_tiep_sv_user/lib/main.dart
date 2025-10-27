@@ -3,8 +3,6 @@ import 'package:giao_tiep_sv_user/Home_screen/Home/Home_screen/Group_create/nhom
 import 'package:giao_tiep_sv_user/Home_screen/home.dart';
 import 'package:giao_tiep_sv_user/Login_register/dang_ki.dart';
 import 'package:giao_tiep_sv_user/Login_register/dang_nhap.dart';
-import 'package:giao_tiep_sv_user/Login_register/quen_mk.dart';
-import 'package:giao_tiep_sv_user/Screens_chatMember/view/chatMemberScreens.dart';
 import 'package:giao_tiep_sv_user/Screens_chatMember/view/chatMessage.dart';
 import 'package:giao_tiep_sv_user/ThongBao/ManHinhThongBao.dart';
 
@@ -21,9 +19,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false, // ẩn banner debug
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 0, 0, 0)),
       ),
-      home: ManHinhThongBao(), // Trang mặc định
+
+      home: DangKi(), // Trang mặc định
+
     );
   }
 }

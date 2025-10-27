@@ -7,7 +7,7 @@ class TieuDeThongBao extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: Text(
-        "Thông Báo",
+        "Thông Báo Gần Đây",
         style: TextStyle(
           fontSize: 26,
           fontWeight: FontWeight.bold,
