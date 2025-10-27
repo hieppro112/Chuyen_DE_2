@@ -13,34 +13,61 @@ class DangBaiDialog extends StatefulWidget {
 class _DangBaiDialogState extends State<DangBaiDialog> {
   String selectedGroup = 'Khoa CNTT';
   final TextEditingController contentController = TextEditingController();
-  File? selectedImage;
-  String? selectedFileName;
+
+  // Thay đổi: Sử dụng List để lưu nhiều File ảnh
+  List<File> selectedImages = [];
+
+  // Thay đổi: Sử dụng List để lưu tên nhiều File tài liệu
+  List<String> selectedFileNames = [];
 
   final ImagePicker _picker = ImagePicker();
 
-  // Hàm chọn ảnh từ thư viện
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
+  // Hàm chọn nhiều ảnh từ thư viện
+  Future<void> _pickImages() async {
+    // Cho phép chọn nhiều ảnh
+    final pickedFiles = await _picker.pickMultiImage();
+
+    if (pickedFiles.isNotEmpty) {
       setState(() {
-        selectedImage = File(pickedFile.path);
-        // Khi chọn ảnh, bỏ chọn file nếu có
-        selectedFileName = null;
+        // Chuyển đổi XFile sang File và thêm vào danh sách
+        selectedImages.addAll(
+          pickedFiles.map((xfile) => File(xfile.path)).toList(),
+        );
+        // Khi chọn ảnh, xóa danh sách file tài liệu
+        selectedFileNames.clear();
       });
     }
   }
 
-  // Hàm chọn file
-  Future<void> _pickFile() async {
-    final result = await FilePicker.platform.pickFiles();
+  // Hàm chọn nhiều file tài liệu
+  Future<void> _pickFiles() async {
+    // Cho phép chọn nhiều file tài liệu
+    final result = await FilePicker.platform.pickFiles(allowMultiple: true);
+
     if (result != null) {
       setState(() {
-        // Chỉ lấy tên file, không cần lấy path file cho biến này
-        selectedFileName = result.files.single.name;
-        // Khi chọn file, bỏ chọn ảnh nếu có
-        selectedImage = null;
+        // Lấy tên các file và thêm vào danh sách
+        selectedFileNames.addAll(
+          result.files.map((platformFile) => platformFile.name).toList(),
+        );
+        // Khi chọn file tài liệu, xóa danh sách ảnh
+        selectedImages.clear();
       });
     }
+  }
+
+  // Hàm xóa một file tài liệu khỏi danh sách
+  void _removeFile(int index) {
+    setState(() {
+      selectedFileNames.removeAt(index);
+    });
+  }
+
+  // Hàm xóa một ảnh khỏi danh sách
+  void _removeImage(int index) {
+    setState(() {
+      selectedImages.removeAt(index);
+    });
   }
 
   @override
@@ -51,23 +78,23 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
 
   @override
   Widget build(BuildContext context) {
-    // Màu chủ đạo cho ứng dụng
-    const Color primaryColor = Color(0xFF1E88E5); // Màu xanh dương đậm hơn
+    const Color primaryColor = Color(0xFF1E88E5);
+
+    // Kiểm tra xem có bất kỳ file hay ảnh nào được chọn không
+    final hasAttachments =
+        selectedImages.isNotEmpty || selectedFileNames.isNotEmpty;
 
     return Dialog(
-      // Thay đổi padding và margin để trông gọn gàng hơn
       insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: SingleChildScrollView(
-        // Thêm SingleChildScrollView để tránh tràn màn hình
         child: Container(
-          width: 500, // Đảm bảo kích thước tối đa vẫn giữ nguyên
+          width: 500,
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: Colors.white, // Nền trắng sạch sẽ
+            color: Colors.white,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
-              // Thêm shadow nhẹ cho dialog
               BoxShadow(
                 color: Colors.grey.withOpacity(0.15),
                 spreadRadius: 2,
@@ -103,7 +130,7 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
               // Ô nhập nội dung
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade50, // Nền nhập liệu màu nhạt
+                  color: Colors.grey.shade50,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: Colors.grey.shade200),
                 ),
@@ -125,7 +152,7 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
               ),
               const SizedBox(height: 20),
 
-              // Khu vực đính kèm (File / Ảnh)
+              // Khu vực chọn và hiển thị đính kèm
               const Text(
                 'Đính kèm:',
                 style: TextStyle(
@@ -134,6 +161,8 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
                 ),
               ),
               const SizedBox(height: 8),
+
+              // Hàng Icon chọn File/Ảnh
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
@@ -148,82 +177,122 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
                   children: [
                     // Icon chọn file
                     Tooltip(
-                      message: 'Đính kèm tệp tin',
+                      message: 'Đính kèm tệp tin (nhiều file)',
                       child: IconButton(
                         icon: const Icon(
                           Icons.attach_file,
                           size: 28,
                           color: primaryColor,
                         ),
-                        onPressed: _pickFile,
+                        onPressed: _pickFiles,
                       ),
                     ),
                     // Icon chọn ảnh
                     Tooltip(
-                      message: 'Tải ảnh từ thư viện',
+                      message: 'Tải ảnh từ thư viện (nhiều ảnh)',
                       child: IconButton(
                         icon: const Icon(
                           Icons.image_outlined,
                           size: 28,
                           color: primaryColor,
                         ),
-                        onPressed: _pickImage,
+                        onPressed: _pickImages,
                       ),
                     ),
                     const SizedBox(width: 16),
-                    // Hiển thị tên file hoặc ảnh
+
+                    // Thông báo trạng thái đính kèm
                     Expanded(
                       child: Text(
-                        selectedFileName ??
-                            (selectedImage != null
-                                ? selectedImage!.path
-                                      .split('/')
-                                      .last // Hiển thị tên file ảnh
-                                : 'Chưa có tệp nào được chọn'),
+                        hasAttachments
+                            ? 'Đã đính kèm ${selectedImages.length + selectedFileNames.length} tệp'
+                            : 'Chưa có tệp nào được chọn',
                         style: TextStyle(
-                          color:
-                              selectedFileName != null || selectedImage != null
-                              ? Colors.black87
-                              : Colors.grey,
-                          fontStyle:
-                              selectedFileName == null && selectedImage == null
-                              ? FontStyle.italic
-                              : null,
+                          color: hasAttachments ? Colors.black87 : Colors.grey,
+                          fontStyle: hasAttachments ? null : FontStyle.italic,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    // Nút xóa đính kèm chung
-                    if (selectedFileName != null || selectedImage != null)
-                      IconButton(
-                        icon: const Icon(
-                          Icons.close,
-                          size: 18,
-                          color: Colors.red,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            selectedFileName = null;
-                            selectedImage = null;
-                          });
-                        },
-                      ),
                   ],
                 ),
               ),
 
-              // Hiển thị ảnh đã chọn (Preview)
-              if (selectedImage != null)
+              // Hiển thị danh sách file tài liệu đã chọn
+              if (selectedFileNames.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 16),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.file(
-                      selectedImage!,
-                      height: 150,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                    ),
+                  child: Wrap(
+                    spacing: 8.0,
+                    runSpacing: 4.0,
+                    children: selectedFileNames.asMap().entries.map((entry) {
+                      int index = entry.key;
+                      String fileName = entry.value;
+                      return Chip(
+                        avatar: const Icon(Icons.insert_drive_file, size: 18),
+                        label: Text(
+                          fileName,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                        deleteIcon: const Icon(Icons.close, size: 18),
+                        onDeleted: () => _removeFile(index),
+                        backgroundColor: Colors.blue.shade50,
+                      );
+                    }).toList(),
+                  ),
+                ),
+
+              // Hiển thị preview nhiều ảnh đã chọn
+              if (selectedImages.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4, // 4 ảnh trên 1 hàng
+                          crossAxisSpacing: 8.0,
+                          mainAxisSpacing: 8.0,
+                        ),
+                    itemCount: selectedImages.length,
+                    itemBuilder: (context, index) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: GridTile(
+                          child: Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              Image.file(
+                                selectedImages[index],
+                                fit: BoxFit.cover,
+                              ),
+                              // Nút xóa ảnh
+                              Positioned(
+                                top: 4,
+                                right: 4,
+                                child: InkWell(
+                                  onTap: () => _removeImage(index),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black54,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: const Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
 
@@ -301,8 +370,7 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
                   const SizedBox(width: 15),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          primaryColor, // Nút Đăng dùng màu chủ đạo
+                      backgroundColor: primaryColor,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 25,
@@ -314,7 +382,7 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
                       elevation: 5,
                     ),
                     onPressed: () {
-                      // Xử lý đăng bài ở đây
+                      // Lưu ý!: Xử lý đăng bài ở đây
                       // final postData = {
                       //   'content': contentController.text,
                       //   'group': selectedGroup,
