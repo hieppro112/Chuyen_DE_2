@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/view/Screen_uyquyen.dart';
 import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/widget/custom_all_khoa.dart';
 import 'package:giao_tiep_sv_admin/widget/MyButton.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ScreenCommunityGroup extends StatefulWidget {
   const ScreenCommunityGroup({super.key});
@@ -11,6 +14,7 @@ class ScreenCommunityGroup extends StatefulWidget {
 }
 
 class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
+  File? avt_group =null;
   List<String> khoa= [
     "CNTT","Kế Toán","Điện","Ô Tô","Cơ khí",
   ];
@@ -157,6 +161,7 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
   }
 
   Widget create_avt() {
+
     return Row(
       children: [
         Expanded(
@@ -164,15 +169,34 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
         ),
         Expanded(
           child: InkWell(
-            onTap: () {
-              print("image");
+            onTap: () async{
+              print("pick img");
+              final ImagePicker pickerImg = ImagePicker();
+              final XFile? image = await pickerImg.pickImage(source: ImageSource.gallery);
+              if(image!=null){
+                setState(() {
+                  avt_group = File(image.path);
+                });
+              }
             },
-            child: Image.asset(
-              'assets/images/picked_avt_group.png',
+            child:(avt_group==null)?
+             Image.asset(
+            'assets/images/picked_avt_group.png',
+            width: 100,
+            
+            height: 100,
+            fit: BoxFit.contain,
+          )
+          :
+            Image.file(
+              // avt_group.path?'assets/images/picked_avt_group.png',
+             avt_group!,
               fit: BoxFit.contain,
               width: 45,
               height: 45,
-            ),
+            )
+            
+           
           ),
         ),
       ],
