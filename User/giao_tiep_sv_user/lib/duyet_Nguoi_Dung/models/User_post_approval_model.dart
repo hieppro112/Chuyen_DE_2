@@ -1,10 +1,11 @@
+// models/User_post_approval_model.dart
 class UserPostApprovalModel {
   final String id;
   final String authorName;
   final String content;
   final String image;
   final DateTime date;
-  final String status;
+  String status; // THAY ĐỔI: bỏ final để có thể cập nhật
   final String reviewType;
 
   UserPostApprovalModel({
@@ -17,15 +18,24 @@ class UserPostApprovalModel {
     required this.reviewType,
   });
 
-  factory UserPostApprovalModel.fromJson(Map<String, dynamic> json) {
+  // THÊM: Phương thức copyWith để cập nhật trạng thái
+  UserPostApprovalModel copyWith({
+    String? id,
+    String? authorName,
+    String? content,
+    String? image,
+    DateTime? date,
+    String? status,
+    String? reviewType,
+  }) {
     return UserPostApprovalModel(
-      id: json['id'],
-      authorName: json['authorName'],
-      content: json['content'],
-      image: json['image'],
-      date: DateTime.parse(json['date']),
-      status: json['status'],
-      reviewType: json['reviewType'],
+      id: id ?? this.id,
+      authorName: authorName ?? this.authorName,
+      content: content ?? this.content,
+      image: image ?? this.image,
+      date: date ?? this.date,
+      status: status ?? this.status,
+      reviewType: reviewType ?? this.reviewType,
     );
   }
 }
