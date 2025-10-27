@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_user/duyet_Nguoi_Dung/member_post_screen.dart';
+import 'package:giao_tiep_sv_user/maneger_member_group_Screens/view/maneger_member_group.dart';
 
 class GroupInfoDialog extends StatelessWidget {
   final String groupName;
@@ -57,6 +58,13 @@ class GroupInfoDialog extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => MemberPostScreen()),
+          );
+          return;
+        }
+        else if (text == "Thành viên") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ManegerMemberGroupScreen()),
           );
           return;
         }
