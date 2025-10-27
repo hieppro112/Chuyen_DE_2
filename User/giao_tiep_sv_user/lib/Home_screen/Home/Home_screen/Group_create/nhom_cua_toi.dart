@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:giao_tiep_sv_user/Home_screen/Home/Home_screen/left_panel.dart';
+import '../left_panel.dart'; // Đảm bảo đúng đường dẫn
 
 class NhomCuaToi extends StatefulWidget {
   const NhomCuaToi({super.key});
@@ -10,36 +10,32 @@ class NhomCuaToi extends StatefulWidget {
 
 class _NhomCuaToiState extends State<NhomCuaToi> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  // Dữ liệu mẫu
   final List<Map<String, dynamic>> groups = [
     {"name": "Dev vui vẻ", "image": "assets/images/dev.png"},
     {"name": "Cơ sở dữ liệu", "image": "assets/images/database.png"},
-    {"name": "Mạng máy tính", "image": "assets/images/database.png"},
+    {"name": "Công nghệ vui vẻ", "image": "assets/images/database.png"},
     {"name": "Lập trình di động", "image": "assets/images/dev.png"},
-    {"name": "Lập trình Backend 1", "image": "assets/images/dev.png"},
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Colors.white,
       drawer: Drawer(
-        child: Column(
-          children: [
-            const Divider(height: 1),
-            // phần nội dung chính của Drawer (LeftPanel)
-            Expanded(
-              child: LeftPanel(
-                onClose: () {
-                  Navigator.of(context).pop();
-                }, onGroupSelected: (String p1) {  },
-              ),
-            ),
-          ],
+        child: LeftPanel(
+          onClose: () {
+            Navigator.of(context).pop();
+          },
+          // Tham số cần thiết cho LeftPanel
+          onGroupSelected: (_) {},
+          isGroupPage: true,
         ),
       ),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        backgroundColor: Colors.white,
         elevation: 0.5,
         leading: Builder(
           builder: (context) => IconButton(
@@ -54,22 +50,21 @@ class _NhomCuaToiState extends State<NhomCuaToi> {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        //  Nút Quay lại ở góc phải
         actions: [
           IconButton(
-           icon:Image.asset(
-              "assets/icons/ic_back.png",
-              width: 24,
-              height: 24,
-            ),
+            icon: const Icon(Icons.arrow_back, color: Colors.black, size: 20),
             onPressed: () {
-              // Xử lý khi nhấn nút tìm kiếm
+              // Quay lại màn hình trước
+              Navigator.pop(context);
             },
           ),
+          const SizedBox(width: 8), // Thêm khoảng cách ở lề phải
         ],
       ),
       body: Column(
         children: [
-          // Danh sách nhóm ở dưới panel
+          // Danh sách nhóm
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(12.0),
@@ -118,6 +113,7 @@ class _NhomCuaToiState extends State<NhomCuaToi> {
                               // Nút truy cập
                               OutlinedButton(
                                 onPressed: () {
+                                  print('Truy cập nhóm: ${group["name"]}');
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(

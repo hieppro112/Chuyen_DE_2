@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:giao_tiep_sv_user/duyet_Nguoi_Dung/member_post_screen.dart';
 
 class GroupInfoDialog extends StatelessWidget {
   final String groupName;
@@ -51,6 +52,15 @@ class GroupInfoDialog extends StatelessWidget {
       title: Text(text),
       onTap: () {
         Navigator.pop(context);
+        // bat sk khi click vao duyet
+        if (text == "Duyệt") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MemberPostScreen()),
+          );
+          return;
+        }
+        // bat sk khac cho thanh vien,tim kiem,...
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text("Đã chọn: $text")));

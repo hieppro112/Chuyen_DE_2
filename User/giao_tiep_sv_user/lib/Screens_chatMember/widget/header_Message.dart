@@ -17,17 +17,17 @@ class HeaderMessage extends StatelessWidget {
         ))
       ),
 
-      child: createHeader(),
+      child: createHeader(context),
     );
   }
 
-  Widget createHeader(){
+  Widget createHeader(BuildContext context){
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         InkWell(
           onTap: () {
-            print("exit");
+            Navigator.pop(context);
           },
           child: ClipOval(
             child: Image.asset("assets/icons/ic_back.png",fit: BoxFit.cover,width: 30,height: 30,),

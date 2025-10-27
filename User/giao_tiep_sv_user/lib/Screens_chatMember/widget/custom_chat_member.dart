@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class CustomChatMember extends StatefulWidget {
+  final String id_chat;
   final String url_avt;
   final String fullname;
   final String content;
   final bool isnew;
-  const CustomChatMember({super.key, required this.url_avt, required this.fullname, required this.content, required this.isnew});
+  final ValueChanged ontap;
+  const CustomChatMember({super.key, required this.url_avt, required this.fullname, required this.content, required this.isnew, required this.id_chat, required this.ontap});
 
   @override
   State<CustomChatMember> createState() => _CustomChatMemberState();
@@ -24,12 +26,15 @@ class _CustomChatMemberState extends State<CustomChatMember> {
       ),
       child: createMember(),
 
-
     );
   }
 
   Widget createMember(){
-    return Row(
+    return InkWell(
+      onTap: () {
+        return widget.ontap?.call(widget.id_chat);
+      },
+      child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
@@ -59,6 +64,7 @@ class _CustomChatMemberState extends State<CustomChatMember> {
         Icon(Icons.circle,size: 10,
         color: (widget.isnew==true)?Colors.blue:Colors.red,)
       ],
+    ),
     );
   }
 }
