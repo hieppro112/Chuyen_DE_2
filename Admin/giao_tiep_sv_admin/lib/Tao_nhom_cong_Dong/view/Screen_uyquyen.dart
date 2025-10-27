@@ -5,7 +5,10 @@ import 'package:giao_tiep_sv_admin/widget/customMember.dart';
 import 'package:giao_tiep_sv_admin/widget/customSearch.dart';
 
 class Screen_uyquyen extends StatefulWidget {
-  const Screen_uyquyen({super.key});
+  final List<Users>? listUyQuyen;
+
+  const Screen_uyquyen({super.key, this.listUyQuyen});
+  
 
   @override
   State<Screen_uyquyen> createState() => _Screen_uyquyenState();
@@ -242,7 +245,6 @@ class _Screen_uyquyenState extends State<Screen_uyquyen> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         createChoseKhoa(),
-
         InkWell(
           onTap: () {
             print("xong");
@@ -319,7 +321,8 @@ class _Screen_uyquyenState extends State<Screen_uyquyen> {
       itemCount: Listsearch.length,
       itemBuilder: (context, index) {
         var value = Listsearch[index];
-        return CustommemberWidget(id: value.id_user, url: value.url_avt, fullname: value.fullname);
+        return CustommemberWidget(id: value.id_user, url: value.url_avt, fullname: value.fullname
+        );
       },
     );
   }
