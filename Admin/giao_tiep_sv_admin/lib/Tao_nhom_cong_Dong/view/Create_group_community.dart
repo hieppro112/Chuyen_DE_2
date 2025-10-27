@@ -5,7 +5,6 @@ import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/view/Screen_uyquyen.dart';
 import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/widget/custom_all_khoa.dart';
 import 'package:giao_tiep_sv_admin/widget/MyButton.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class ScreenCommunityGroup extends StatefulWidget {
   const ScreenCommunityGroup({super.key});
@@ -184,6 +183,7 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
              Image.asset(
             'assets/images/picked_avt_group.png',
             width: 100,
+            
             height: 100,
             fit: BoxFit.contain,
           )
