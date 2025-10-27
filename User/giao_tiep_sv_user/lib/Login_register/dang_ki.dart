@@ -14,8 +14,6 @@ class _DangKiState extends State<DangKi> {
   final TextEditingController confirmController = TextEditingController();
 
   String? nganhHoc;
-
-
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
 
@@ -70,7 +68,7 @@ class _DangKiState extends State<DangKi> {
     }
   }
 
-  void _dangKy(BuildContext context) {
+  void _dangKy(BuildContext context) {  
     if (emailController.text.isEmpty ||
         passwordController.text.isEmpty ||
         confirmController.text.isEmpty) {
@@ -142,7 +140,9 @@ class _DangKiState extends State<DangKi> {
                         style: TextStyle(color: Colors.red),
                       ),
                     ),
-
+                 
+                  const SizedBox(height: 20),
+                  _buildNameField(),
                   const SizedBox(height: 20),
                   _buildPasswordField(),
                   const SizedBox(height: 15),
@@ -177,6 +177,27 @@ class _DangKiState extends State<DangKi> {
           prefixIcon: Icon(Icons.email, color: Colors.black),
           hintText: 'Email sinh viên',
           hintStyle: TextStyle(color: Colors.black54, fontSize: 14),
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNameField() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        border: Border.all(color: Colors.black),
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: TextField(
+        controller: null,
+        style: const TextStyle(color: Colors.black87),
+        decoration: const InputDecoration(
+          prefixIcon: Icon(Icons.person, color: Colors.black),
+          hintText: 'Họ và tên',
+          hintStyle: TextStyle(color: Colors.black54),
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
         ),
