@@ -76,6 +76,7 @@ class ScreenMessageState extends State<ScreenMessage> {
     ),
   ];
 
+//chuyen dong man hinh xuong ben duoi
   final ScrollController _scrollController = ScrollController();
   void _scrollToBottom() {
     Future.delayed(const Duration(milliseconds: 100), () {
@@ -91,7 +92,6 @@ class ScreenMessageState extends State<ScreenMessage> {
 
   @override
   Widget build(BuildContext context) {
-    print(listMessage.length);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Color(0xfff5f5f5),
