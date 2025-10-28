@@ -153,15 +153,45 @@ class _TrangChuState extends State<TrangChu> {
                         const SizedBox(width: 10),
 
                         // Nút đăng bài
-                        ElevatedButton(
-                          onPressed: _openDangBaiDialog,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.lightBlueAccent,
-                            shape: RoundedRectangleBorder(
+                        // Nút đăng bài - hiện đại, icon + gradient + bóng nhẹ
+                        GestureDetector(
+                          onTap: _openDangBaiDialog,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF42A5F5), Color(0xFF1976D2)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
                               borderRadius: BorderRadius.circular(30),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.blue.withOpacity(0.3),
+                                  offset: const Offset(0, 3),
+                                  blurRadius: 6,
+                                ),
+                              ],
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.edit, color: Colors.white, size: 18),
+                                SizedBox(width: 6),
+                                Text(
+                                  "Đăng bài",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          child: const Text("Đăng bài"),
                         ),
                       ],
                     ),
