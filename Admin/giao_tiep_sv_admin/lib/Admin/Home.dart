@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-=======
 import 'package:giao_tiep_sv_admin/Admin/duyet_bai_viet_admin/duyet_bai_viet_admin.dart';
 import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/view/Create_group_community.dart';
->>>>>>> b6500652a2aed7f9dfd3343440230690b53b30c1
 import 'package:giao_tiep_sv_admin/Truy_Xuat_TK_Screens/truy_xuat_tai_Khoan.dart';
 import 'bao_cao_vi_pham.dart';
-
 
 class AdminScreen extends StatelessWidget {
   const AdminScreen({super.key});
@@ -63,26 +59,15 @@ class AdminScreen extends StatelessWidget {
               _buildAdminButton(
                 context,
                 icon: Icons.people_alt, // Icon người dùng
-<<<<<<< HEAD
-                text: 'Truy xuất tài khoản',
-=======
                 text: 'Truy xuất tài khoản người dùng.',
->>>>>>> b6500652a2aed7f9dfd3343440230690b53b30c1
                 color: const Color(0xFFE8F5E9), // Màu xanh lá nhạt
                 iconColor: Colors.blue, // Màu icon xanh dương
                 onPressed: () {
                   // Xử lý khi nhấn nút
-<<<<<<< HEAD
-                Navigator.push(
+                  Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const TruyXuatTaiKhoan(),
-                    ),
+                    MaterialPageRoute(builder: (context) => TruyXuatTaiKhoan()),
                   );
-=======
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => TruyXuatTaiKhoan(),));
-                  
->>>>>>> b6500652a2aed7f9dfd3343440230690b53b30c1
                 },
               ),
               const SizedBox(height: 15),
@@ -96,7 +81,12 @@ class AdminScreen extends StatelessWidget {
                 iconColor: Colors.purple, // Màu icon tím
                 onPressed: () {
                   // Xử lý khi nhấn nút
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenCommunityGroup(),));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ScreenCommunityGroup(),
+                    ),
+                  );
                 },
               ),
               const SizedBox(height: 15),
