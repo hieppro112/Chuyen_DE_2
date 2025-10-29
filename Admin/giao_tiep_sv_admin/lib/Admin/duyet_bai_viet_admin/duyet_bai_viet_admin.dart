@@ -25,7 +25,7 @@ class _AdminPostManagementScreenState extends State<AdminPostManagementScreen> {
     Post(
       id: '2',
       author: 'Lê Đình Thuận',
-      group: 'khoa CNTT',
+      group: 'Khoa CNTT',
       title: 'Tìm người đi xem phim chung',
       content: ' Tôi đã gặp nhiều bạn bè mới...',
       imageUrl:
@@ -59,6 +59,7 @@ class _AdminPostManagementScreenState extends State<AdminPostManagementScreen> {
 
   // Biến quản lý bộ lọc
   PostFilterType _currentFilter = PostFilterType.all;
+  String? _currentGroupFilter;
 
   void _approvePost(int index) {
     setState(() {
@@ -80,49 +81,68 @@ class _AdminPostManagementScreenState extends State<AdminPostManagementScreen> {
     );
   }
 
-  // Lấy danh sách bài viết đã lọc
+  // Lấy danh sách nhóm duy nhất (đã sửa lỗi sort)
+  List<String> get uniqueGroups {
+    final groups = posts.map((p) => p.group).toSet().toList()..sort();
+    return ['Tất cả nhóm', ...groups];
+  }
+
+  // Lọc bài viết
   List<Post> get filteredPosts {
+    List<Post> result = posts;
+
+    // Lọc theo trạng thái
     switch (_currentFilter) {
       case PostFilterType.pending:
-        return posts
+        result = result
             .where((post) => post.status == PostStatus.pending)
             .toList();
+        break;
       case PostFilterType.approved:
-        return posts
+        result = result
             .where((post) => post.status == PostStatus.approved)
             .toList();
+        break;
       case PostFilterType.rejected:
-        return posts
+        result = result
             .where((post) => post.status == PostStatus.rejected)
             .toList();
+        break;
       case PostFilterType.all:
-        return posts;
+        break;
     }
+
+    // Lọc theo nhóm
+    if (_currentGroupFilter != null && _currentGroupFilter != 'Tất cả nhóm') {
+      result = result
+          .where((post) => post.group == _currentGroupFilter)
+          .toList();
+    }
+
+    return result;
   }
 
-  int get pendingPostsCount {
-    return posts.where((post) => post.status == PostStatus.pending).length;
-  }
-
-  int get approvedPostsCount {
-    return posts.where((post) => post.status == PostStatus.approved).length;
-  }
-
-  int get rejectedPostsCount {
-    return posts.where((post) => post.status == PostStatus.rejected).length;
-  }
+  int get pendingPostsCount =>
+      posts.where((post) => post.status == PostStatus.pending).length;
+  int get approvedPostsCount =>
+      posts.where((post) => post.status == PostStatus.approved).length;
+  int get rejectedPostsCount =>
+      posts.where((post) => post.status == PostStatus.rejected).length;
 
   @override
   Widget build(BuildContext context) {
+    final safeGroupValue = uniqueGroups.contains(_currentGroupFilter)
+        ? _currentGroupFilter
+        : 'Tất cả nhóm';
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'ADMIN',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          'Duyệt bài viết',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
         centerTitle: true,
-        backgroundColor: Colors.blue[800],
-        elevation: 0,
+        //elevation: 0,
       ),
       body: Column(
         children: [
@@ -130,71 +150,100 @@ class _AdminPostManagementScreenState extends State<AdminPostManagementScreen> {
           Container(
             color: Colors.white,
             padding: EdgeInsets.all(16),
-            child: Row(
+            child: Column(
               children: [
-                // Header Section
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Duyệt bài viết',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue[800],
+                // Hai dropdown
+                Row(
+                  children: [
+                    // Dropdown trạng thái
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: DropdownButton<PostFilterType>(
+                          value: PostFilterType.values.contains(_currentFilter)
+                              ? _currentFilter
+                              : PostFilterType.all,
+                          onChanged: (PostFilterType? newValue) {
+                            setState(() => _currentFilter = newValue!);
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                          items: [
+                            DropdownMenuItem(
+                              value: PostFilterType.all,
+                              child: Text('Tất cả (${posts.length})'),
+                            ),
+                            DropdownMenuItem(
+                              value: PostFilterType.pending,
+                              child: Text('Chờ duyệt ($pendingPostsCount)'),
+                            ),
+                            DropdownMenuItem(
+                              value: PostFilterType.approved,
+                              child: Text('Đã duyệt ($approvedPostsCount)'),
+                            ),
+                            DropdownMenuItem(
+                              value: PostFilterType.rejected,
+                              child: Text('Từ chối ($rejectedPostsCount)'),
+                            ),
+                          ],
                         ),
                       ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Có ${filteredPosts.length} bài viết phù hợp',
-                        style: TextStyle(color: Colors.grey[600]),
+                    ),
+                    SizedBox(width: 12),
+                    // Dropdown nhóm
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: DropdownButton<String>(
+                          value: safeGroupValue ?? 'Tất cả nhóm',
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _currentGroupFilter = newValue == 'Tất cả nhóm'
+                                  ? null
+                                  : newValue;
+                            });
+                          },
+                          isExpanded: true,
+                          underline: SizedBox(),
+                          items: uniqueGroups.map((String group) {
+                            return DropdownMenuItem<String>(
+                              value: group,
+                              child: Text(group),
+                            );
+                          }).toList(),
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-
-                // Dropdown Filter Section
-                Container(
-                  width: 200, // Hoặc để width cố định
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: DropdownButton<PostFilterType>(
-                    value: _currentFilter,
-                    onChanged: (PostFilterType? newValue) {
-                      setState(() {
-                        _currentFilter = newValue!;
-                      });
-                    },
-                    isExpanded: true,
-                    underline: SizedBox(),
-                    items: [
-                      DropdownMenuItem(
-                        value: PostFilterType.all,
-                        child: Text('Tất cả (${posts.length})'),
+                SizedBox(height: 12),
+                // hien thi ket qua
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Có ${filteredPosts.length} bài viết phù hợp',
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      DropdownMenuItem(
-                        value: PostFilterType.pending,
-                        child: Text('Chờ duyệt ($pendingPostsCount)'),
-                      ),
-                      DropdownMenuItem(
-                        value: PostFilterType.approved,
-                        child: Text('Đã duyệt ($approvedPostsCount)'),
-                      ),
-                      DropdownMenuItem(
-                        value: PostFilterType.rejected,
-                        child: Text('Từ chối ($rejectedPostsCount)'),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
-          // Posts List
+          // Danh sách bài viết
           Expanded(
             child: filteredPosts.isEmpty
                 ? _buildEmptyState()
@@ -206,7 +255,6 @@ class _AdminPostManagementScreenState extends State<AdminPostManagementScreen> {
                       final originalIndex = posts.indexWhere(
                         (p) => p.id == post.id,
                       );
-
                       return PostCard(
                         post: post,
                         onApprove: () => _approvePost(originalIndex),
@@ -220,22 +268,20 @@ class _AdminPostManagementScreenState extends State<AdminPostManagementScreen> {
     );
   }
 
-  Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.article_outlined, size: 64, color: Colors.grey[300]),
-          SizedBox(height: 16),
-          Text(
-            _getEmptyStateMessage(),
-            style: TextStyle(color: Colors.grey[500], fontSize: 16),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
+  Widget _buildEmptyState() => Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.article_outlined, size: 64, color: Colors.grey[300]),
+        SizedBox(height: 16),
+        Text(
+          _getEmptyStateMessage(),
+          style: TextStyle(color: Colors.grey[500], fontSize: 16),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+  );
 
   String _getEmptyStateMessage() {
     switch (_currentFilter) {
