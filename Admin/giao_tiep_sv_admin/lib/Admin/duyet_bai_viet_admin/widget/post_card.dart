@@ -81,7 +81,6 @@ class PostCard extends StatelessWidget {
             ),
 
             SizedBox(height: 12),
-
             // tieu de bai viet
             Text(
               post.title,
@@ -89,7 +88,6 @@ class PostCard extends StatelessWidget {
             ),
 
             SizedBox(height: 8),
-
             // Post Image (nếu có)
             if (post.imageUrl != null && post.imageUrl!.isNotEmpty) ...[
               _buildPostImage(),

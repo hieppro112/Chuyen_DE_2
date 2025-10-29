@@ -142,7 +142,6 @@ class _AdminPostManagementScreenState extends State<AdminPostManagementScreen> {
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
         ),
         centerTitle: true,
-        //elevation: 0,
       ),
       body: Column(
         children: [
