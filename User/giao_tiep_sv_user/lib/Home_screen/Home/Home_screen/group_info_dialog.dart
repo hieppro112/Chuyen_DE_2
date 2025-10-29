@@ -21,12 +21,12 @@ class GroupInfoDialog extends StatelessWidget {
             // ======= Các tùy chọn chính =======
             _buildOption(context, Icons.check_circle, "Duyệt", Colors.green),
             _buildOption(context, Icons.group, "Thành viên", Colors.blue),
-            _buildOption(
-              context,
-              Icons.search,
-              "Tìm kiếm cuộc đối thoại",
-              Colors.grey,
-            ),
+            // _buildOption(
+            //   context,
+            //   Icons.search,
+            //   "Tìm kiếm cuộc đối thoại",
+            //   Colors.grey,
+            // ),
             _buildOption(context, Icons.logout, "Rời nhóm", Colors.red),
             _buildOption(context, Icons.delete, "Xóa chat nhóm", Colors.black),
           ],
