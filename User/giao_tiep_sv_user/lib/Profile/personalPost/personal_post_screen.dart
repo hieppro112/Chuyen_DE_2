@@ -195,6 +195,7 @@ class _PersonalPostScreenState extends State<PersonalPostScreen> {
                         onEdit: () => _handleEdit(index),
                         avatarUrl: widget.avatarUrl,
                         avatarFile: widget.avatarFile,
+                        currentUserName: widget.userName,
                       );
                     },
                   ),

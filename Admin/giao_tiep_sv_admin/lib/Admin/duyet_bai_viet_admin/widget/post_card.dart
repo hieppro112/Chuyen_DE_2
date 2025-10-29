@@ -30,7 +30,7 @@ class PostCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Author Info
+            // thong tin bai viet
             Row(
               children: [
                 Container(
@@ -82,7 +82,7 @@ class PostCard extends StatelessWidget {
 
             SizedBox(height: 12),
 
-            // Post Title
+            // tieu de bai viet
             Text(
               post.title,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),

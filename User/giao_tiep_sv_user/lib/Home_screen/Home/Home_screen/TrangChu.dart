@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'port_card.dart';
 import 'dang_bai_dialog.dart';
-import 'left_panel.dart'; // Đảm bảo đã cập nhật LeftPanel.dart
+import 'left_panel.dart';
 import 'group_info_dialog.dart';
 import 'search_page.dart';
 
@@ -14,21 +14,20 @@ class TrangChu extends StatefulWidget {
 
 class _TrangChuState extends State<TrangChu> {
   bool _isOpen = false; // trạng thái mở menu trái
-  String currentGroup =
-      "Tất cả"; // 🔹 Nhóm hiện tại hiển thị, mặc định là "Tất cả"
-  List<Map<String, dynamic>> allPosts = []; // Dữ liệu bài viết gốc
-  List<Map<String, dynamic>> filteredPosts = []; // Dữ liệu bài viết hiển thị
+  String currentGroup = "Tất cả";
+  List<Map<String, dynamic>> allPosts = [];
+  List<Map<String, dynamic>> filteredPosts = [];
 
-  // 🔹 HÀM CẬP NHẬT NHÓM VÀ LỌC BÀI VIẾT
+  //  HÀM CẬP NHẬT NHÓM VÀ LỌC BÀI VIẾT
   void _changeGroup(String newGroup) {
     setState(() {
       currentGroup = newGroup;
-      _isOpen = false; // Đóng panel sau khi chọn nhóm
-      _filterPosts(); // Gọi hàm lọc bài viết
+      _isOpen = false;
+      _filterPosts();
     });
   }
 
-  // 🔹 HÀM LỌC BÀI VIẾT DỰA TRÊN currentGroup
+  //  HÀM LỌC BÀI VIẾT DỰA TRÊN currentGroup
   void _filterPosts() {
     if (currentGroup == "Tất cả") {
       filteredPosts = allPosts;
@@ -154,15 +153,45 @@ class _TrangChuState extends State<TrangChu> {
                         const SizedBox(width: 10),
 
                         // Nút đăng bài
-                        ElevatedButton(
-                          onPressed: _openDangBaiDialog,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.lightBlueAccent,
-                            shape: RoundedRectangleBorder(
+                        // Nút đăng bài - hiện đại, icon + gradient + bóng nhẹ
+                        GestureDetector(
+                          onTap: _openDangBaiDialog,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF42A5F5), Color(0xFF1976D2)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
                               borderRadius: BorderRadius.circular(30),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.blue.withOpacity(0.3),
+                                  offset: const Offset(0, 3),
+                                  blurRadius: 6,
+                                ),
+                              ],
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.edit, color: Colors.white, size: 18),
+                                SizedBox(width: 6),
+                                Text(
+                                  "Đăng bài",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          child: const Text("Đăng bài"),
                         ),
                       ],
                     ),
@@ -195,19 +224,22 @@ class _TrangChuState extends State<TrangChu> {
                             ),
                           ],
                         ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.info_outline,
-                            color: Colors.blue,
+
+                        // 🔹 Chỉ hiện nút info nếu KHÔNG phải "Tất cả"
+                        if (currentGroup != "Tất cả")
+                          IconButton(
+                            icon: const Icon(
+                              Icons.info_outline,
+                              color: Colors.blue,
+                            ),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) =>
+                                    GroupInfoDialog(groupName: currentGroup),
+                              );
+                            },
                           ),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (_) =>
-                                  GroupInfoDialog(groupName: currentGroup),
-                            );
-                          },
-                        ),
                       ],
                     ),
                   ),

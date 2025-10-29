@@ -18,7 +18,6 @@ class MyApp extends StatelessWidget {
       ),
 
       home: Home(), // Trang mặc định
-
     );
   }
 }

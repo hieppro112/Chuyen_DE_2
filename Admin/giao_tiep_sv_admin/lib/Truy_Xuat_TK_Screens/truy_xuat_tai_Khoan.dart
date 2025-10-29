@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_admin/widget/customSearch.dart';
+import 'chi_tiet_tai_khoan.dart'; // 👈 import màn chi tiết
 
 class TruyXuatTaiKhoan extends StatefulWidget {
   const TruyXuatTaiKhoan({super.key});
@@ -24,25 +25,44 @@ class _TruyXuatTaiKhoan extends State<TruyXuatTaiKhoan> {
 
   final TextEditingController _searchController = TextEditingController();
   final List<Map<String, String>> _accountData = [
-    {"username": "Lê Đình Thuận", "id": "23211TT1371"},
-    {"username": "Lê Đại Hiệp", "id": "23211TT1324"},
-    {"username": "Cao Quang Khánh", "id": "23211TT4567"},
-    {"username": "Phạm Thắng", "id": "23211TT7890"},
-    {"username": "Lê Văn Tèo", "id": "23211TT2345"},
-    {"username": "Khánh Sky", "id": "23211TT6789"},
-    {"username": "Nguyễn Văn Đô", "id": "23211TT3456"},
-    {"username": "Nguyễn Văn SuKa", "id": "23211TT8901"},
-    {"username": "Lê Thị Bướm", "id": "23211TT5678"},
-    {"username": "Trần Văn Hiệp", "id": "23211TT9012"},
+    {
+      "username": "Lê Đình Thuận",
+      "id": "23211TT1371",
+      "khoa": "Khoa Công Nghệ Thông Tin",
+      "email": "23211TT1371@mail.tdc.edu.vn",
+    },
+    {
+      "username": "Lê Đại Hiệp",
+      "id": "23211TT1324",
+      "khoa": "Khoa Công Nghệ Thông Tin",
+      "email": "23211TT1324@mail.tdc.edu.vn",
+    },
+    {
+      "username": "Cao Quang Khánh",
+      "id": "23211TT4567",
+      "khoa": "Khoa Công Nghệ Thông Tin",
+      "email": "23211TT4567@mail.tdc.edu.vn",
+    },
+    {
+      "username": "Phạm Thắng",
+      "id": "23211TT7890",
+      "khoa": "Khoa Công Nghệ Thông Tin",
+      "email": "23211TT7890@mail.tdc.edu.vn",
+    },
+    {
+      "username": "Lê Văn Tèo",
+      "id": "23211TT2345",
+      "khoa": "Khoa Công Nghệ Thông Tin",
+      "email": "23211TT2345@mail.tdc.edu.vn",
+    },
   ];
 
-  // Danh sách kết quả tìm kiếm
   List<Map<String, String>> _filteredAccounts = [];
 
   @override
   void initState() {
     super.initState();
-    _filteredAccounts = _accountData; // ban đầu hiển thị toàn bộ
+    _filteredAccounts = _accountData;
   }
 
   void _filterAccounts(String query) {
@@ -66,7 +86,7 @@ class _TruyXuatTaiKhoan extends State<TruyXuatTaiKhoan> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Truy Xuất Tài Khoản'),
-        titleTextStyle: TextStyle(
+        titleTextStyle: const TextStyle(
           color: Colors.black,
           fontSize: 20,
           fontWeight: FontWeight.bold,
@@ -76,26 +96,19 @@ class _TruyXuatTaiKhoan extends State<TruyXuatTaiKhoan> {
         centerTitle: true,
         leading: IconButton(
           icon: Image.asset("assets/icons/ic_back.png", width: 32, height: 32),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: () => Navigator.of(context).pop(),
         ),
         actions: const [SizedBox(width: 48)],
       ),
-
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // thanh tìm kiếm
-            Customsearch(
-              onTap: (value) {
-                _filterAccounts(value);
-              },
-            ),
+            Customsearch(onTap: (value) => _filterAccounts(value)),
             const SizedBox(height: 20),
-            // bộ lọc khoa
+
+            // Dropdown chọn khoa
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
               decoration: BoxDecoration(
@@ -112,16 +125,14 @@ class _TruyXuatTaiKhoan extends State<TruyXuatTaiKhoan> {
                     );
                   }).toList(),
                   onChanged: (newValue) {
-                    setState(() {
-                      selectedKhoa = newValue!;
-                    });
+                    setState(() => selectedKhoa = newValue!);
                   },
                 ),
               ),
             ),
 
             const SizedBox(height: 20),
-            // --- Kết quả tìm kiếm ---
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -131,63 +142,76 @@ class _TruyXuatTaiKhoan extends State<TruyXuatTaiKhoan> {
                 ),
                 Text(
                   "Kết quả: ${_filteredAccounts.length}",
-                  style: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                  style: const TextStyle(color: Colors.black),
                 ),
               ],
             ),
+
             const SizedBox(height: 10),
-            // --- Danh sách tài khoản ---
+
             Expanded(
               child: ListView.builder(
                 itemCount: _filteredAccounts.length,
                 itemBuilder: (context, index) {
                   final user = _filteredAccounts[index];
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black87, width: 1),
-                      borderRadius: BorderRadius.circular(18),
-                      color: const Color.fromARGB(255, 255, 250, 250),
-                    ),
-                    child: Row(
-                      children: [
-                        // Avatar người dùng
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: Image.asset(
-                            "assets/images/user.png",
-                            width: 45,
-                            height: 45,
-                            fit: BoxFit.cover,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChiTietTaiKhoan(
+                            ten: user["username"]!,
+                            mssv: user["id"]!,
+                            khoa: user["khoa"]!,
+                            email: user["email"]!,
                           ),
                         ),
-                        const SizedBox(width: 12),
-
-                        // Tên và mã số
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              user["username"]!,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
+                      );
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black87, width: 1),
+                        borderRadius: BorderRadius.circular(18),
+                        color: const Color.fromARGB(255, 255, 250, 250),
+                      ),
+                      child: Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Image.asset(
+                              "assets/images/user.png",
+                              width: 45,
+                              height: 45,
+                              fit: BoxFit.cover,
                             ),
-                            Text(
-                              user["id"]!,
-                              style: const TextStyle(
-                                color: Colors.black54,
-                                fontSize: 13,
+                          ),
+                          const SizedBox(width: 12),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                user["username"]!,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              Text(
+                                user["id"]!,
+                                style: const TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },

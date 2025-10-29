@@ -49,7 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // Hàm mở liên kết web
   Future<void> _launchWebsite() async {
-    final Uri url = Uri.parse('https://online.tdc.edu.vn/');
+    final Uri url = Uri.parse('https://tdc.edu.vn/');
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       throw Exception('Không thể mở liên kết $url');
     }
