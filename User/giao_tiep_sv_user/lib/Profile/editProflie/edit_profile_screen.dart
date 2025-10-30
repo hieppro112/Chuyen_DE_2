@@ -103,9 +103,46 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   void _handleSaveProfile() {
+    final full_name = _nameController.text.trim();
+    final phone = _phoneController.text.trim();
+    final address = _addressController.text.trim();
     // Kiểm tra nếu không có thay đổi
     if (!_hasChanges) {
       _showInfoSnackBar('Không có thay đổi nào để lưu!');
+      return;
+    }
+    // Kiểm tra trường tên
+    //--------------------------------------------------------------------------
+    if (full_name.isEmpty) {
+      _showErrorSnackBar('Vui lòng nhập họ và tên!');
+      return;
+    } else if (full_name.length < 8) {
+      _showErrorSnackBar('Họ và tên phải có ít nhất 8 ký tự!');
+      return;
+    } else if (full_name.length > 50) {
+      _showErrorSnackBar('Họ và tên không được vượt quá 50 ký tự!');
+      return;
+    }
+    // Kiểm tra trường địa chỉ
+    //--------------------------------------------------------------------------
+    if (address.isEmpty) {
+      _showErrorSnackBar('Vui lòng nhập địa chỉ!');
+      return;
+    } else if (address.length < 20) {
+      _showErrorSnackBar('Địa chỉ phải có ít nhất 20 ký tự!');
+      return;
+    } else if (address.length > 70) {
+      _showErrorSnackBar('Địa chỉ không được vượt quá 70 ký tự!');
+      return;
+    }
+    // Kiểm tra trường số điện thoại
+    //--------------------------------------------------------------------------
+    if (phone.isEmpty) {
+      _showErrorSnackBar('Vui lòng nhập số điện thoại!');
+      return;
+    }
+    if (phone.length != 10 || !RegExp(r'^[0-9]+$').hasMatch(phone)) {
+      _showErrorSnackBar('Số điện thoại phải có đúng 10 chữ số!');
       return;
     }
 
@@ -114,7 +151,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       name: _nameController.text,
       email: _emailController.text,
       address: _addressController.text,
-      phone: _phoneController.text,
+      phone: phone,
     );
 
     // TODO: Lưu dữ liệu vào database/API
@@ -180,7 +217,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 8),
           padding: const EdgeInsets.all(8),
-          height: 60, // 👈 chỉnh chiều cao tùy ý
+          height: 60, // chỉnh chiều cao tùy ý
           decoration: BoxDecoration(
             color: Colors.red,
             borderRadius: BorderRadius.circular(12),
@@ -190,7 +227,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               message,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 16, // 👈 chỉnh kích thước chữ
+                fontSize: 16, // chỉnh kích thước chữ
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -248,7 +285,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               message,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 16, // 👈 chỉnh kích thước chữ
+                fontSize: 16, // chỉnh kích thước chữ
                 fontWeight: FontWeight.bold,
               ),
             ),

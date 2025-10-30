@@ -18,7 +18,7 @@ class _MemberPostScreenState extends State<MemberPostScreen> {
   String _memberFilter = 'Tất cả';
 
   // Dummy data
-  List<UserPostApprovalModel> _posts = [
+  final List<UserPostApprovalModel> _posts = [
     UserPostApprovalModel(
       id: '1',
       authorName: 'Cao Quang Khánh',
@@ -51,7 +51,7 @@ class _MemberPostScreenState extends State<MemberPostScreen> {
     ),
   ];
 
-  List<MemberApprovalModel> _users = [
+  final List<MemberApprovalModel> _users = [
     MemberApprovalModel(
       id: '1',
       fullName: 'Cao Quang Khánh',
