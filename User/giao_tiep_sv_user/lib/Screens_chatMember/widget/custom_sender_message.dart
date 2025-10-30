@@ -16,6 +16,8 @@ class CustomSenderMessage extends StatelessWidget {
       ,child: createSender());
   }
 
+  //phan chon va gui tin nhan 
+
   Widget createSender() {
     TextEditingController contenttxt = TextEditingController();
     return Row(
@@ -89,7 +91,9 @@ class CustomSenderMessage extends StatelessWidget {
           child: InkWell(
             onTap: () {
               // print("send");
-              onTapSend?.call(contenttxt.text);
+              if(contenttxt.text.isNotEmpty){
+                onTapSend?.call(contenttxt.text);
+              }
             },
 
             child: Icon(Icons.send, color: Colors.blue),
