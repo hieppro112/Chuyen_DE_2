@@ -21,7 +21,6 @@ class Post {
     required this.createdAt,
   });
 
-  // Convert to Map for database operations
   Map<String, dynamic> toMap() {
     return {
       'id': id,

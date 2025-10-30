@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_user/Profile/Widget/avatarWidget.dart';
 import '../models/personal_post_model.dart';
+import '../widgets/comment_section_widget.dart'; // THÊM: import widget bình luận
 
 class PersonalPostItemWidget extends StatefulWidget {
   final PersonalPostModel post;
@@ -10,8 +11,9 @@ class PersonalPostItemWidget extends StatefulWidget {
   final VoidCallback onLike;
   final VoidCallback onDelete;
   final VoidCallback? onEdit;
-  final String avatarUrl; // THÊM: avatar từ profile
-  final File? avatarFile; // THÊM: avatar file từ profile
+  final String avatarUrl;
+  final File? avatarFile;
+  final String currentUserName; // THÊM: tên user hiện tại cho bình luận
 
   const PersonalPostItemWidget({
     super.key,
@@ -22,6 +24,7 @@ class PersonalPostItemWidget extends StatefulWidget {
     this.onEdit,
     required this.avatarUrl,
     this.avatarFile,
+    required this.currentUserName, // THÊM: tham số mới
   });
 
   @override
@@ -60,6 +63,84 @@ class _PersonalPostItemWidgetState extends State<PersonalPostItemWidget> {
         );
       },
     );
+  }
+
+  // THÊM: Phương thức hiển thị bottom sheet bình luận
+  void _showCommentSheet() {
+    // Chuyển đổi PersonalPostModel sang Map để tương thích với widget bình luận
+    final postMap = _convertPostToMap(widget.post);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            final double screenHeight = MediaQuery.of(context).size.height;
+            final double sheetHeight = screenHeight * 0.85;
+
+            return Container(
+              height: sheetHeight,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+              ),
+              child: CommentSectionWidget(
+                post: postMap,
+                // THÊM: truyền tên user hiện tại
+                currentUserName: widget.currentUserName,
+                // TRUYỀN AVATAR USER HIỆN TẠI
+                currentUserAvatar: widget.avatarUrl,
+                onCommentSubmitted: (commentText) {
+                  // Cập nhật dữ liệu tạm thời
+                  setModalState(() {
+                    postMap["comments"].add({
+                      "name": widget.currentUserName,
+                      "text": commentText,
+                    });
+                  });
+                  // Cập nhật số lượng bình luận trong post
+                  // setState(() {
+                  //   widget.post.commentsCount++;
+                  // });
+                  // Gọi callback từ parent nếu cần
+                  widget.onComment();
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  // THÊM: Chuyển đổi PersonalPostModel sang Map
+  Map<String, dynamic> _convertPostToMap(PersonalPostModel post) {
+    return {
+      "user": post.name,
+      "title": post.title,
+      "group": post.faculty,
+      "comments": [
+        {
+          "name": "Nguyễn Văn A",
+          "text": "Bài viết rất hay và ý nghĩa!",
+          "time": DateTime.now().subtract(const Duration(hours: 2)),
+        },
+        {
+          "name": "Trần Thị B",
+          "text": "Cảm ơn bạn đã chia sẻ thông tin hữu ích này",
+          "time": DateTime.now().subtract(const Duration(hours: 1)),
+        },
+        {
+          "name": "Lê Văn C",
+          "text":
+              "Mình cũng đang tìm hiểu về vấn đề này, có thể trao đổi thêm không?",
+          "time": DateTime.now().subtract(const Duration(minutes: 30)),
+        },
+      ], // Bạn có thể thêm comments thực tế nếu có
+      "avatar": widget.avatarUrl,
+    };
   }
 
   @override
@@ -114,36 +195,36 @@ class _PersonalPostItemWidgetState extends State<PersonalPostItemWidget> {
                   onSelected: (value) {
                     if (value == 'delete') {
                       _showDeleteConfirmation(context);
-                    } else if (value == 'edit' && widget.onEdit != null) {
-                      widget.onEdit!();
+                      // } else if (value == 'edit' && widget.onEdit != null) {
+                      //   widget.onEdit!();
                     }
                   },
                   itemBuilder: (context) => [
                     if (widget.onEdit != null)
+                      // const PopupMenuItem(
+                      //   value: 'edit',
+                      //   child: Row(
+                      //     children: [
+                      //       Icon(Icons.edit, size: 18),
+                      //       SizedBox(width: 8),
+                      //       Text('Chỉnh sửa'),
+                      //     ],
+                      //   ),
+                      // ),
                       const PopupMenuItem(
-                        value: 'edit',
+                        value: 'delete',
                         child: Row(
                           children: [
-                            Icon(Icons.edit, size: 18),
+                            Icon(
+                              Icons.delete_outline,
+                              size: 18,
+                              color: Colors.red,
+                            ),
                             SizedBox(width: 8),
-                            Text('Chỉnh sửa'),
+                            Text('Xóa', style: TextStyle(color: Colors.red)),
                           ],
                         ),
                       ),
-                    const PopupMenuItem(
-                      value: 'delete',
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.delete_outline,
-                            size: 18,
-                            color: Colors.red,
-                          ),
-                          SizedBox(width: 8),
-                          Text('Xóa', style: TextStyle(color: Colors.red)),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ],
@@ -218,7 +299,7 @@ class _PersonalPostItemWidgetState extends State<PersonalPostItemWidget> {
                           vertical: 8,
                         ),
                       ),
-                      onPressed: widget.onComment,
+                      onPressed: _showCommentSheet, // SỬA: gọi phương thức mới
                       child: const Text("Bình luận"),
                     ),
                     const SizedBox(width: 8),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:giao_tiep_sv_user/Data/Users.dart';
 
 class HeaderMessage extends StatelessWidget {
   final String fullname;
@@ -22,6 +23,7 @@ class HeaderMessage extends StatelessWidget {
   }
 
   Widget createHeader(BuildContext context){
+  Users myInfo = Users(id_user: "abc", email: "email", pass: "pass", fullname: "Le Dai Hiep", url_avt: "assets/images/avatar.png", role: 1, faculty_id: 0);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -49,7 +51,7 @@ class HeaderMessage extends StatelessWidget {
             print("avatar");
           },
           child: ClipOval(
-            child: Image.asset("assets/images/avatar.png",fit: BoxFit.cover,width: 45,height: 45,),
+            child: Image.asset(myInfo.url_avt,fit: BoxFit.cover,width: 45,height: 45,),
           ),
         ),
           ],

@@ -39,7 +39,7 @@ class _PersonalPostScreenState extends State<PersonalPostScreen> {
         faculty: "CNTT",
         title: "Em xin tài liệu tiếng anh như này",
         image:
-            "https://codingweek.org/wp-content/uploads/2023/09/chris-ried-ieic5Tq8YMk-unsplash-scaled.jpg",
+            "https://cdn2.tuoitre.vn/thumb_w/480/471584752817336320/2025/10/8/screenshot20240421at090524-17599639007531328622673.jpeg",
         createdAt: DateTime.now().subtract(const Duration(hours: 2)),
         likesCount: 15,
         commentsCount: 3,
@@ -50,7 +50,7 @@ class _PersonalPostScreenState extends State<PersonalPostScreen> {
         faculty: "CNTT",
         title: "Cần tuyển thành viên lập trình ứng dụng đi giải cứu thế giới",
         image:
-            "https://assets-prd.ignimgs.com/2025/04/10/dragon-ball-super-4480x2520-21218-1744310919473.jpg",
+            "https://cdn2.tuoitre.vn/thumb_w/480/471584752817336320/2025/10/8/screenshot20240421at090524-17599639007531328622673.jpeg",
         createdAt: DateTime.now().subtract(const Duration(days: 1)),
         likesCount: 42,
         commentsCount: 7,
@@ -61,7 +61,7 @@ class _PersonalPostScreenState extends State<PersonalPostScreen> {
         faculty: "CNTT",
         title: "Cần tuyển thành viên lập trình ứng dụng đi giải cứu thế giới",
         image:
-            "https://nipponclass.jp/wp-content/uploads/2024/07/5265_SeriesHeaders_OP_2000x800_wm.0.jpg",
+            "https://cdn2.tuoitre.vn/thumb_w/480/471584752817336320/2025/10/8/screenshot20240421at090524-17599639007531328622673.jpeg",
         createdAt: DateTime.now().subtract(const Duration(days: 3)),
         likesCount: 28,
         commentsCount: 5,
@@ -195,6 +195,7 @@ class _PersonalPostScreenState extends State<PersonalPostScreen> {
                         onEdit: () => _handleEdit(index),
                         avatarUrl: widget.avatarUrl,
                         avatarFile: widget.avatarFile,
+                        currentUserName: widget.userName,
                       );
                     },
                   ),
