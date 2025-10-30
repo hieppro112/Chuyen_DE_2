@@ -18,7 +18,6 @@ class _TrangChuState extends State<TrangChu> {
   List<Map<String, dynamic>> allPosts = [];
   List<Map<String, dynamic>> filteredPosts = [];
 
-  //  HÀM CẬP NHẬT NHÓM VÀ LỌC BÀI VIẾT
   void _changeGroup(String newGroup) {
     setState(() {
       currentGroup = newGroup;
@@ -39,17 +38,35 @@ class _TrangChuState extends State<TrangChu> {
     }
   }
 
+  void _toggleLike(Map<String, dynamic> post) {
+    setState(() {
+      post["isLiked"] = !(post["isLiked"] ?? false);
+      if (post["isLiked"]) {
+        post["likes"] = (post["likes"] ?? 0) + 1;
+      } else {
+        post["likes"] = (post["likes"] ?? 1) - 1;
+        if (post["likes"]! < 0) post["likes"] = 0;
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
 
-    //  Tạo dữ liệu mẫu (Sử dụng tên nhóm chính xác từ LeftPanel)
+    //  Tạo dữ liệu mẫu
     allPosts = [
       {
         "user": "Cao Quang Khánh",
         "group": "CNTT",
         "title": "Em xin tài liệu tiếng anh như này",
-        "image": "https://picsum.photos/seed/1/400/200",
+        "images": [
+          "https://picsum.photos/seed/1a/400/200",
+          "https://picsum.photos/seed/1b/400/200",
+          "https://picsum.photos/seed/1c/400/200",
+        ],
+        "likes": 3,
+        "isLiked": false,
         "comments": [
           {
             "name": "Nguyễn Văn A",
@@ -65,7 +82,12 @@ class _TrangChuState extends State<TrangChu> {
         "user": "Trần Văn Dũng",
         "group": "DEV - vui vẻ",
         "title": "Chia sẻ kinh nghiệm làm việc với Flutter",
-        "image": "https://picsum.photos/seed/2/400/200",
+        "images": [
+          "https://picsum.photos/seed/2a/400/200",
+          "https://picsum.photos/seed/2b/400/200",
+        ],
+        "likes": 5,
+        "isLiked": false,
         "comments": [
           {"name": "Phan Thị E", "text": "Cảm ơn bài viết hữu ích!"},
         ],
@@ -74,19 +96,28 @@ class _TrangChuState extends State<TrangChu> {
         "user": "Phạm Văn F",
         "group": "CNTT",
         "title": "Cần người làm chung project cuối kì",
-        "image": "https://picsum.photos/seed/3/400/200",
+        "images": ["https://picsum.photos/seed/3a/400/200"],
+        "likes": 2,
+        "isLiked": false,
         "comments": [],
       },
       {
         "user": "Lý Văn G",
         "group": "Thiết kế đồ họa",
         "title": "Mẫu thiết kế UI mới nhất 2024",
-        "image": "https://picsum.photos/seed/4/400/200",
+        "images": [
+          "https://picsum.photos/seed/4a/400/200",
+          "https://picsum.photos/seed/4b/400/200",
+          "https://picsum.photos/seed/4c/400/200",
+          "https://picsum.photos/seed/4d/400/200",
+        ],
+        "likes": 1,
+        "isLiked": false,
         "comments": [],
       },
     ];
 
-    _filterPosts(); // Khởi tạo lần đầu
+    _filterPosts();
   }
 
   @override
@@ -100,7 +131,7 @@ class _TrangChuState extends State<TrangChu> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // ======= Thanh trên cùng =======
+                  //Thanh trên cùng
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Row(
@@ -153,7 +184,6 @@ class _TrangChuState extends State<TrangChu> {
                         const SizedBox(width: 10),
 
                         // Nút đăng bài
-                        // Nút đăng bài - hiện đại, icon + gradient + bóng nhẹ
                         GestureDetector(
                           onTap: _openDangBaiDialog,
                           child: Container(
@@ -197,7 +227,7 @@ class _TrangChuState extends State<TrangChu> {
                     ),
                   ),
 
-                  // ======= Thông tin nhóm =======
+                  //Thông tin nhóm
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16.0,
@@ -225,7 +255,7 @@ class _TrangChuState extends State<TrangChu> {
                           ],
                         ),
 
-                        // 🔹 Chỉ hiện nút info nếu KHÔNG phải "Tất cả"
+                        //  Chỉ hiện nút info nếu KHÔNG phải "Tất cả"
                         if (currentGroup != "Tất cả")
                           IconButton(
                             icon: const Icon(
@@ -259,18 +289,17 @@ class _TrangChuState extends State<TrangChu> {
                   ),
                   const Divider(height: 1),
 
-                  // ======= Danh sách bài viết =======
+                  // Danh sách bài viết
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount:
-                        filteredPosts.length, // 🔹 Sử dụng danh sách đã lọc
+                    itemCount: filteredPosts.length, // Sử dụng danh sách đã lọc
                     itemBuilder: (context, i) {
                       final post = filteredPosts[i];
                       return PostCard(
                         post: post,
                         onCommentPressed: () => _showCommentSheet(post),
-                        onLikePressed: () {},
+                        onLikePressed: () => _toggleLike(post),
                         onMenuSelected: (value) {
                           debugPrint("Đã chọn: $value");
                         },
@@ -297,7 +326,7 @@ class _TrangChuState extends State<TrangChu> {
             left: _isOpen ? 0 : -260,
             child: LeftPanel(
               onClose: () => setState(() => _isOpen = false),
-              // 🔹 TRUYỀN HÀM CẬP NHẬT NHÓM
+              // TRUYỀN HÀM CẬP NHẬT NHÓM
               onGroupSelected: _changeGroup,
             ),
           ),
@@ -308,8 +337,25 @@ class _TrangChuState extends State<TrangChu> {
 
   // Mở dialog đăng bài
   void _openDangBaiDialog() async {
-    await showDialog(context: context, builder: (_) => const DangBaiDialog());
-    setState(() {});
+    final newPost = await showDialog<Map<String, dynamic>>(
+      context: context,
+      builder: (_) => DangBaiDialog(
+        availableGroups: [
+          "Tất cả",
+          "Mobile - (Flutter, Kotlin)",
+          "Thiết kế đồ họa",
+          "DEV - vui vẻ",
+          "CNTT",
+        ],
+      ),
+    );
+
+    if (newPost != null) {
+      setState(() {
+        allPosts.insert(0, newPost);
+        _filterPosts();
+      });
+    }
   }
 
   // Hàm hiển thị BOTTOM SHEET BÌNH LUẬN MỚI
@@ -466,17 +512,15 @@ class _TrangChuState extends State<TrangChu> {
                           onPressed: () {
                             String val = commentCtrl.text.trim();
                             if (val.isNotEmpty) {
-                              // 1. Cập nhật dữ liệu tạm thời
+                              // Cập nhật dữ liệu tạm thời
                               setModalState(() {
                                 post["comments"].add({
-                                  "name":
-                                      "Cao Quang Khánh", // Giả định là user hiện tại
+                                  "name": "Cao Quang Khánh",
                                   "text": val,
                                 });
                               });
                               //  Cập nhật giao diện trang chủ
                               this.setState(() {});
-
                               commentCtrl.clear();
                               FocusScope.of(context).unfocus(); // Đóng bàn phím
                             }
