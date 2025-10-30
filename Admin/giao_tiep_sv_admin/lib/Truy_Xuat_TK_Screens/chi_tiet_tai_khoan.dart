@@ -49,7 +49,6 @@ class ChiTietTaiKhoan extends StatelessWidget {
               backgroundColor: Color(0xFFE0E0E0),
             ),
             const SizedBox(height: 15),
-
             //  Tên và MSSV
             Text(
               ten,
@@ -80,7 +79,7 @@ class ChiTietTaiKhoan extends StatelessWidget {
                   const SizedBox(height: 10),
                   _buildInfoRow(Icons.email, "Email", email),
                   const SizedBox(height: 10),
-                  _buildInfoRow(Icons.check_circle, "Trạng thái", "Hoạt động"),
+                  
                 ],
               ),
             ),
@@ -104,11 +103,11 @@ class ChiTietTaiKhoan extends StatelessWidget {
           child: Text(
             value,
             style: const TextStyle(fontSize: 16),
+            softWrap: false,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],
     );
-  }  
   }
-  
-
+}

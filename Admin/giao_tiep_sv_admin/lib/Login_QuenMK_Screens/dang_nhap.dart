@@ -20,7 +20,14 @@ class _DangNhapState extends State<DangNhap> {
     _passwordController.dispose();
     super.dispose();
   }
-
+  // Dữ liệu giả tài khoản
+  final List<Map<String, String>> _fakeAccounts = [
+    {
+      "email": "23211TT1371@mail.tdc.edu.vn",
+      "password": "123456",
+      "name": "Lê Đình Thuận",
+    },
+  ];
   void _dangNhap(BuildContext context) {
     String email = _emailController.text.trim();
     String password = _passwordController.text;
@@ -32,24 +39,36 @@ class _DangNhapState extends State<DangNhap> {
       return;
     }
 
-    if (!RegExp(
-      r'^[0-9]{5}([A-Z]{2})[0-9]{4}@mail\.tdc\.edu\.vn$',
-    ).hasMatch(email)) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Email không hợp lệ!")));
+    if (!email.endsWith("@mail.tdc.edu.vn")) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Email phải thuộc TDC !")),
+      );
       return;
     }
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const AdminScreen()),
+    // Kiểm tra tài khoản trong dữ liệu giả
+    final user = _fakeAccounts.firstWhere(
+      (acc) => acc['email'] == email && acc['password'] == password,
+      orElse: () => {},
     );
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Đăng nhập thành công!')));
-  }
 
+    if (user.isNotEmpty) {
+      // Thành công
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Xin chào ${user['name']}")),
+      );
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const AdminScreen()),
+      );
+    } else {
+      // Sai thông tin
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Email hoặc mật khẩu không đúng!")),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
