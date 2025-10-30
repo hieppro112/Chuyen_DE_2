@@ -56,6 +56,12 @@ Widget createDialog(BuildContext context) {
     icon: Icon(Icons.more_horiz),
     onSelected: (value) {
       value == 'delete'?print(value):value == 'post'?print(value):value == 'upmember'?print(value):print(value);
+    ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+              content: Text('Đã $value thành viên!'),
+              duration: Duration(seconds: 3),
+            ),
+          );
     },
     itemBuilder: (context) {
       return [

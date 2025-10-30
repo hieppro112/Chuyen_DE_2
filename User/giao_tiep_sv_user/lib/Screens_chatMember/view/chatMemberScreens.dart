@@ -83,7 +83,7 @@ class _ChatMemberScreenState extends State<ChatMemberScreen> {
     Room_chat(
       room_id: "0",
       type_id: 1,
-      name: "Trò chuyện IT",
+      name: "Cùng học java",
       avt_url: "assets/images/user.png",
       created_id: 0,
       create_at: DateTime.now(),
@@ -91,7 +91,7 @@ class _ChatMemberScreenState extends State<ChatMemberScreen> {
     Room_chat(
       room_id: "0",
       type_id: 1,
-      name: "Trò chuyện IT",
+      name: "chia sẻ tài liệu flutter",
       avt_url: "assets/images/user.png",
       created_id: 0,
       create_at: DateTime.now(),
