@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:giao_tiep_sv_admin/Data/Users.dart';
 
-class CustommemberWidget extends StatefulWidget {
+
+class CustommemberUyQuyen extends StatefulWidget {
   final String id;
   final String url;
   final String fullname;
   final ValueChanged<Map<String,bool>>? ontap;
-  const CustommemberWidget({
+  const CustommemberUyQuyen({
     super.key,
     required this.id,
     required this.url,
@@ -15,10 +15,10 @@ class CustommemberWidget extends StatefulWidget {
   });
 
   @override
-  State<CustommemberWidget> createState() => _CustommemberWidgetState();
+  State<CustommemberUyQuyen> createState() => _CustommemberUyQuyen();
 }
 
-class _CustommemberWidgetState extends State<CustommemberWidget> {
+class _CustommemberUyQuyen extends State<CustommemberUyQuyen> {
   bool ischecked = false;
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,8 @@ class _CustommemberWidgetState extends State<CustommemberWidget> {
               onChanged: (value) {
                 setState(() {
                   ischecked = value!;
-                  widget.ontap?.call({widget.id:value});
+                  widget.ontap?.call({widget.id:ischecked});
+
                 });
               },
             ),

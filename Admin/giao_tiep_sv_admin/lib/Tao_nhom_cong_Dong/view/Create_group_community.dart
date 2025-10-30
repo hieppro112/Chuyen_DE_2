@@ -16,12 +16,11 @@ class ScreenCommunityGroup extends StatefulWidget {
 }
 
 class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
-  File? avt_group =null;
-  List<String> khoa= [
-    "CNTT","Kế Toán","Điện","Ô Tô","Cơ khí",
-  ];
+  File? avt_group = null;
+  List<String> khoa = ["CNTT", "Kế Toán", "Điện", "Ô Tô", "Cơ khí"];
   TextEditingController nameGroup = TextEditingController();
   TextEditingController descriptionGroup = TextEditingController();
+  List<String> listSelected_uyquyen = [];
 
   List<Users> ListMember = [
     Users(
@@ -114,7 +113,8 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
       url_avt: "assets/images/avatar.png",
       role: 1,
       faculty_id: 1,
-    ),Users(
+    ),
+    Users(
       id_user: "23211TT3595@mail.tdc.edu.vn",
       email: "23211TT3595@mail.tdc.edu.vn",
       pass: "123456",
@@ -186,6 +186,11 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
     ),
   ];
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +216,6 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 15),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             createNameGroup(),
@@ -221,11 +225,10 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
             create_avt(),
             SizedBox(height: 10),
             createButton(),
-            SizedBox(height: 15,),
-            CustomSlected(listmember: ListMember, listFaculty: []),
+            SizedBox(height: 15),
+            CustomSlected(listmember: listSelected_uyquyen, listFaculty: []),
             SizedBox(height: 30),
             complate_create(),
-            
           ],
         ),
       ),
@@ -233,20 +236,30 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
   }
 
   Widget complate_create() {
-    return Center(
-      child: Container(
-      padding: EdgeInsets.symmetric(horizontal: 25,vertical: 5),
-      decoration: BoxDecoration(
-        color: Color(0xff55B9F6),
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.grey,
-        width: 0.9),
+    return InkWell(
+       onTap: () async{
+          ScaffoldMessenger.of(context).showSnackBar(
+            await const SnackBar(
+              content: Text('Đã tạo nhóm thành công !'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+          Navigator.pop(context);
+        },
+      child: Center(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
+          decoration: BoxDecoration(
+            color: Color(0xff55B9F6),
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(color: Colors.grey, width: 0.9),
+          ),
+          child: Text(
+            "Tạo nhóm",
+            style: TextStyle(fontSize: 20, color: Colors.white),
+          ),
+        ),
       ),
-      child: Text("Tạo nhóm",style: TextStyle(
-        fontSize: 20,
-        color: Colors.white
-      ),)
-    ),
     );
   }
 
@@ -258,7 +271,19 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
           url_icon: 'assets/images/admin.png',
           nameButton: "Ủy quyền",
           Mycolor: Colors.white,
-          ontap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => Screen_uyquyen(),)),
+          ontap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Screen_uyquyen(
+                listUyQuyen: ListMember,
+                GetList: (value) {
+                  setState(() {
+                    listSelected_uyquyen = value;
+                  });
+                },
+              ),
+            ),
+          ),
         ),
         Mybutton(
           url_icon: 'assets/images/group.png',
@@ -276,7 +301,6 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
   Widget createNameGroup() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-
       children: [
         Text("Tên Nhóm:", style: TextStyle(fontSize: 25)),
         SizedBox(height: 5),
@@ -287,12 +311,12 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
             fillColor: Colors.white,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey)
+              borderSide: BorderSide(color: Colors.grey),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.lightBlueAccent)
-            )
+              borderSide: BorderSide(color: Colors.lightBlueAccent),
+            ),
             //border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
@@ -310,18 +334,18 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
           textAlignVertical: TextAlignVertical.top,
           minLines: 3,
           maxLines: 5,
-          controller: nameGroup,
+          controller: descriptionGroup,
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey)
+              borderSide: BorderSide(color: Colors.grey),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.lightBlueAccent)
-            )
+              borderSide: BorderSide(color: Colors.lightBlueAccent),
+            ),
           ),
         ),
       ],
@@ -329,7 +353,6 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
   }
 
   Widget create_avt() {
-
     return Row(
       children: [
         Expanded(
@@ -337,38 +360,36 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
         ),
         Expanded(
           child: InkWell(
-            onTap: () async{
+            onTap: () async {
               print("pick img");
               final ImagePicker pickerImg = ImagePicker();
-              final XFile? image = await pickerImg.pickImage(source: ImageSource.gallery);
-              if(image!=null){
+              final XFile? image = await pickerImg.pickImage(
+                source: ImageSource.gallery,
+              );
+              if (image != null) {
                 setState(() {
                   avt_group = File(image.path);
                 });
               }
             },
-            child:(avt_group==null)?
-             Image.asset(
-            'assets/images/picked_avt_group.png',
-            width: 100,
-            
-            height: 100,
-            fit: BoxFit.contain,
-          )
-          :
-            Image.file(
-              // avt_group.path?'assets/images/picked_avt_group.png',
-             avt_group!,
-              fit: BoxFit.contain,
-              width: 45,
-              height: 45,
-            )
-            
-           
+            child: (avt_group == null)
+                ? Image.asset(
+                    'assets/images/picked_avt_group.png',
+                    width: 100,
+
+                    height: 100,
+                    fit: BoxFit.contain,
+                  )
+                : Image.file(
+                    // avt_group.path?'assets/images/picked_avt_group.png',
+                    avt_group!,
+                    fit: BoxFit.contain,
+                    width: 45,
+                    height: 45,
+                  ),
           ),
         ),
       ],
     );
   }
-
 }

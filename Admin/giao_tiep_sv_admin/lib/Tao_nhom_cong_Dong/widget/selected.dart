@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:giao_tiep_sv_admin/Data/Users.dart';
 import 'package:giao_tiep_sv_admin/Data/faculty.dart';
 
 class CustomSlected extends StatefulWidget {
-  final List<Users> listmember;
+  final List<String> listmember;
   final List<Faculty> listFaculty;
   const CustomSlected({
     super.key,
@@ -35,7 +34,7 @@ class _CustomSlectedState extends State<CustomSlected> {
         ),
         SizedBox(width: 4),
         ...widget.listmember.map((e) {
-          return Text("${e.fullname}, ", style: TextStyle(fontSize: 14));
+          return Text("${e}, ", style: TextStyle(fontSize: 14));
         }).toList(),
       ],
     );

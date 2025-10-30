@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_admin/Data/Users.dart';
 import 'package:giao_tiep_sv_admin/Data/faculty.dart';
-import 'package:giao_tiep_sv_admin/widget/customMember.dart';
+import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/widget/customMemberUyquyen.dart';
 import 'package:giao_tiep_sv_admin/widget/customSearch.dart';
 
 class Screen_uyquyen extends StatefulWidget {
   final List<Users>? listUyQuyen;
+  final ValueChanged<List<String>>? GetList;
 
-  const Screen_uyquyen({super.key, this.listUyQuyen});
+  const Screen_uyquyen({super.key, this.listUyQuyen, this.GetList});
   
 
   @override
@@ -15,170 +16,9 @@ class Screen_uyquyen extends StatefulWidget {
 }
 
 class _Screen_uyquyenState extends State<Screen_uyquyen> {
-  String selectedKhoa="Tất cả ";
+  String selectedKhoa="Tất cả";
+  List<String> listUyQuyen_out =[];
   List<Users> Listsearch = [];
-  List<Users> ListMember = [
-    Users(
-      id_user: "23211TT3598@mail.tdc.edu.vn",
-      email: "23211TT3598@mail.tdc.edu.vn",
-      pass: "123456",
-      fullname: "Lê Đại Hiệp",
-      phone: "0898415185",
-      url_avt: "assets/images/avatar.png",
-      role: 1,
-      faculty_id: 1,
-    ),
-    Users(
-      id_user: "23211TT3599@mail.tdc.edu.vn",
-      email: "23211TT3599@mail.tdc.edu.vn",
-      pass: "123456",
-      fullname: "Lê Đình Thuận",
-      phone: "0898415185",
-      url_avt: "assets/images/avatar.png",
-      role: 1,
-      faculty_id: 1,
-    ),
-    Users(
-      id_user: "23211TT3597@mail.tdc.edu.vn",
-      email: "23211TT3597@mail.tdc.edu.vn",
-      pass: "123456",
-      fullname: "Cao Quang Khánh",
-      phone: "0898415185",
-      url_avt: "assets/images/avatar.png",
-      role: 0,
-      faculty_id: 1,
-    ),
-    Users(
-      id_user: "23211TT3596@mail.tdc.edu.vn",
-      email: "23211TT3596@mail.tdc.edu.vn",
-      pass: "123456",
-      fullname: "Phạm Thắng",
-      phone: "0898415185",
-      url_avt: "assets/images/avatar.png",
-      role: 0,
-      faculty_id: 1,
-    ),
-    Users(
-      id_user: "23211TT3595@mail.tdc.edu.vn",
-      email: "23211TT3595@mail.tdc.edu.vn",
-      pass: "123456",
-      fullname: "Lê Van Tủn",
-      phone: "0898415185",
-      url_avt: "assets/images/avatar.png",
-      role: 1,
-      faculty_id: 1,
-    ),
-    Users(
-      id_user: "23211TT3595@mail.tdc.edu.vn",
-      email: "23211TT3595@mail.tdc.edu.vn",
-      pass: "123456",
-      fullname: "Lê Van Tủn",
-      phone: "0898415185",
-      url_avt: "assets/images/avatar.png",
-      role: 1,
-      faculty_id: 1,
-    ),
-    Users(
-      id_user: "23211TT3595@mail.tdc.edu.vn",
-      email: "23211TT3595@mail.tdc.edu.vn",
-      pass: "123456",
-      fullname: "Lê Van Tủn",
-      phone: "0898415185",
-      url_avt: "assets/images/avatar.png",
-      role: 1,
-      faculty_id: 1,
-    ),
-
-    Users(
-      id_user: "23211TT3595@mail.tdc.edu.vn",
-      email: "23211TT3595@mail.tdc.edu.vn",
-      pass: "123456",
-      fullname: "Lê Van Tủn",
-      phone: "0898415185",
-      url_avt: "assets/images/avatar.png",
-      role: 1,
-      faculty_id: 1,
-    ),
-    Users(
-      id_user: "23211TT3595@mail.tdc.edu.vn",
-      email: "23211TT3595@mail.tdc.edu.vn",
-      pass: "123456",
-      fullname: "Lê Van Tủn",
-      phone: "0898415185",
-      url_avt: "assets/images/avatar.png",
-      role: 1,
-      faculty_id: 1,
-    ),Users(
-      id_user: "23211TT3595@mail.tdc.edu.vn",
-      email: "23211TT3595@mail.tdc.edu.vn",
-      pass: "123456",
-      fullname: "Lê Van Tủn",
-      phone: "0898415185",
-      url_avt: "assets/images/avatar.png",
-      role: 1,
-      faculty_id: 1,
-    ),
-    Users(
-      id_user: "23211TT3595@mail.tdc.edu.vn",
-      email: "23211TT3595@mail.tdc.edu.vn",
-      pass: "123456",
-      fullname: "Lê Van Tủn",
-      phone: "0898415185",
-      url_avt: "assets/images/avatar.png",
-      role: 1,
-      faculty_id: 1,
-    ),
-    Users(
-      id_user: "23211TT3595@mail.tdc.edu.vn",
-      email: "23211TT3595@mail.tdc.edu.vn",
-      pass: "123456",
-      fullname: "Lê Van Tủn",
-      phone: "0898415185",
-      url_avt: "assets/images/avatar.png",
-      role: 1,
-      faculty_id: 1,
-    ),
-    Users(
-      id_user: "23211KS3595@mail.tdc.edu.vn",
-      email: "23211TT3595@mail.tdc.edu.vn",
-      pass: "123456",
-      fullname: "Lê Van Tủn",
-      phone: "0898415185",
-      url_avt: "assets/images/avatar.png",
-      role: 1,
-      faculty_id: 1,
-    ),
-    Users(
-      id_user: "23211QT3595@mail.tdc.edu.vn",
-      email: "23211TT3595@mail.tdc.edu.vn",
-      pass: "123456",
-      fullname: "Lê Van Tủn",
-      phone: "0898415185",
-      url_avt: "assets/images/avatar.png",
-      role: 1,
-      faculty_id: 1,
-    ),
-    Users(
-      id_user: "23211PC3595@mail.tdc.edu.vn",
-      email: "23211TT3595@mail.tdc.edu.vn",
-      pass: "123456",
-      fullname: "Lê Van Tủn",
-      phone: "0898415185",
-      url_avt: "assets/images/avatar.png",
-      role: 1,
-      faculty_id: 1,
-    ),
-    Users(
-      id_user: "23211KT3595@mail.tdc.edu.vn",
-      email: "23211TT3595@mail.tdc.edu.vn",
-      pass: "123456",
-      fullname: "Anh Thu",
-      phone: "0898415185",
-      url_avt: "assets/images/avatar.png",
-      role: 1,
-      faculty_id: 1,
-    ),
-  ];
 
   List<Faculty> dsKhoa = [
     Faculty(id: "TT", name_faculty: "Công nghệ thông tin"),
@@ -199,7 +39,7 @@ class _Screen_uyquyenState extends State<Screen_uyquyen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Listsearch = ListMember;
+    Listsearch = widget.listUyQuyen!;
   }
 
   @override
@@ -247,7 +87,7 @@ class _Screen_uyquyenState extends State<Screen_uyquyen> {
         createChoseKhoa(),
         InkWell(
           onTap: () {
-            print("xong");
+            widget.GetList?.call(listUyQuyen_out);
             Navigator.pop(context);
           },
           child: Container(
@@ -298,7 +138,7 @@ class _Screen_uyquyenState extends State<Screen_uyquyen> {
       onSelected: (value) {
         setState(() {
           selectedKhoa = value;
-          Listsearch = ListMember.where((element) {
+          Listsearch = widget.listUyQuyen!.where((element) {
             return element.id_user.toLowerCase().contains(value.toLowerCase());
           },).toList();
         });
@@ -314,6 +154,8 @@ class _Screen_uyquyenState extends State<Screen_uyquyen> {
     },);
   }
 
+  //mang hinh uy quyen 
+
   Widget createListmember(){
     return ListView.builder(
       shrinkWrap: true,
@@ -321,8 +163,15 @@ class _Screen_uyquyenState extends State<Screen_uyquyen> {
       itemCount: Listsearch.length,
       itemBuilder: (context, index) {
         var value = Listsearch[index];
-        return CustommemberWidget(id: value.id_user, url: value.url_avt, fullname: value.fullname
-        );
+        return CustommemberUyQuyen(id: value.id_user, url: value.url_avt, fullname: value.fullname,ontap: (value) {
+          //print("key = ${value.keys}, value =${value.values} ");
+          if(value.values.first==true){
+            listUyQuyen_out+=[value.keys.toString()];
+          }
+          else{
+            listUyQuyen_out.removeWhere((element) => element.contains(value.keys.toString()),);
+          }
+        },);
       },
     );
   }
