@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_admin/Data/faculty.dart';
 
+
 class CustomAllKhoa extends StatefulWidget {
   // final List listKhoa;
   final ValueChanged<bool>? selected;
@@ -17,19 +18,19 @@ class CustomAllKhoa extends StatefulWidget {
 class CustomAllKhoaState extends State<CustomAllKhoa> {
   Map<String, bool> ListSelected = {};
   List<Faculty> dsKhoa = [
-    Faculty(id: "CNTT", name_faculty: "Công nghệ thông tin"),
-    Faculty(id: "KT", name_faculty: "Kế toán"),
-    Faculty(id: "DT", name_faculty: "Điện"),
-    Faculty(id: "OT", name_faculty: "Ô tô"),
-    Faculty(id: "CK", name_faculty: "Cơ Khí"),
-    Faculty(id: "DL", name_faculty: "Du lich"),
-    Faculty(id: "DP", name_faculty: "Đông phương học"),
-    Faculty(id: "PC", name_faculty: "Bartender"),
-    Faculty(id: "TD", name_faculty: "Tự động hóa"),
-    Faculty(id: "KS", name_faculty: "khách sạn"),
-    Faculty(id: "NA", name_faculty: "Nấu ăn"),
-    Faculty(id: "QT", name_faculty: "Quản trị kinh doanh"),
-    Faculty(id: "QT", name_faculty: "Quản trị kinh kk"),
+    // Faculty(id: "CNTT", name_faculty: "Công nghệ thông tin"),
+    // Faculty(id: "KT", name_faculty: "Kế toán"),
+    // Faculty(id: "DT", name_faculty: "Điện"),
+    // Faculty(id: "OT", name_faculty: "Ô tô"),
+    // Faculty(id: "CK", name_faculty: "Cơ Khí"),
+    // Faculty(id: "DL", name_faculty: "Du lich"),
+    // Faculty(id: "DP", name_faculty: "Đông phương học"),
+    // Faculty(id: "PC", name_faculty: "Bartender"),
+    // Faculty(id: "TD", name_faculty: "Tự động hóa"),
+    // Faculty(id: "KS", name_faculty: "khách sạn"),
+    // Faculty(id: "NA", name_faculty: "Nấu ăn"),
+    // Faculty(id: "QT", name_faculty: "Quản trị kinh doanh"),
+    // Faculty(id: "QT", name_faculty: "Quản trị kinh kk"),
     
   ];
 
@@ -133,4 +134,9 @@ class CustomAllKhoaState extends State<CustomAllKhoa> {
       ),
     );
   }
+
+  //lay cac khoa tu fibase ve
+  // Future<void> fetchFaculty() async{
+  //   final snap = await Firebase
+  // }
 }

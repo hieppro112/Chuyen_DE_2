@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_admin/Data/faculty.dart';
 
 class CustomSlected extends StatefulWidget {
+  final int Throws;
   final List<String> listmember;
   final List<Faculty> listFaculty;
   const CustomSlected({
     super.key,
     required this.listmember,
-    required this.listFaculty,
+    required this.listFaculty, required this.Throws,
   });
 
   @override
@@ -29,7 +30,7 @@ class _CustomSlectedState extends State<CustomSlected> {
       runSpacing: 5,
       children: [
         Text(
-          "Người được ủy quyền: ",
+          (widget.Throws==1)?"Người được ủy quyền: ":"Người được gửi: ",
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
         ),
         SizedBox(width: 4),
