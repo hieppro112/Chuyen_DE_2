@@ -2,31 +2,61 @@ import 'package:flutter/material.dart';
 import 'Group_create/tham_gia_nhom.dart';
 import 'package:giao_tiep_sv_user/Home_screen/home.dart';
 
-class LeftPanel extends StatelessWidget {
+class LeftPanel extends StatefulWidget {
   final VoidCallback onClose;
-  //  thuộc tính để xác định menu có đang ở trang nhóm hay không
   final bool isGroupPage;
-  // 🔹 HÀM GỌI LẠI KHI CHỌN NHÓM
   final void Function(String) onGroupSelected;
 
   const LeftPanel({
     super.key,
     required this.onClose,
-    required this.onGroupSelected, // 🔹 Bắt buộc phải truyền vào
-    this.isGroupPage = false, //  Giá trị mặc định là false
+    required this.onGroupSelected,
+    this.isGroupPage = false,
   });
 
   @override
-  Widget build(BuildContext context) {
-    // 🔹 DANH SÁCH NHÓM CẦN HIỂN THỊ
-    const List<Map<String, dynamic>> groups = [
-      {"name": "Tất cả", "icon": Icons.public},
-      {"name": "Mobile - (Flutter, Kotlin)", "icon": Icons.phone_android},
-      {"name": "Thiết kế đồ họa", "icon": Icons.computer},
-      {"name": "DEV - vui vẻ", "icon": Icons.developer_mode},
-      {"name": "CNTT", "icon": Icons.school},
-    ];
+  State<LeftPanel> createState() => _LeftPanelState();
+}
 
+class _LeftPanelState extends State<LeftPanel> {
+  //  Dữ liệu nhóm gốc
+  final List<Map<String, dynamic>> _groups = const [
+    {"name": "Tất cả", "icon": Icons.public},
+    {"name": "Mobile - (Flutter, Kotlin)", "icon": Icons.phone_android},
+    {"name": "Thiết kế đồ họa", "icon": Icons.computer},
+    {"name": "DEV - vui vẻ", "icon": Icons.developer_mode},
+    {"name": "CNTT", "icon": Icons.school},
+  ];
+
+  //  Danh sách nhóm đang hiển thị
+  late List<Map<String, dynamic>> _filteredGroups;
+
+  //  Controller cho ô tìm kiếm
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredGroups = _groups; // mặc định hiển thị toàn bộ
+  }
+
+  //  Hàm lọc nhóm
+  void _filterGroups(String query) {
+    final lowerQuery = query.toLowerCase();
+
+    setState(() {
+      if (lowerQuery.isEmpty) {
+        _filteredGroups = _groups;
+      } else {
+        _filteredGroups = _groups
+            .where((group) => group["name"].toLowerCase().contains(lowerQuery))
+            .toList();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
         width: 260,
@@ -35,6 +65,7 @@ class LeftPanel extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Header "Nhóm" + nút Mở rộng
             Row(
               children: [
                 const Text(
@@ -42,19 +73,16 @@ class LeftPanel extends StatelessWidget {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
-
-                //  LOGIC ẨN/HIỆN NÚT "Mở rộng" DỰA TRÊN isGroupPage
-                if (!isGroupPage)
+                if (!widget.isGroupPage)
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          // 🔹 Đã sửa lỗi: ThiamGiaNhom() -> const ThamGiaNhomPage()
                           builder: (context) => const ThamGiaNhomPage(),
                         ),
                       );
-                      onClose();
+                      widget.onClose();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.lightGreenAccent,
@@ -82,7 +110,11 @@ class LeftPanel extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
+
+            //  Thanh tìm kiếm
             TextField(
+              controller: _searchController,
+              onChanged: _filterGroups,
               decoration: InputDecoration(
                 hintText: "Tìm nhóm...",
                 prefixIcon: const Icon(Icons.search),
@@ -96,7 +128,7 @@ class LeftPanel extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            // Nút "Trang chủ"
+            //  Nút "Trang chủ"
             ListTile(
               leading: const Icon(Icons.home),
               title: const Text("Trang chủ"),
@@ -105,27 +137,34 @@ class LeftPanel extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => const Home()),
                 );
-                onClose();
+                widget.onClose();
               },
             ),
-            const Divider(), // Phân cách
-            // 🔹 DANH SÁCH CÁC NHÓM
+            const Divider(),
+
+            //  Danh sách nhóm có lọc
             Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: groups.length,
-                itemBuilder: (context, index) {
-                  final group = groups[index];
-                  return ListTile(
-                    leading: Icon(group["icon"]),
-                    title: Text(group["name"]),
-                    onTap: () {
-                      // 🔹 GỌI HÀM CALLBACK VÀ TRUYỀN TÊN NHÓM
-                      onGroupSelected(group["name"]);
-                    },
-                  );
-                },
-              ),
+              child: _filteredGroups.isEmpty
+                  ? const Center(
+                      child: Text(
+                        "Không tìm thấy nhóm nào",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: EdgeInsets.zero,
+                      itemCount: _filteredGroups.length,
+                      itemBuilder: (context, index) {
+                        final group = _filteredGroups[index];
+                        return ListTile(
+                          leading: Icon(group["icon"]),
+                          title: Text(group["name"]),
+                          onTap: () {
+                            widget.onGroupSelected(group["name"]);
+                          },
+                        );
+                      },
+                    ),
             ),
           ],
         ),
