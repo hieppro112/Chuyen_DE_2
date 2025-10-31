@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 class PostCard extends StatelessWidget {
   final Map<String, dynamic> post;
@@ -18,7 +19,7 @@ class PostCard extends StatelessWidget {
     if (dateStr == null) return "Không rõ";
     try {
       final DateTime date = DateTime.parse(dateStr);
-      return '${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute}';
+      return '${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
     } catch (e) {
       return "Không rõ";
     }
@@ -26,6 +27,8 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final images = _extractImages(post); // ✅ lấy danh sách ảnh chuẩn
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       padding: const EdgeInsets.all(8),
@@ -37,6 +40,7 @@ class PostCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 👤 Thông tin người đăng
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -93,31 +97,20 @@ class PostCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          // Tiêu đề
+
+          // 📝 Tiêu đề
           Text(
             post["title"] ?? "Không có tiêu đề",
             style: const TextStyle(fontSize: 14),
           ),
           const SizedBox(height: 8),
-          // Hình ảnh
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              post["image"] ?? "",
-              height: 150,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  height: 150,
-                  color: Colors.grey[300],
-                  child: const Icon(Icons.error_outline, color: Colors.grey),
-                );
-              },
-            ),
-          ),
+
+          // 🖼️ Hiển thị ảnh
+          if (images.isNotEmpty) _buildImageSection(images),
+
           const SizedBox(height: 8),
-          // Hành động
+
+          // ❤️ Bình luận + Lượt thích
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -136,10 +129,14 @@ class PostCard extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: onLikePressed,
-                    icon: const Icon(
-                      Icons.favorite_border,
+                    icon: Icon(
+                      (post["isLiked"] ?? false)
+                          ? Icons.favorite
+                          : Icons.favorite_border,
                       size: 16,
-                      color: Colors.redAccent,
+                      color: (post["isLiked"] ?? false)
+                          ? Colors.red
+                          : Colors.redAccent,
                     ),
                     padding: EdgeInsets.zero,
                   ),
@@ -149,6 +146,87 @@ class PostCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  /// 🧩 Chuẩn hóa danh sách ảnh
+  List<String> _extractImages(Map<String, dynamic> post) {
+    final data = post["images"];
+    if (data == null) {
+      if (post["image"] != null && post["image"].toString().isNotEmpty) {
+        return [post["image"]];
+      }
+      return [];
+    }
+
+    if (data is List) {
+      return data.map((e) => e.toString()).toList();
+    }
+
+    if (data is String && data.contains('[')) {
+      // Nếu là chuỗi dạng JSON
+      return data
+          .replaceAll('[', '')
+          .replaceAll(']', '')
+          .split(',')
+          .map((e) => e.trim())
+          .toList();
+    }
+
+    return [];
+  }
+
+  /// 🧩 Vẽ phần ảnh — 1 hoặc nhiều
+  Widget _buildImageSection(List<String> images) {
+    if (images.length == 1) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: _buildImage(images.first),
+      );
+    } else {
+      return SizedBox(
+        height: ((images.length / 2).ceil() * 160).toDouble(),
+        child: GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 6,
+            mainAxisSpacing: 6,
+          ),
+          itemCount: images.length,
+          itemBuilder: (context, index) {
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: _buildImage(images[index]),
+            );
+          },
+        ),
+      );
+    }
+  }
+
+  /// 🧩 Xử lý ảnh — URL hoặc local
+  Widget _buildImage(String path) {
+    if (path.startsWith("http")) {
+      return Image.network(
+        path,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stack) => _errorImage(),
+      );
+    } else {
+      return Image.file(
+        File(path),
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stack) => _errorImage(),
+      );
+    }
+  }
+
+  Widget _errorImage() {
+    return Container(
+      color: Colors.grey[300],
+      child: const Icon(Icons.image_not_supported, color: Colors.grey),
     );
   }
 }

@@ -5,12 +5,10 @@ import 'package:giao_tiep_sv_user/Profile/Widget/avatarWidget.dart';
 import 'package:giao_tiep_sv_user/Profile/editProflie/edit_profile_screen.dart';
 import 'package:giao_tiep_sv_user/Profile/personalPost/personal_post_screen.dart';
 import 'package:giao_tiep_sv_user/Profile/saveItemsProfile/saved_items_profile_screen.dart';
-import 'package:giao_tiep_sv_user/duyet_Nguoi_Dung/member_post_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
-
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -52,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // Hàm mở liên kết web
   Future<void> _launchWebsite() async {
-    final Uri url = Uri.parse('https://online.tdc.edu.vn/');
+    final Uri url = Uri.parse('https://tdc.edu.vn/');
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       throw Exception('Không thể mở liên kết $url');
     }

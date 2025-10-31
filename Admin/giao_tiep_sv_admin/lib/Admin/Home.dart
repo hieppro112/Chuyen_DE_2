@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_admin/Admin/duyet_bai_viet_admin/duyet_bai_viet_admin.dart';
+import 'package:giao_tiep_sv_admin/Gui_Thong_bao/view/Notifycation_Sceen.dart';
 import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/view/Create_group_community.dart';
 import 'package:giao_tiep_sv_admin/Truy_Xuat_TK_Screens/truy_xuat_tai_Khoan.dart';
 import 'bao_cao_vi_pham.dart';
-
 
 class AdminScreen extends StatelessWidget {
   const AdminScreen({super.key});
@@ -60,16 +60,14 @@ class AdminScreen extends StatelessWidget {
               _buildAdminButton(
                 context,
                 icon: Icons.people_alt, // Icon người dùng
-                text: 'Truy xuất tài khoản',
+                text: 'Truy xuất tài khoản người dùng.',
                 color: const Color(0xFFE8F5E9), // Màu xanh lá nhạt
                 iconColor: Colors.blue, // Màu icon xanh dương
                 onPressed: () {
                   // Xử lý khi nhấn nút
-                Navigator.push(
+                  Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const TruyXuatTaiKhoan(),
-                    ),
+                    MaterialPageRoute(builder: (context) => TruyXuatTaiKhoan()),
                   );
                 },
               ),
@@ -84,7 +82,12 @@ class AdminScreen extends StatelessWidget {
                 iconColor: Colors.purple, // Màu icon tím
                 onPressed: () {
                   // Xử lý khi nhấn nút
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ScreenCommunityGroup(),));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ScreenCommunityGroup(),
+                    ),
+                  );
                 },
               ),
               const SizedBox(height: 15),
@@ -105,6 +108,24 @@ class AdminScreen extends StatelessWidget {
                   );
                 },
               ),
+              SizedBox(height: 15,),
+              // Nút "Quản lý bài viết và báo cáo"
+              _buildAdminButton(
+                context,
+                icon: Icons.notification_add, // Icon báo cáo
+                text: 'Gửi thông báo người dùng',
+                color: const Color.fromARGB(255, 85, 138, 243), // Màu cam nhạt
+                iconColor: Colors.yellow, // Màu icon đỏ
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ScreenNotify(),
+                    ),
+                  );
+                },
+              ),
+              
             ],
           ),
         ),

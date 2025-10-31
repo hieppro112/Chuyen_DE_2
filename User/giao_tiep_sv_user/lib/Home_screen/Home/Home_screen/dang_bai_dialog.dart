@@ -4,36 +4,35 @@ import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 
 class DangBaiDialog extends StatefulWidget {
-  const DangBaiDialog({super.key});
+  // Nhận danh sách nhóm từ ngoài vào
+  final List<String> availableGroups;
+
+  const DangBaiDialog({
+    super.key,
+    required this.availableGroups, // truyền từ TrangChu
+  });
 
   @override
   State<DangBaiDialog> createState() => _DangBaiDialogState();
 }
 
 class _DangBaiDialogState extends State<DangBaiDialog> {
-  String selectedGroup = 'Khoa CNTT';
+  late String selectedGroup;
   final TextEditingController contentController = TextEditingController();
 
-  // Thay đổi: Sử dụng List để lưu nhiều File ảnh
   List<File> selectedImages = [];
-
-  // Thay đổi: Sử dụng List để lưu tên nhiều File tài liệu
   List<String> selectedFileNames = [];
 
   final ImagePicker _picker = ImagePicker();
 
   // Hàm chọn nhiều ảnh từ thư viện
   Future<void> _pickImages() async {
-    // Cho phép chọn nhiều ảnh
     final pickedFiles = await _picker.pickMultiImage();
-
     if (pickedFiles.isNotEmpty) {
       setState(() {
-        // Chuyển đổi XFile sang File và thêm vào danh sách
         selectedImages.addAll(
           pickedFiles.map((xfile) => File(xfile.path)).toList(),
         );
-        // Khi chọn ảnh, xóa danh sách file tài liệu
         selectedFileNames.clear();
       });
     }
@@ -41,33 +40,36 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
 
   // Hàm chọn nhiều file tài liệu
   Future<void> _pickFiles() async {
-    // Cho phép chọn nhiều file tài liệu
     final result = await FilePicker.platform.pickFiles(allowMultiple: true);
-
     if (result != null) {
       setState(() {
-        // Lấy tên các file và thêm vào danh sách
         selectedFileNames.addAll(
-          result.files.map((platformFile) => platformFile.name).toList(),
+          result.files.map((file) => file.name).toList(),
         );
-        // Khi chọn file tài liệu, xóa danh sách ảnh
         selectedImages.clear();
       });
     }
   }
 
-  // Hàm xóa một file tài liệu khỏi danh sách
   void _removeFile(int index) {
     setState(() {
       selectedFileNames.removeAt(index);
     });
   }
 
-  // Hàm xóa một ảnh khỏi danh sách
   void _removeImage(int index) {
     setState(() {
       selectedImages.removeAt(index);
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    //  Nhóm mặc định là nhóm đầu tiên trong danh sách
+    selectedGroup = widget.availableGroups.isNotEmpty
+        ? widget.availableGroups.first
+        : 'CNTT';
   }
 
   @override
@@ -80,7 +82,6 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
   Widget build(BuildContext context) {
     const Color primaryColor = Color(0xFF1E88E5);
 
-    // Kiểm tra xem có bất kỳ file hay ảnh nào được chọn không
     final hasAttachments =
         selectedImages.isNotEmpty || selectedFileNames.isNotEmpty;
 
@@ -152,7 +153,7 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
               ),
               const SizedBox(height: 20),
 
-              // Khu vực chọn và hiển thị đính kèm
+              // Khu vực đính kèm
               const Text(
                 'Đính kèm:',
                 style: TextStyle(
@@ -162,7 +163,6 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
               ),
               const SizedBox(height: 8),
 
-              // Hàng Icon chọn File/Ảnh
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 10,
@@ -175,7 +175,6 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
                 ),
                 child: Row(
                   children: [
-                    // Icon chọn file
                     Tooltip(
                       message: 'Đính kèm tệp tin (nhiều file)',
                       child: IconButton(
@@ -187,7 +186,6 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
                         onPressed: _pickFiles,
                       ),
                     ),
-                    // Icon chọn ảnh
                     Tooltip(
                       message: 'Tải ảnh từ thư viện (nhiều ảnh)',
                       child: IconButton(
@@ -200,8 +198,6 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
                       ),
                     ),
                     const SizedBox(width: 16),
-
-                    // Thông báo trạng thái đính kèm
                     Expanded(
                       child: Text(
                         hasAttachments
@@ -218,7 +214,6 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
                 ),
               ),
 
-              // Hiển thị danh sách file tài liệu đã chọn
               if (selectedFileNames.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 16),
@@ -243,7 +238,6 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
                   ),
                 ),
 
-              // Hiển thị preview nhiều ảnh đã chọn
               if (selectedImages.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 16),
@@ -252,7 +246,7 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
                     physics: const NeverScrollableScrollPhysics(),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 4, // 4 ảnh trên 1 hàng
+                          crossAxisCount: 4,
                           crossAxisSpacing: 8.0,
                           mainAxisSpacing: 8.0,
                         ),
@@ -268,7 +262,6 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
                                 selectedImages[index],
                                 fit: BoxFit.cover,
                               ),
-                              // Nút xóa ảnh
                               Positioned(
                                 top: 4,
                                 right: 4,
@@ -298,7 +291,7 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
 
               const SizedBox(height: 20),
 
-              // Chọn nhóm (Dropdown)
+              // 🔹 Chọn nhóm (dùng danh sách từ availableGroups)
               const Text(
                 'Chọn nhóm:',
                 style: TextStyle(
@@ -309,20 +302,12 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
                 value: selectedGroup,
-                items: const [
-                  DropdownMenuItem(
-                    value: 'Khoa CNTT',
-                    child: Text('Khoa CNTT'),
-                  ),
-                  DropdownMenuItem(
-                    value: 'DEV vui vẻ',
-                    child: Text('DEV vui vẻ'),
-                  ),
-                  DropdownMenuItem(
-                    value: 'Thiết kế đồ họa',
-                    child: Text('Thiết kế đồ họa'),
-                  ),
-                ],
+                items: widget.availableGroups.map((groupName) {
+                  return DropdownMenuItem(
+                    value: groupName,
+                    child: Text(groupName),
+                  );
+                }).toList(),
                 onChanged: (value) {
                   if (value != null) setState(() => selectedGroup = value);
                 },
@@ -346,9 +331,9 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
                   isDense: true,
                 ),
               ),
+
               const SizedBox(height: 30),
 
-              // Nút hành động
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -382,17 +367,21 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
                       elevation: 5,
                     ),
                     onPressed: () {
-                      // Lưu ý!: Xử lý đăng bài ở đây
-                      // final postData = {
-                      //   'content': contentController.text,
-                      //   'group': selectedGroup,
-                      //   'image_file': selectedImage,
-                      //   'other_file': selectedFileName,
-                      // };
+                      if (contentController.text.trim().isEmpty) return;
 
-                      // print(postData);
+                      final newPost = {
+                        "user": "Cao Quang Khánh",
+                        "group": selectedGroup,
+                        "title": contentController.text.trim(),
+                        "image": selectedImages.isNotEmpty
+                            ? selectedImages.first.path
+                            : null,
+                        "likes": 0,
+                        "isLiked": false,
+                        "comments": [],
+                      };
 
-                      Navigator.pop(context);
+                      Navigator.pop(context, newPost);
                     },
                     child: const Text(
                       'Đăng Bài',

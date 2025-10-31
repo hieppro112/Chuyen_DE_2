@@ -3,8 +3,12 @@ import 'package:giao_tiep_sv_user/Home_screen/Home/Home_screen/Group_create/nhom
 import 'package:giao_tiep_sv_user/Home_screen/home.dart';
 import 'package:giao_tiep_sv_user/Login_register/dang_ki.dart';
 import 'package:giao_tiep_sv_user/Login_register/dang_nhap.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
