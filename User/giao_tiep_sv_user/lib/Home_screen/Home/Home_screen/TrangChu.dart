@@ -115,6 +115,34 @@ class _TrangChuState extends State<TrangChu> {
         "isLiked": false,
         "comments": [],
       },
+      {
+        "user": "Cao Quang Khánh",
+        "group": "CNTT",
+        "title": "Tài liệu học Flutter",
+        "files": [
+          {
+            "name": "flutter_notes.pdf",
+            "path": "https://example.com/flutter_notes.pdf",
+          },
+          {
+            "name": "code_sample.zip",
+            "path": "https://example.com/code_sample.zip",
+          },
+        ],
+        "images": [],
+        "likes": 3,
+        "isLiked": false,
+        "comments": [
+          {
+            "name": "Nguyễn Văn A",
+            "text": "Bạn thử tìm trên trang web của trường xem sao.",
+          },
+          {
+            "name": "Lê Thị B",
+            "text": "Mình có một số tài liệu, bạn gửi email cho mình nhé.",
+          },
+        ],
+      },
     ];
 
     _filterPosts();
