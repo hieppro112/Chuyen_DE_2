@@ -238,7 +238,7 @@ class _ScreenNotify extends State<ScreenNotify> {
        onTap: () async{
           ScaffoldMessenger.of(context).showSnackBar(
             await const SnackBar(
-              content: Text('Đã tạo nhóm thành công !'),
+              content: Text('Đã gửi nội dung đi !'),
               duration: Duration(seconds: 3),
             ),
           );
