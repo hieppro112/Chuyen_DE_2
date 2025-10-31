@@ -172,7 +172,7 @@ class _DangNhapState extends State<DangNhap> {
           hintStyle: const TextStyle(color: Colors.black54),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
-            vertical: 16,
+            vertical: 16, 
             horizontal: 20,
           ),
         ),
