@@ -129,7 +129,7 @@ class _DangKiState extends State<DangKi> {
                       fontFamily: 'Georgia',
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 31),
 
                   _buildEmailField(),
 

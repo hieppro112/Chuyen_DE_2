@@ -43,25 +43,22 @@ class _DangNhapState extends State<DangNhap> {
     }
 
     if (!email.endsWith("@mail.tdc.edu.vn")) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Email phải thuộc TDC !")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Email phải thuộc TDC !")));
       return;
     }
 
-    
     final user = _fakeAccounts.firstWhere(
       (acc) => acc['email'] == email && acc['password'] == password,
-      orElse: () => {
-
-      },
+      orElse: () => {},
     );
 
     if (user.isNotEmpty) {
       // Thành công
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Xin chào ${user['name']}")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Xin chào ${user['name']}")));
 
       Navigator.pushReplacement(
         context,
@@ -100,7 +97,7 @@ class _DangNhapState extends State<DangNhap> {
                       fontFamily: 'Georgia',
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 31),
 
                   _buildEmailField(),
                   const SizedBox(height: 20),
@@ -172,7 +169,7 @@ class _DangNhapState extends State<DangNhap> {
           hintStyle: const TextStyle(color: Colors.black54),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
-            vertical: 16, 
+            vertical: 16,
             horizontal: 20,
           ),
         ),

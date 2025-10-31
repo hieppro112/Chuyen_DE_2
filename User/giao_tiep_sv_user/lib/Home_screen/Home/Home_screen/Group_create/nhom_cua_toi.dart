@@ -54,13 +54,13 @@ class _NhomCuaToiState extends State<NhomCuaToi> {
         ),
       ),
       title: const Text(
-        "Nhóm của tôi",
+        "Nhóm của tôi ",
         style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       ),
       centerTitle: true,
       actions: [
         IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black, size: 20),
+          icon: const Icon(Icons.arrow_back, color: Colors.black, size: 21),
           onPressed: () => Navigator.pop(context),
         ),
         const SizedBox(width: 8),
