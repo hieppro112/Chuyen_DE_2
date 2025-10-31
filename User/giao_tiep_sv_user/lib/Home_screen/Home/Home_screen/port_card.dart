@@ -40,7 +40,7 @@ class PostCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 👤 Thông tin người đăng
+          //  Thông tin người đăng
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -98,19 +98,21 @@ class PostCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
 
-          // 📝 Tiêu đề
+          //  Tiêu đề
           Text(
             post["title"] ?? "Không có tiêu đề",
             style: const TextStyle(fontSize: 14),
           ),
           const SizedBox(height: 8),
 
-          // 🖼️ Hiển thị ảnh
+          //  Hiển thị ảnh
           if (images.isNotEmpty) _buildImageSection(images),
+          if (post["files"] != null && post["files"].isNotEmpty)
+            _buildFileSection(List<Map<String, String>>.from(post["files"])),
 
           const SizedBox(height: 8),
 
-          // ❤️ Bình luận + Lượt thích
+          //  Bình luận + Lượt thích
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -149,7 +151,7 @@ class PostCard extends StatelessWidget {
     );
   }
 
-  /// 🧩 Chuẩn hóa danh sách ảnh
+  ///  Chuẩn hóa danh sách ảnh
   List<String> _extractImages(Map<String, dynamic> post) {
     final data = post["images"];
     if (data == null) {
@@ -206,7 +208,61 @@ class PostCard extends StatelessWidget {
     }
   }
 
-  /// 🧩 Xử lý ảnh — URL hoặc local
+  /// 🧩 Hiển thị file đính kèm (PDF, DOCX,...)
+  Widget _buildFileSection(List<Map<String, String>> files) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: files.map((file) {
+        final fileName = file["name"] ?? "Tệp không rõ";
+        final path = file["path"] ?? "";
+
+        IconData icon;
+        if (fileName.endsWith(".pdf")) {
+          icon = Icons.picture_as_pdf;
+        } else if (fileName.endsWith(".doc") || fileName.endsWith(".docx")) {
+          icon = Icons.description;
+        } else if (fileName.endsWith(".zip")) {
+          icon = Icons.archive;
+        } else if (fileName.endsWith(".mp4")) {
+          icon = Icons.video_file;
+        } else {
+          icon = Icons.insert_drive_file;
+        }
+
+        return Container(
+          margin: const EdgeInsets.symmetric(vertical: 4),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.grey[100],
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          child: Row(
+            children: [
+              Icon(icon, color: Colors.blueAccent),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  fileName,
+                  style: const TextStyle(fontSize: 14),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.open_in_new, color: Colors.blueAccent),
+                onPressed: () {
+                  // 🧩 Ở đây bạn có thể mở file hoặc tải file
+                  debugPrint("Mở file: $path");
+                },
+              ),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  ///  Xử lý ảnh — URL hoặc local
   Widget _buildImage(String path) {
     if (path.startsWith("http")) {
       return Image.network(
