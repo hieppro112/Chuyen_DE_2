@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_admin/Admin/duyet_bai_viet_admin/duyet_bai_viet_admin.dart';
+import 'package:giao_tiep_sv_admin/Gui_Thong_bao/view/Notifycation_Sceen.dart';
 import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/view/Create_group_community.dart';
 import 'package:giao_tiep_sv_admin/Truy_Xuat_TK_Screens/truy_xuat_tai_Khoan.dart';
 import 'bao_cao_vi_pham.dart';
@@ -107,6 +108,24 @@ class AdminScreen extends StatelessWidget {
                   );
                 },
               ),
+              SizedBox(height: 15,),
+              // Nút "Quản lý bài viết và báo cáo"
+              _buildAdminButton(
+                context,
+                icon: Icons.notification_add, // Icon báo cáo
+                text: 'Gửi thông báo người dùng',
+                color: const Color.fromARGB(255, 85, 138, 243), // Màu cam nhạt
+                iconColor: Colors.yellow, // Màu icon đỏ
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ScreenNotify(),
+                    ),
+                  );
+                },
+              ),
+              
             ],
           ),
         ),

@@ -6,16 +6,15 @@ import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/view/Screen_uyquyen.dart';
 import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/widget/custom_all_khoa.dart';
 import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/widget/selected.dart';
 import 'package:giao_tiep_sv_admin/widget/MyButton.dart';
-import 'package:image_picker/image_picker.dart';
 
-class ScreenCommunityGroup extends StatefulWidget {
-  const ScreenCommunityGroup({super.key});
+class ScreenNotify extends StatefulWidget {
+  const ScreenNotify({super.key});
 
   @override
-  State<ScreenCommunityGroup> createState() => _ScreenCommunityGroupState();
+  State<ScreenNotify> createState() => _ScreenNotify();
 }
 
-class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
+class _ScreenNotify extends State<ScreenNotify> {
   File? avt_group = null;
   List<String> khoa = ["CNTT", "Kế Toán", "Điện", "Ô Tô", "Cơ khí"];
   TextEditingController nameGroup = TextEditingController();
@@ -207,7 +206,7 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
           iconSize: 25,
         ),
         title: Text(
-          "Tạo nhóm cộng đồng",
+          "Gửi thông báo",
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -222,11 +221,10 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
             SizedBox(height: 10),
             createDescription(),
             SizedBox(height: 10),
-            create_avt(),
             SizedBox(height: 10),
             createButton(),
             SizedBox(height: 15),
-            CustomSlected(Throws: 1,listmember: listSelected_uyquyen, listFaculty: []),
+            CustomSlected(Throws: 2,listmember: listSelected_uyquyen, listFaculty: []),
             SizedBox(height: 30),
             complate_create(),
           ],
@@ -240,7 +238,7 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
        onTap: () async{
           ScaffoldMessenger.of(context).showSnackBar(
             await const SnackBar(
-              content: Text('Đã tạo nhóm thành công !'),
+              content: Text('Đã gửi nội dung đi !'),
               duration: Duration(seconds: 3),
             ),
           );
@@ -255,7 +253,7 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
             border: Border.all(color: Colors.grey, width: 0.9),
           ),
           child: Text(
-            "Tạo nhóm",
+            "Xác nhận",
             style: TextStyle(fontSize: 20, color: Colors.white),
           ),
         ),
@@ -269,7 +267,7 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
       children: [
         Mybutton(
           url_icon: 'assets/images/admin.png',
-          nameButton: "Ủy quyền",
+          nameButton: "Chọn người",
           Mycolor: Colors.white,
           ontap: () => Navigator.push(
             context,
@@ -301,7 +299,7 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Tên Nhóm:", style: TextStyle(fontSize: 25)),
+        Text("Tiêu đề:", style: TextStyle(fontSize: 25)),
         SizedBox(height: 5),
         TextField(
           controller: nameGroup,
@@ -327,7 +325,7 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Mô Tả:", style: TextStyle(fontSize: 25)),
+        Text("Nội dung:", style: TextStyle(fontSize: 25)),
         SizedBox(height: 5),
         TextField(
           textAlignVertical: TextAlignVertical.top,
@@ -345,47 +343,6 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: Colors.lightBlueAccent),
             ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget create_avt() {
-    return Row(
-      children: [
-        Expanded(
-          child: Text("Chọn ảnh đại diện:", style: TextStyle(fontSize: 20)),
-        ),
-        Expanded(
-          child: InkWell(
-            onTap: () async {
-              print("pick img");
-              final ImagePicker pickerImg = ImagePicker();
-              final XFile? image = await pickerImg.pickImage(
-                source: ImageSource.gallery,
-              );
-              if (image != null) {
-                setState(() {
-                  avt_group = File(image.path);
-                });
-              }
-            },
-            child: (avt_group == null)
-                ? Image.asset(
-                    'assets/images/picked_avt_group.png',
-                    width: 100,
-
-                    height: 100,
-                    fit: BoxFit.contain,
-                  )
-                : Image.file(
-                    // avt_group.path?'assets/images/picked_avt_group.png',
-                    avt_group!,
-                    fit: BoxFit.contain,
-                    width: 45,
-                    height: 45,
-                  ),
           ),
         ),
       ],

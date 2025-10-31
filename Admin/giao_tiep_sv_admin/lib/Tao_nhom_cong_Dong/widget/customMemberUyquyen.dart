@@ -38,7 +38,7 @@ class _CustommemberUyQuyen extends State<CustommemberUyQuyen> {
               children: [
                 //create img avatar
                 ClipOval(
-                  child: Image.asset(
+                  child: Image.network(
                     widget.url,
                     fit: BoxFit.fill,
                     height: 40,
