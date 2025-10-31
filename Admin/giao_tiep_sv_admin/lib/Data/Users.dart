@@ -7,7 +7,7 @@ class Users {
   final String? address;
   final String url_avt;
   final int role;
-  final int faculty_id;
+  final String faculty_id;
 
   Users({required this.id_user, required this.email, required this.pass, required this.fullname,  this.phone,  this.address, required this.url_avt, required this.role, required this.faculty_id});
 

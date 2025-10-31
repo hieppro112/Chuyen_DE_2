@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_admin/Data/Users.dart';
 import 'package:giao_tiep_sv_admin/Data/faculty.dart';
@@ -5,10 +6,9 @@ import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/widget/customMemberUyquyen
 import 'package:giao_tiep_sv_admin/widget/customSearch.dart';
 
 class Screen_uyquyen extends StatefulWidget {
-  final List<Users>? listUyQuyen;
   final ValueChanged<List<String>>? GetList;
 
-  const Screen_uyquyen({super.key, this.listUyQuyen, this.GetList});
+  const Screen_uyquyen({super.key, this.GetList});
   
 
   @override
@@ -16,30 +16,36 @@ class Screen_uyquyen extends StatefulWidget {
 }
 
 class _Screen_uyquyenState extends State<Screen_uyquyen> {
+  List<Users> listUyQuyen=[];
+  
   String selectedKhoa="Tất cả";
   List<String> listUyQuyen_out =[];
   List<Users> Listsearch = [];
 
+
   List<Faculty> dsKhoa = [
-    Faculty(id: "TT", name_faculty: "Công nghệ thông tin"),
-    Faculty(id: "KT", name_faculty: "Kế toán"),
-    Faculty(id: "DT", name_faculty: "Điện"),
-    Faculty(id: "OT", name_faculty: "Ô tô"),
-    Faculty(id: "CK", name_faculty: "Cơ Khí"),
-    Faculty(id: "DL", name_faculty: "Du lich"),
-    Faculty(id: "DP", name_faculty: "Đông phương học"),
-    Faculty(id: "PC", name_faculty: "Bartender"),
-    Faculty(id: "TD", name_faculty: "Tự động hóa"),
-    Faculty(id: "KS", name_faculty: "khách sạn"),
-    Faculty(id: "NA", name_faculty: "Nấu ăn"),
-    Faculty(id: "QT", name_faculty: "Quản trị kinh doanh"),
+    // Faculty(id: "TT", name_faculty: "Công nghệ thông tin"),
+    // Faculty(id: "KT", name_faculty: "Kế toán"),
+    // Faculty(id: "DT", name_faculty: "Điện"),
+    // Faculty(id: "OT", name_faculty: "Ô tô"),
+    // Faculty(id: "CK", name_faculty: "Cơ Khí"),
+    // Faculty(id: "DL", name_faculty: "Du lich"),
+    // Faculty(id: "DP", name_faculty: "Đông phương học"),
+    // Faculty(id: "PC", name_faculty: "Bartender"),
+    // Faculty(id: "TD", name_faculty: "Tự động hóa"),
+    // Faculty(id: "KS", name_faculty: "khách sạn"),
+    // Faculty(id: "NA", name_faculty: "Nấu ăn"),
+    // Faculty(id: "QT", name_faculty: "Quản trị kinh doanh"),
   ];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Listsearch = widget.listUyQuyen!;
+    featchMembers();
+    Listsearch = listUyQuyen;
+
+    featchFaculty();
   }
 
   @override
@@ -112,6 +118,7 @@ class _Screen_uyquyenState extends State<Screen_uyquyen> {
     );
   }
 
+//menu chon khoa
   Widget createChoseKhoa(){
     return PopupMenuButton<String>(
       child: Container(
@@ -138,8 +145,8 @@ class _Screen_uyquyenState extends State<Screen_uyquyen> {
       onSelected: (value) {
         setState(() {
           selectedKhoa = value;
-          Listsearch = widget.listUyQuyen!.where((element) {
-            return element.id_user.toLowerCase().contains(value.toLowerCase());
+          Listsearch = listUyQuyen.where((element) {
+            return element.faculty_id.toLowerCase().contains(value.toLowerCase());
           },).toList();
         });
         print(value);
@@ -154,8 +161,7 @@ class _Screen_uyquyenState extends State<Screen_uyquyen> {
     },);
   }
 
-  //mang hinh uy quyen 
-
+  //hiển thị toàn bộ người dùng 
   Widget createListmember(){
     return ListView.builder(
       shrinkWrap: true,
@@ -176,6 +182,31 @@ class _Screen_uyquyenState extends State<Screen_uyquyen> {
     );
   }
 
-  //lấy da
+  //lấy danh sách khoa vào 
+  Future<void> featchFaculty() async{
+    final snap = await FirebaseFirestore.instance.collection("Faculty").get();
+    final data = snap.docs.map((e) {
+      final map = e.data();
+      return Faculty(id: map['id'].toString()??"", name_faculty: map['name']??"");
+    },).toList();
+
+    setState(() {
+      dsKhoa = data;
+    });
+  }
+
+  //lay dach sach nguoi dung vao list uy quyen
+  Future<void> featchMembers()async{
+    final snap = await FirebaseFirestore.instance.collection("Users").get();
+
+    final data = snap.docs.map((e) {
+      final mapData = e.data();
+      return Users(id_user: mapData["email"]??"", email: mapData["mail"]??"", pass: mapData["pass"]??"", fullname: mapData["fullname"]??"", url_avt: mapData["avt"]??"", role: mapData["role"]??0, faculty_id: mapData["faculty_id"]??"");
+    },).toList();
+
+    setState(() {
+      listUyQuyen = data;
+    });
+  }
   
   }

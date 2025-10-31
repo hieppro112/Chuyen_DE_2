@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_admin/Admin/Home.dart';
-import 'package:giao_tiep_sv_admin/Login_QuenMK_Screens/dang_nhap.dart';
-import 'package:giao_tiep_sv_admin/Truy_Xuat_TK_Screens/truy_xuat_tai_Khoan.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(const MyApp());
 }
 
@@ -18,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: DangNhap(), // Trang mặc định
+      home: AdminScreen(), // Trang mặc định
     );
   }
 }
