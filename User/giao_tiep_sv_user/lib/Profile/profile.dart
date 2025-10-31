@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:giao_tiep_sv_user/Login_register/dang_nhap.dart';
 import 'package:giao_tiep_sv_user/Profile/Widget/avatarWidget.dart';
 import 'package:giao_tiep_sv_user/Profile/editProflie/edit_profile_screen.dart';
 import 'package:giao_tiep_sv_user/Profile/personalPost/personal_post_screen.dart';
@@ -199,7 +200,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 leading: const Icon(Icons.logout, color: Colors.blue),
                 title: const Text("Đăng xuất"),
                 onTap: () {
-                  // logout
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return const DangNhap();
+                  }));
                 },
               ),
             ],

@@ -68,7 +68,8 @@ class _DangKiState extends State<DangKi> {
     }
   }
 
-  void _dangKy(BuildContext context) {  
+  // Xử lý đăng ký
+  void _dangKy(BuildContext context) {
     if (emailController.text.isEmpty ||
         passwordController.text.isEmpty ||
         confirmController.text.isEmpty) {
@@ -128,19 +129,10 @@ class _DangKiState extends State<DangKi> {
                       fontFamily: 'Georgia',
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 31),
 
                   _buildEmailField(),
-            
-                  if (nganhHoc == null && emailController.text.isNotEmpty)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 8),
-                      child: Text(
-                        " Email phải thuộc trường TDC!",
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ),
-                 
+
                   const SizedBox(height: 20),
                   _buildNameField(),
                   const SizedBox(height: 20),
@@ -221,13 +213,17 @@ class _DangKiState extends State<DangKi> {
           hintText: 'Mật khẩu',
           hintStyle: const TextStyle(color: Colors.black54),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 16,
+            horizontal: 20,
+          ),
           suffixIcon: IconButton(
             icon: Icon(
               _obscurePassword ? Icons.visibility_off : Icons.visibility,
               color: Colors.black54,
             ),
-            onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+            onPressed: () =>
+                setState(() => _obscurePassword = !_obscurePassword),
           ),
         ),
       ),
@@ -250,7 +246,10 @@ class _DangKiState extends State<DangKi> {
           hintText: 'Xác nhận mật khẩu',
           hintStyle: const TextStyle(color: Colors.black54),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 16,
+            horizontal: 20,
+          ),
           suffixIcon: IconButton(
             icon: Icon(
               _obscureConfirm ? Icons.visibility_off : Icons.visibility,
