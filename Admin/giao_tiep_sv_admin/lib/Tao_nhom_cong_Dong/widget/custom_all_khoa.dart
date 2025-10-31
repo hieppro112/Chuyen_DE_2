@@ -146,7 +146,7 @@ class CustomAllKhoaState extends State<CustomAllKhoa> {
     } catch (e) {
       if (!mounted) return;
       setState(() => isLoading = false);
-      debugPrint("🔥 Lỗi khi load Faculty: $e");
+      debugPrint(" Lỗi khi load Faculty: $e");
     }
   }
 }
