@@ -1,6 +1,10 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_admin/Admin/duyet_bai_viet_admin/model/post_model.dart';
 import 'package:giao_tiep_sv_admin/Admin/duyet_bai_viet_admin/widget/post_card.dart';
+import 'package:giao_tiep_sv_admin/Data/faculty.dart';
 
 class AdminPostManagementScreen extends StatefulWidget {
   @override
@@ -9,11 +13,14 @@ class AdminPostManagementScreen extends StatefulWidget {
 }
 
 class _AdminPostManagementScreenState extends State<AdminPostManagementScreen> {
+  // Danh sách các khoa từ Firebase
+  List<Faculty> facultys = [];
+  StreamSubscription<QuerySnapshot>? _facultySubscription;
   List<Post> posts = [
     Post(
       id: '1',
       author: 'Cao Quang Khanh',
-      group: 'Điện - Điện tử',
+      faculty: Faculty(id: 'KT', name_faculty: 'Kế toán'),
       title: 'Ngày đầu tiên đi học tại TDC',
       content:
           'Hôm nay là ngày đầu tiên tôi đi học tại trường TDC. Mọi thứ thật mới mẻ và thú vị...',
@@ -25,7 +32,7 @@ class _AdminPostManagementScreenState extends State<AdminPostManagementScreen> {
     Post(
       id: '2',
       author: 'Lê Đình Thuận',
-      group: 'Khoa CNTT',
+      faculty: Faculty(id: 'TT', name_faculty: 'Công nghệ thông tin'),
       title: 'Tìm người đi xem phim chung',
       content: ' Tôi đã gặp nhiều bạn bè mới...',
       imageUrl:
@@ -36,7 +43,7 @@ class _AdminPostManagementScreenState extends State<AdminPostManagementScreen> {
     Post(
       id: '3',
       author: 'Lê Đại Hiệp',
-      group: 'Kinh tế',
+      faculty: Faculty(id: 'OT', name_faculty: 'Otô1'),
       title: 'Trải nghiệm học tập tại TDC',
       content: 'Môi trường học tập tại TDC rất chuyên nghiệp và thân thiện...',
       imageUrl:
@@ -47,7 +54,7 @@ class _AdminPostManagementScreenState extends State<AdminPostManagementScreen> {
     Post(
       id: '4',
       author: 'Phạm Thắng ',
-      group: 'Cơ khí',
+      faculty: Faculty(id: 'DT', name_faculty: 'Điện - Điện tử'),
       title: 'Hoạt động ngoại khóa tại TDC',
       content: 'Các hoạt động ngoại khóa tại trường rất đa dạng và bổ ích...',
       imageUrl:
@@ -57,9 +64,55 @@ class _AdminPostManagementScreenState extends State<AdminPostManagementScreen> {
     ),
   ];
 
-  // Biến quản lý bộ lọc
+  @override
+  void initState() {
+    super.initState();
+    _loadFaculty();
+  }
+
+  void _loadFaculty() {
+    _facultySubscription = FirebaseFirestore.instance
+        .collection('Faculty')
+        .orderBy('name')
+        .snapshots()
+        .listen(
+          (QuerySnapshot snapshot) {
+            // Cập nhật danh sách khoa mỗi khi có thay đổi
+            facultys = snapshot.docs.map((doc) {
+              return Faculty(
+                id: doc.id,
+                name_faculty: doc['name'] ?? 'Không xác định',
+              );
+            }).toList();
+          },
+          onError: (error) {
+            print('Lỗi lấy dữ liệu khoa: $error');
+          },
+        );
+  }
+
+  @override
+  void dispose() {
+    _facultySubscription?.cancel();
+    super.dispose();
+  }
+
+  // Hàm chuyển đổi string sang PostStatus
+  PostStatus _parsePostStatus(String status) {
+    switch (status) {
+      case 'approved':
+        return PostStatus.approved;
+      case 'rejected':
+        return PostStatus.rejected;
+      case 'pending':
+      default:
+        return PostStatus.pending;
+    }
+  }
+
+  // Biến quản lý bộ lọc theo tên của khoa
   PostFilterType _currentFilter = PostFilterType.all;
-  String? _currentGroupFilter;
+  String? _currentFacultyFilter;
 
   void _approvePost(int index) {
     setState(() {
@@ -81,10 +134,10 @@ class _AdminPostManagementScreenState extends State<AdminPostManagementScreen> {
     );
   }
 
-  // Lấy danh sách nhóm duy nhất (đã sửa lỗi sort)
-  List<String> get uniqueGroups {
-    final groups = posts.map((p) => p.group).toSet().toList()..sort();
-    return ['Tất cả nhóm', ...groups];
+  // Lấy danh sách tên khoa cho dropdown
+  List<String> get uniqueFaculties {
+    final facultyNames = facultys.map((f) => f.name_faculty).toList()..sort();
+    return ['Tất cả khoa', ...facultyNames];
   }
 
   // Lọc bài viết
@@ -112,10 +165,11 @@ class _AdminPostManagementScreenState extends State<AdminPostManagementScreen> {
         break;
     }
 
-    // Lọc theo nhóm
-    if (_currentGroupFilter != null && _currentGroupFilter != 'Tất cả nhóm') {
+    // Lọc theo nhóm theo tên khoa
+    if (_currentFacultyFilter != null &&
+        _currentFacultyFilter != 'Tất cả khoa') {
       result = result
-          .where((post) => post.group == _currentGroupFilter)
+          .where((post) => post.faculty.name_faculty == _currentFacultyFilter)
           .toList();
     }
 
@@ -131,9 +185,9 @@ class _AdminPostManagementScreenState extends State<AdminPostManagementScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final safeGroupValue = uniqueGroups.contains(_currentGroupFilter)
-        ? _currentGroupFilter
-        : 'Tất cả nhóm';
+    final safeFacultyValue = uniqueFaculties.contains(_currentFacultyFilter)
+        ? _currentFacultyFilter
+        : 'Tất cả khoa';
 
     return Scaffold(
       appBar: AppBar(
@@ -193,7 +247,7 @@ class _AdminPostManagementScreenState extends State<AdminPostManagementScreen> {
                       ),
                     ),
                     SizedBox(width: 12),
-                    // Dropdown nhóm
+                    // Dropdown khoa
                     Expanded(
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 12),
@@ -202,20 +256,20 @@ class _AdminPostManagementScreenState extends State<AdminPostManagementScreen> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: DropdownButton<String>(
-                          value: safeGroupValue ?? 'Tất cả nhóm',
+                          value: safeFacultyValue,
                           onChanged: (String? newValue) {
                             setState(() {
-                              _currentGroupFilter = newValue == 'Tất cả nhóm'
+                              _currentFacultyFilter = newValue == 'Tất cả khoa'
                                   ? null
                                   : newValue;
                             });
                           },
                           isExpanded: true,
                           underline: SizedBox(),
-                          items: uniqueGroups.map((String group) {
+                          items: uniqueFaculties.map((String faculty) {
                             return DropdownMenuItem<String>(
-                              value: group,
-                              child: Text(group),
+                              value: faculty,
+                              child: Text(faculty),
                             );
                           }).toList(),
                         ),

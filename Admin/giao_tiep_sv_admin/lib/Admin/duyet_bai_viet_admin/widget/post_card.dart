@@ -55,7 +55,7 @@ class PostCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Nhóm: ${post.group}',
+                        'Nhóm: ${post.faculty.name_faculty}',
                         style: TextStyle(color: Colors.grey[600], fontSize: 14),
                       ),
                     ],
