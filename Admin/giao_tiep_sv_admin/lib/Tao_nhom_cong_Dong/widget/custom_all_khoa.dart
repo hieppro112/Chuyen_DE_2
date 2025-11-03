@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_admin/Data/faculty.dart';
+import 'package:giao_tiep_sv_admin/FirebaseFirestore/FacultyFirebase.dart';
+import 'package:giao_tiep_sv_admin/FirebaseFirestore/UserFirebase.dart.dart';
 
 class CustomAllKhoa extends StatefulWidget {
-  final ValueChanged<bool>? selected;
-  const CustomAllKhoa({super.key, this.selected});
+  final ValueChanged<List<Faculty>>? listKhoa_out;
+
+  const CustomAllKhoa({super.key, this.listKhoa_out});
 
   static Future<void> show(BuildContext context) async {
     await showDialog(
@@ -18,9 +21,12 @@ class CustomAllKhoa extends StatefulWidget {
 }
 
 class CustomAllKhoaState extends State<CustomAllKhoa> {
-  Map<String, bool> listSelected = {};
+  final FireStoreServiceFaculty firebaseServiceFaculty = FireStoreServiceFaculty();
+  List<Faculty> listSelected = [];
   List<Faculty> dsKhoa = [];
   bool isLoading = true; // ✅ Biến trạng thái loading
+  bool isSelectedCafulty = false;
+  Map<String, bool> Selected = {};
 
   @override
   void initState() {
@@ -48,22 +54,24 @@ class CustomAllKhoaState extends State<CustomAllKhoa> {
             Expanded(
               child: isLoading
                   ? const Center(child: CircularProgressIndicator())
-                  : listSelected.isEmpty
-                      ? const Center(
-                          child: Text(
-                            "Không có dữ liệu khoa.",
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        )
-                      : ListView.builder(
-                          itemCount: listSelected.length,
-                          itemBuilder: (context, index) {
-                            final entry = listSelected.entries.elementAt(index);
-                            final nameKhoa = entry.key;
-                            final selected = entry.value;
-                            return customItem(selected, nameKhoa);
-                          },
-                        ),
+                  : dsKhoa.isEmpty
+                  ? const Center(
+                      child: Text(
+                        "Không có dữ liệu khoa.",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    )
+                  :
+                    //danh sach va truyen check box cua cac user
+                    ListView.builder(
+                      itemCount: dsKhoa.length,
+                      itemBuilder: (context, index) {
+                        var valueItem = dsKhoa[index];
+                        final nameKhoa = valueItem.name_faculty;
+                        final idKhoa = valueItem.id;
+                        return customItem(idKhoa, nameKhoa);
+                      },
+                    ),
             ),
 
             const SizedBox(height: 10),
@@ -80,6 +88,13 @@ class CustomAllKhoaState extends State<CustomAllKhoa> {
                 const SizedBox(width: 8),
                 ElevatedButton(
                   onPressed: () {
+                    for (var item in dsKhoa) {
+                      if (Selected[item.id] == true) {
+                        listSelected.add(item);
+                      }
+                    }
+                    // print(listSelected.length);
+                    widget.listKhoa_out?.call(listSelected);
                     Navigator.pop(context);
                   },
                   child: const Text(
@@ -95,21 +110,22 @@ class CustomAllKhoaState extends State<CustomAllKhoa> {
     );
   }
 
-  Widget customItem(bool selected, String nameKhoa) {
+  Widget customItem(String idKhoa, String nameKhoa) {
     return InkWell(
       onTap: () {
         setState(() {
-          listSelected[nameKhoa] = !selected;
+          Selected[idKhoa] = !Selected[idKhoa]! ?? false;
         });
       },
       child: Row(
         children: [
           Checkbox(
             activeColor: Colors.blue,
-            value: selected,
+            value: Selected[idKhoa],
             onChanged: (value) {
               setState(() {
-                listSelected[nameKhoa] = value ?? false;
+                Selected[idKhoa] = value! ?? false;
+                print(value);
               });
             },
           ),
@@ -127,22 +143,43 @@ class CustomAllKhoaState extends State<CustomAllKhoa> {
   Future<void> fetchFaculty() async {
     try {
       setState(() => isLoading = true);
+      // //lay duong dan
+      // final snap = await FirebaseFirestore.instance.collection('Faculty').get();
 
-      final snap = await FirebaseFirestore.instance.collection('Faculty').get();
+      //realtime
+      // FirebaseFirestore.instance.collection('Faculty').snapshots().listen((
+      //   event,
+      // ) {
+      //   final data = event.docs.map((e) {
+      //     final map = e.data();
+      //     return Faculty(id: e.id, name_faculty: map['name'] ?? '');
+      //   }).toList();
 
-      final data = snap.docs.map((e) {
-        final map = e.data();
-        return Faculty(id: e.id, name_faculty: map['name'] ?? '');
-      }).toList();
+      //   setState(() {
+      //     dsKhoa = data;
 
-      if (!mounted) return;
-      setState(() {
-        dsKhoa = data;
-        listSelected = {
-          for (var item in dsKhoa) item.name_faculty: false,
-        };
-        isLoading = false;
-      });
+      //     // Nếu chưa có key thì thêm, tránh reset chọn cũ
+      //     for (var item in dsKhoa) {
+      //       Selected.putIfAbsent(item.id, () => false);
+      //     }
+      //     isLoading = false;
+      //   });
+      // });
+
+      firebaseServiceFaculty.streamBuilder().listen(
+        (data) {
+         
+        setState(() {
+          dsKhoa = data;
+
+          // Nếu chưa có key thì thêm, tránh reset chọn cũ
+          for (var item in dsKhoa) {
+            Selected.putIfAbsent(item.id, () => false);
+          }
+          isLoading = false;
+        });
+        },
+      );
     } catch (e) {
       if (!mounted) return;
       setState(() => isLoading = false);
