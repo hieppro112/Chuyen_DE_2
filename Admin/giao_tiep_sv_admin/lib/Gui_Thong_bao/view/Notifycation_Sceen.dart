@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_admin/Data/Users.dart';
+import 'package:giao_tiep_sv_admin/Data/faculty.dart';
 import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/view/Screen_uyquyen.dart';
 import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/widget/custom_all_khoa.dart';
 import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/widget/selected.dart';
@@ -19,7 +20,8 @@ class _ScreenNotify extends State<ScreenNotify> {
   List<String> khoa = ["CNTT", "Kế Toán", "Điện", "Ô Tô", "Cơ khí"];
   TextEditingController nameGroup = TextEditingController();
   TextEditingController descriptionGroup = TextEditingController();
-  List<String> listSelected_uyquyen = [];
+  List<Users> listSelected_uyquyen = [];
+  List<Faculty> listSelected_khoa = [];
 
   List<Users> ListMember = [
     // Users(
@@ -224,7 +226,11 @@ class _ScreenNotify extends State<ScreenNotify> {
             SizedBox(height: 10),
             createButton(),
             SizedBox(height: 15),
-            CustomSlected(Throws: 2,listmember: listSelected_uyquyen, listFaculty: []),
+            CustomSlected(
+              Throws: 1,
+              listmember: listSelected_uyquyen,
+              listFaculty: listSelected_khoa,
+            ),
             SizedBox(height: 30),
             complate_create(),
           ],
@@ -236,13 +242,25 @@ class _ScreenNotify extends State<ScreenNotify> {
   Widget complate_create() {
     return InkWell(
        onTap: () async{
-          ScaffoldMessenger.of(context).showSnackBar(
-            await const SnackBar(
-              content: Text('Đã gửi nội dung đi !'),
+          if(nameGroup.text.trim().isEmpty||descriptionGroup.text.trim().isEmpty||avt_group==null||listSelected_khoa.length<=0||listSelected_uyquyen.length<=0){
+            ScaffoldMessenger.of(context).showSnackBar(
+             const SnackBar(
+              content: Text('Vui lòng đưa đầy đủ thông tin!'),
               duration: Duration(seconds: 3),
             ),
           );
-          Navigator.pop(context);
+          }
+          else{
+            Navigator.pop(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+             const SnackBar(
+              content: Text('Đã tạo nhóm thành công !'),
+              duration: Duration(seconds: 3),
+            ),
+            
+            
+          );
+          }
         },
       child: Center(
         child: Container(
@@ -287,8 +305,16 @@ class _ScreenNotify extends State<ScreenNotify> {
           nameButton: "Khoa",
           Mycolor: Colors.white,
           ontap: () {
-            print("chon khoa");
-            CustomAllKhoa.show(context);
+           showDialog(
+              context: context,
+              builder: (context) => CustomAllKhoa(
+                listKhoa_out: (value) {
+                  setState(() {
+                    listSelected_khoa = value;
+                  });
+                },
+              ),
+            );
           },
         ),
       ],

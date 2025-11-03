@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:giao_tiep_sv_admin/Data/Users.dart';
 
 
 class CustommemberUyQuyen extends StatefulWidget {
-  final String id;
-  final String url;
-  final String fullname;
-  final ValueChanged<Map<String,bool>>? ontap;
+  final Users user;
+  final ValueChanged<bool>? ontap;
+  final bool selectedMember;
   const CustommemberUyQuyen({
     super.key,
-    required this.id,
-    required this.url,
-    required this.fullname,
-    this.ontap,
+    this.ontap, required this.user, required this.selectedMember,
   });
 
   @override
@@ -20,14 +17,14 @@ class CustommemberUyQuyen extends StatefulWidget {
 
 class _CustommemberUyQuyen extends State<CustommemberUyQuyen> {
   bool ischecked = false;
+  //trang thai selected cac member
+
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        setState(() {
-          ischecked = !ischecked;
-          widget.ontap?.call({widget.id:ischecked});
-        });
+       widget.ontap?.call(!widget.selectedMember);
       },
       child: Padding(
         padding: EdgeInsets.all(10),
@@ -39,7 +36,7 @@ class _CustommemberUyQuyen extends State<CustommemberUyQuyen> {
                 //create img avatar
                 ClipOval(
                   child: Image.network(
-                    widget.url,
+                    widget.user.url_avt,
                     fit: BoxFit.fill,
                     height: 40,
                     width: 40,
@@ -48,19 +45,19 @@ class _CustommemberUyQuyen extends State<CustommemberUyQuyen> {
                 SizedBox(width: 15),
                 //name
                 Text(
-                  widget.fullname,
+                  widget.user.fullname,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
 
             Checkbox(
-              value: ischecked,
+              value: widget.selectedMember,
               activeColor: Colors.blue,
               onChanged: (value) {
                 setState(() {
                   ischecked = value!;
-                  widget.ontap?.call({widget.id:ischecked});
+                  widget.ontap?.call(value);
 
                 });
               },
