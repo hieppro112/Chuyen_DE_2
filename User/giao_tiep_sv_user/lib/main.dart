@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_user/Home_screen/Home/Home_screen/Group_create/nhom_cua_toi.dart';
-import 'package:giao_tiep_sv_user/Home_screen/Home/Home_screen/TrangChu.dart';
 import 'package:giao_tiep_sv_user/Home_screen/home.dart';
 import 'package:giao_tiep_sv_user/Login_register/dang_ki.dart';
 import 'package:giao_tiep_sv_user/Login_register/dang_nhap.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:giao_tiep_sv_user/Profile/profile.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -26,7 +24,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
 
-      home: DangNhap(), // Trang mặc định
+      home: DangNhap() // Trang mặc định
     );
   }
 }
