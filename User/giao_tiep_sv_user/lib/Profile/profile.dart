@@ -5,6 +5,7 @@ import 'package:giao_tiep_sv_user/Profile/Widget/avatarWidget.dart';
 import 'package:giao_tiep_sv_user/Profile/editProflie/edit_profile_screen.dart';
 import 'package:giao_tiep_sv_user/Profile/personalPost/personal_post_screen.dart';
 import 'package:giao_tiep_sv_user/Profile/saveItemsProfile/saved_items_profile_screen.dart';
+import 'package:giao_tiep_sv_user/service/profile_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -15,14 +16,54 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   // Dữ liệu profile - có thể cập nhật được
-  String _userName = "Phạm Thắng";
-  String _avatarUrl =
-      "https://i.pinimg.com/736x/d4/38/25/d43825dd483d634e59838d919c3cf393.jpg";
-  String _major = "CNTT";
-  String _schoolYear = "2023";
-  String _address = "115/16, Hồ Văn Tư, Thủ Đức";
-  String _phone = "0393413787";
-  File? _avatarFile; // Thêm biến để lưu ảnh local
+  String _userName = "";
+  String _avatarUrl = "";
+  String _major = "";
+  String _schoolYear = "";
+  String _address = "";
+  String _phone = "";
+  File? _avatarFile;
+
+  final ProfileService _profileService = ProfileService();
+  bool _isLoading = true;
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileFromFirebase();
+  }
+
+  // Hàm tải dữ liệu từ Firebase
+  Future<void> _loadProfileFromFirebase() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final profile = await _profileService.getProfile();
+
+      if (profile != null) {
+        // Lấy major và schoolYear từ email và faculty_id
+        final facultyInfo = await _profileService.layNganhVaNienKhoa(
+          profile.email,
+          profile.faculty.faculty_id,
+        );
+        setState(() {
+          _userName = profile.name;
+          _avatarUrl = profile.avatarUrl.trim();
+          _address = profile.address;
+          _phone = profile.phone;
+          _major = facultyInfo['major'] ?? 'Không tìm thấy';
+          _schoolYear = facultyInfo['schoolYear'] ?? 'Không tìm thấy';
+        });
+      }
+    } catch (e) {
+      print('❌ Lỗi khi tải profile từ Firebase: $e');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   // Hàm để cập nhật dữ liệu từ EditProfileScreen
   void _updateProfile(
@@ -46,6 +87,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _avatarFile = null;
       }
     });
+    // Reload lại dữ liệu từ Firebase để đảm bảo đồng bộ
+    _loadProfileFromFirebase();
   }
 
   // Hàm mở liên kết web
@@ -81,11 +124,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Text(
                         _userName,
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 21,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 6),
                       Row(
                         children: [
                           const Text(
@@ -200,9 +242,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 leading: const Icon(Icons.logout, color: Colors.blue),
                 title: const Text("Đăng xuất"),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return const DangNhap();
-                  }));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const DangNhap();
+                      },
+                    ),
+                  );
                 },
               ),
             ],
