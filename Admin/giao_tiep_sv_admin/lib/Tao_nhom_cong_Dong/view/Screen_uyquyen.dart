@@ -8,8 +8,9 @@ import 'package:giao_tiep_sv_admin/widget/customSearch.dart';
 
 class Screen_uyquyen extends StatefulWidget {
   final ValueChanged<List<Users>>? GetList;
+  final int throwss;
 
-  const Screen_uyquyen({super.key, this.GetList});
+  const Screen_uyquyen({super.key, this.GetList, required this.throwss});
 
   @override
   State<Screen_uyquyen> createState() => _Screen_uyquyenState();
@@ -54,7 +55,7 @@ class _Screen_uyquyenState extends State<Screen_uyquyen> {
           iconSize: 25,
         ),
         title: Text(
-          "Chọn người ủy quyền",
+          (widget.throwss==1)?"Chọn người ủy quyền":"Người nhận thông báo",
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -261,7 +262,6 @@ class _Screen_uyquyenState extends State<Screen_uyquyen> {
       //   }).toList();
 
       firestoreService.streamBuilder().listen((data) {
-        
         setState(() {
           listUyQuyen = data;
           Listsearch = data;

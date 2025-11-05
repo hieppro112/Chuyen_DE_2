@@ -2,30 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
+import '../../../FireBase_Service/create_post.dart';
 
 class DangBaiDialog extends StatefulWidget {
-  // Nhận danh sách nhóm từ ngoài vào
   final List<String> availableGroups;
 
-  const DangBaiDialog({
-    super.key,
-    required this.availableGroups, // truyền từ TrangChu
-  });
+  const DangBaiDialog({super.key, required this.availableGroups});
 
   @override
   State<DangBaiDialog> createState() => _DangBaiDialogState();
 }
 
 class _DangBaiDialogState extends State<DangBaiDialog> {
+  final CreatePostService _createPostService = CreatePostService();
+
   late String selectedGroup;
   final TextEditingController contentController = TextEditingController();
 
   List<File> selectedImages = [];
   List<String> selectedFileNames = [];
+  String? firstImagePath;
 
   final ImagePicker _picker = ImagePicker();
 
-  // Hàm chọn nhiều ảnh từ thư viện
   Future<void> _pickImages() async {
     final pickedFiles = await _picker.pickMultiImage();
     if (pickedFiles.isNotEmpty) {
@@ -33,12 +32,12 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
         selectedImages.addAll(
           pickedFiles.map((xfile) => File(xfile.path)).toList(),
         );
+        firstImagePath = selectedImages.first.path;
         selectedFileNames.clear();
       });
     }
   }
 
-  // Hàm chọn nhiều file tài liệu
   Future<void> _pickFiles() async {
     final result = await FilePicker.platform.pickFiles(allowMultiple: true);
     if (result != null) {
@@ -47,6 +46,7 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
           result.files.map((file) => file.name).toList(),
         );
         selectedImages.clear();
+        firstImagePath = null;
       });
     }
   }
@@ -60,16 +60,24 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
   void _removeImage(int index) {
     setState(() {
       selectedImages.removeAt(index);
+      if (index == 0 && selectedImages.isNotEmpty) {
+        firstImagePath = selectedImages.first.path;
+      } else if (selectedImages.isEmpty) {
+        firstImagePath = null;
+      }
     });
   }
 
   @override
   void initState() {
     super.initState();
-    //  Nhóm mặc định là nhóm đầu tiên trong danh sách
-    selectedGroup = widget.availableGroups.isNotEmpty
+    selectedGroup =
+        widget.availableGroups.isNotEmpty &&
+            widget.availableGroups.first != "Tất cả"
         ? widget.availableGroups.first
-        : 'CNTT';
+        : (widget.availableGroups.length > 1
+              ? widget.availableGroups[1]
+              : 'CNTT');
   }
 
   @override
@@ -78,10 +86,35 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
     super.dispose();
   }
 
+  // HÀM XỬ LÝ ĐĂNG BÀI (ĐÃ SỬA LỖI TRẢ VỀ TYPE)
+  Future<void> _submitPost() async {
+    if (contentController.text.trim().isEmpty) {
+      return Navigator.pop(context); // Đóng dialog nếu nội dung trống
+    }
+
+    // TẠM THỜI: Dùng local path. Cần thay thế bằng URL của Firebase Storage sau này.
+    final String? uploadedFileUrl = selectedImages.isNotEmpty
+        ? selectedImages.first.path
+        : null;
+
+    final success = await _createPostService.uploadPost(
+      content: contentController.text.trim(),
+      groupId: selectedGroup,
+      fileUrl: uploadedFileUrl,
+    );
+
+    if (success) {
+      // ✅ Trả về TRUE (Kiểu bool)
+      Navigator.pop(context, true);
+    } else {
+      // Trả về FALSE (Kiểu bool)
+      Navigator.pop(context, false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     const Color primaryColor = Color(0xFF1E88E5);
-
     final hasAttachments =
         selectedImages.isNotEmpty || selectedFileNames.isNotEmpty;
 
@@ -366,23 +399,7 @@ class _DangBaiDialogState extends State<DangBaiDialog> {
                       ),
                       elevation: 5,
                     ),
-                    onPressed: () {
-                      if (contentController.text.trim().isEmpty) return;
-
-                      final newPost = {
-                        "user": "Cao Quang Khánh",
-                        "group": selectedGroup,
-                        "title": contentController.text.trim(),
-                        "image": selectedImages.isNotEmpty
-                            ? selectedImages.first.path
-                            : null,
-                        "likes": 0,
-                        "isLiked": false,
-                        "comments": [],
-                      };
-
-                      Navigator.pop(context, newPost);
-                    },
+                    onPressed: _submitPost,
                     child: const Text(
                       'Đăng Bài',
                       style: TextStyle(

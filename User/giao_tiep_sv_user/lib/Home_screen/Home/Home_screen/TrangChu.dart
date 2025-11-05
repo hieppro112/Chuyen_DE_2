@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../FireBase_Service/get_posts.dart';
+import '../../../FireBase_Service/get_posts.dart'; // Đã có sẵn
 import 'port_card.dart';
 import 'dang_bai_dialog.dart';
 import 'left_panel.dart';
@@ -69,6 +69,8 @@ class _TrangChuState extends State<TrangChu> {
     _fetchPosts();
   }
 
+  // --- WIDGET BUILD ---
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,6 +82,7 @@ class _TrangChuState extends State<TrangChu> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Thanh trên cùng (Menu, Search, Đăng bài)
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Row(
@@ -283,10 +286,12 @@ class _TrangChuState extends State<TrangChu> {
     );
   }
 
-  // ... (Các hàm _openDangBaiDialog và _showCommentSheet không thay đổi)
+  // --- LOGIC HÀM ---
+
   // Mở dialog đăng bài
   void _openDangBaiDialog() async {
-    final newPost = await showDialog<Map<String, dynamic>>(
+    // Kiểu trả về đã được đặt đúng là bool?
+    final isSuccess = await showDialog<bool>(
       context: context,
       builder: (_) => DangBaiDialog(
         availableGroups: const [
@@ -299,11 +304,9 @@ class _TrangChuState extends State<TrangChu> {
       ),
     );
 
-    if (newPost != null) {
-      setState(() {
-        allPosts.insert(0, newPost);
-        _filterPosts();
-      });
+    // Nếu đăng bài thành công (nhận được true), tải lại dữ liệu từ Firebase
+    if (isSuccess == true) {
+      await _fetchPosts();
     }
   }
 
@@ -356,14 +359,17 @@ class _TrangChuState extends State<TrangChu> {
 
                   // Bài đăng tóm tắt
                   ListTile(
-                    leading: const CircleAvatar(
+                    leading: CircleAvatar(
                       radius: 20,
                       backgroundImage: NetworkImage(
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTaXZWZglx63-gMfBzslxSUQdqqvCp0QJiOA&s",
+                        post["avatar"] ?? // Dùng key 'avatar'
+                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTaXZWZglx63-gMfBzslxSUQdqqvCp0QJiOA&s",
                       ),
                     ),
                     title: Text(
-                      post["user"],
+                      post["fullname"] ??
+                          post["user"] ??
+                          "Ẩn danh", // Dùng key 'fullname'
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(

@@ -50,7 +50,7 @@ class PostCard extends StatelessWidget {
                     radius: 16,
                     backgroundImage: NetworkImage(
                       post["avatar"] ??
-                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTaXZWZglx63-gMfBzslxSUQdqqvCp0QJiOA&s",
+                          "https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg",
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -58,7 +58,7 @@ class PostCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        post["user"] ?? "Ẩn danh",
+                        post["fullname"] ?? "Ẩn danh",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
