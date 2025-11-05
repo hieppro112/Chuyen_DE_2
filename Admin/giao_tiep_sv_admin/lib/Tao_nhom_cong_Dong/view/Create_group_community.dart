@@ -20,8 +20,7 @@ class ScreenCommunityGroup extends StatefulWidget {
 }
 
 class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
-  final urlImageGroup =
-      "https://i.pinimg.com/736x/28/5f/6a/285f6a1b06bc79a6e1c50c7326ba6ce9.jpg";
+  final urlImageGroup = "https://i.pinimg.com/736x/28/5f/6a/285f6a1b06bc79a6e1c50c7326ba6ce9.jpg";
   final Groupsfirebase firebaseServicesGroup = Groupsfirebase();
   File? avt_group = null;
   List<String> khoa = ["CNTT", "Kế Toán", "Điện", "Ô Tô", "Cơ khí"];
@@ -30,8 +29,169 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
   List<Users> listSelected_uyquyen = [];
   List<Faculty> listSelected_khoa = [];
 
+
   List<Users> ListMember = [
-   
+    // Users(
+    //   id_user: "23211TT3598@mail.tdc.edu.vn",
+    //   email: "23211TT3598@mail.tdc.edu.vn",
+    //   pass: "123456",
+    //   fullname: "Lê Đại Hiệp",
+    //   phone: "0898415185",
+    //   url_avt: "assets/images/avatar.png",
+    //   role: 1,
+    //   faculty_id: 1,
+    // ),
+    // Users(
+    //   id_user: "23211TT3599@mail.tdc.edu.vn",
+    //   email: "23211TT3599@mail.tdc.edu.vn",
+    //   pass: "123456",
+    //   fullname: "Lê Đình Thuận",
+    //   phone: "0898415185",
+    //   url_avt: "assets/images/avatar.png",
+    //   role: 1,
+    //   faculty_id: 1,
+    // ),
+    // Users(
+    //   id_user: "23211TT3597@mail.tdc.edu.vn",
+    //   email: "23211TT3597@mail.tdc.edu.vn",
+    //   pass: "123456",
+    //   fullname: "Cao Quang Khánh",
+    //   phone: "0898415185",
+    //   url_avt: "assets/images/avatar.png",
+    //   role: 0,
+    //   faculty_id: 1,
+    // ),
+    // Users(
+    //   id_user: "23211TT3596@mail.tdc.edu.vn",
+    //   email: "23211TT3596@mail.tdc.edu.vn",
+    //   pass: "123456",
+    //   fullname: "Phạm Thắng",
+    //   phone: "0898415185",
+    //   url_avt: "assets/images/avatar.png",
+    //   role: 0,
+    //   faculty_id: 1,
+    // ),
+    // Users(
+    //   id_user: "23211TT3595@mail.tdc.edu.vn",
+    //   email: "23211TT3595@mail.tdc.edu.vn",
+    //   pass: "123456",
+    //   fullname: "Lê Van Tủn",
+    //   phone: "0898415185",
+    //   url_avt: "assets/images/avatar.png",
+    //   role: 1,
+    //   faculty_id: 1,
+    // ),
+    // Users(
+    //   id_user: "23211TT3595@mail.tdc.edu.vn",
+    //   email: "23211TT3595@mail.tdc.edu.vn",
+    //   pass: "123456",
+    //   fullname: "Lê Van Tủn",
+    //   phone: "0898415185",
+    //   url_avt: "assets/images/avatar.png",
+    //   role: 1,
+    //   faculty_id: 1,
+    // ),
+    // Users(
+    //   id_user: "23211TT3595@mail.tdc.edu.vn",
+    //   email: "23211TT3595@mail.tdc.edu.vn",
+    //   pass: "123456",
+    //   fullname: "Lê Van Tủn",
+    //   phone: "0898415185",
+    //   url_avt: "assets/images/avatar.png",
+    //   role: 1,
+    //   faculty_id: 1,
+    // ),
+
+    // Users(
+    //   id_user: "23211TT3595@mail.tdc.edu.vn",
+    //   email: "23211TT3595@mail.tdc.edu.vn",
+    //   pass: "123456",
+    //   fullname: "Lê Van Tủn",
+    //   phone: "0898415185",
+    //   url_avt: "assets/images/avatar.png",
+    //   role: 1,
+    //   faculty_id: 1,
+    // ),
+    // Users(
+    //   id_user: "23211TT3595@mail.tdc.edu.vn",
+    //   email: "23211TT3595@mail.tdc.edu.vn",
+    //   pass: "123456",
+    //   fullname: "Lê Van Tủn",
+    //   phone: "0898415185",
+    //   url_avt: "assets/images/avatar.png",
+    //   role: 1,
+    //   faculty_id: 1,
+    // ),
+    // Users(
+    //   id_user: "23211TT3595@mail.tdc.edu.vn",
+    //   email: "23211TT3595@mail.tdc.edu.vn",
+    //   pass: "123456",
+    //   fullname: "Lê Van Tủn",
+    //   phone: "0898415185",
+    //   url_avt: "assets/images/avatar.png",
+    //   role: 1,
+    //   faculty_id: 1,
+    // ),
+    // Users(
+    //   id_user: "23211TT3595@mail.tdc.edu.vn",
+    //   email: "23211TT3595@mail.tdc.edu.vn",
+    //   pass: "123456",
+    //   fullname: "Lê Van Tủn",
+    //   phone: "0898415185",
+    //   url_avt: "assets/images/avatar.png",
+    //   role: 1,
+    //   faculty_id: 1,
+    // ),
+    // Users(
+    //   id_user: "23211TT3595@mail.tdc.edu.vn",
+    //   email: "23211TT3595@mail.tdc.edu.vn",
+    //   pass: "123456",
+    //   fullname: "Lê Van Tủn",
+    //   phone: "0898415185",
+    //   url_avt: "assets/images/avatar.png",
+    //   role: 1,
+    //   faculty_id: 1,
+    // ),
+    // Users(
+    //   id_user: "23211KS3595@mail.tdc.edu.vn",
+    //   email: "23211TT3595@mail.tdc.edu.vn",
+    //   pass: "123456",
+    //   fullname: "Lê Van Tủn",
+    //   phone: "0898415185",
+    //   url_avt: "assets/images/avatar.png",
+    //   role: 1,
+    //   faculty_id: 1,
+    // ),
+    // Users(
+    //   id_user: "23211QT3595@mail.tdc.edu.vn",
+    //   email: "23211TT3595@mail.tdc.edu.vn",
+    //   pass: "123456",
+    //   fullname: "Lê Van Tủn",
+    //   phone: "0898415185",
+    //   url_avt: "assets/images/avatar.png",
+    //   role: 1,
+    //   faculty_id: 1,
+    // ),
+    // Users(
+    //   id_user: "23211PC3595@mail.tdc.edu.vn",
+    //   email: "23211TT3595@mail.tdc.edu.vn",
+    //   pass: "123456",
+    //   fullname: "Lê Van Tủn",
+    //   phone: "0898415185",
+    //   url_avt: "assets/images/avatar.png",
+    //   role: 1,
+    //   faculty_id: 1,
+    // ),
+    // Users(
+    //   id_user: "23211KT3595@mail.tdc.edu.vn",
+    //   email: "23211TT3595@mail.tdc.edu.vn",
+    //   pass: "123456",
+    //   fullname: "Anh Thu",
+    //   phone: "0898415185",
+    //   url_avt: "assets/images/avatar.png",
+    //   role: 1,
+    //   faculty_id: 1,
+    // ),
   ];
 
   @override
@@ -105,32 +265,18 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
             ),
           );
         } else {
-          // lấy id ngẫu nhiên
+          // lấy id ngẫu nhiên 
           final groupId = const Uuid().v4();
           final groupName = nameGroup.text;
           final groupDes = descriptionGroup.text;
           final groupMode = false;
           final groupAvt = urlImageGroup;
           final groupType = 0;
-          Map<String, String> groupcreatedBy = {};
-          for (var item in listSelected_uyquyen) {
-            groupcreatedBy[item.id_user] = item.fullname;
+          Map<String,String> groupcreatedBy = {};
+          for(var item in listSelected_uyquyen){
+            groupcreatedBy[item.id_user]= item.fullname;
           }
-          Map<String, String> faculty_id_apply = {};
-          for (var item in listSelected_khoa) {
-            print("id item: ${item.id}");
-            faculty_id_apply[item.id] = item.name_faculty;
-          }
-          Group group = Group(
-            id: groupId,
-            name: groupName,
-            description: groupDes,
-            created_by: groupcreatedBy,
-            faculty_id: faculty_id_apply,
-            approval_mode: groupMode,
-            avt: groupAvt,
-            type_group: groupType,
-          );
+          Group group =  Group(id: groupId, name: groupName, description: groupDes, created_by: groupcreatedBy, approval_mode: groupMode, avt: groupAvt, type_group: groupType);
           firebaseServicesGroup.createGroupAdmin(group);
           Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
@@ -170,7 +316,6 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
             context,
             MaterialPageRoute(
               builder: (context) => Screen_uyquyen(
-                throwss: 1,
                 GetList: (value) {
                   setState(() {
                     listSelected_uyquyen = value;
@@ -185,7 +330,14 @@ class _ScreenCommunityGroupState extends State<ScreenCommunityGroup> {
           nameButton: "Khoa",
           Mycolor: Colors.white,
           ontap: () {
-
+            // print("chon khoa");
+            // CustomAllKhoa.show(context);
+            // Navigator.push(context, MaterialPageRoute(builder: (context) {
+            //   return CustomAllKhoa(listKhoa_out: (value) {
+            //     listSelected_khoa = value;
+            //     print(listSelected_khoa.length);
+            //   },);
+            // },));
 
             showDialog(
               context: context,
