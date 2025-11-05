@@ -1,48 +1,41 @@
 import 'package:flutter/material.dart';
 
 class ConfirmButtonWidget extends StatelessWidget {
-  final VoidCallback? onPressed;
+  final VoidCallback onPressed;
+  final String buttonText;
   final bool isActive;
-  final bool isLoading;
-  static const Color _primaryColor = Color.fromARGB(255, 0, 85, 150);
 
   const ConfirmButtonWidget({
     super.key,
-    this.onPressed,
-    required this.isActive,
-    this.isLoading = false,
+    required this.onPressed,
+    this.buttonText = "Xác nhận",
+    this.isActive = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 50,
+      height: 48,
       child: ElevatedButton(
-        onPressed: (isActive && !isLoading) ? onPressed : null,
         style: ElevatedButton.styleFrom(
-          backgroundColor: isActive ? _primaryColor : Colors.grey,
+          backgroundColor: isActive
+              ? const Color.fromARGB(255, 0, 85, 150)
+              : Colors.grey,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(25),
+          ),
+          elevation: isActive ? 5 : 0,
+        ),
+        onPressed: isActive ? onPressed : null,
+        child: Text(
+          buttonText,
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.white,
+            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
           ),
         ),
-        child: isLoading
-            ? const SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-              )
-            : const Text(
-                'Xác nhận',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
       ),
     );
   }

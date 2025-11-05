@@ -1,13 +1,9 @@
-import 'package:giao_tiep_sv_user/Data/faculty.dart';
-
 class ProfileModel {
   String name;
   String email;
   String address;
   String phone;
   String avatarUrl;
-  Faculty faculty;
-  String roleId;
 
   ProfileModel({
     required this.name,
@@ -15,19 +11,15 @@ class ProfileModel {
     required this.address,
     required this.phone,
     required this.avatarUrl,
-    required this.faculty,
-    required this.roleId,
   });
 
-  // Copy để dễ cập nhật
+  // Có thể thêm phương thức copyWith để dễ dàng cập nhật
   ProfileModel copyWith({
     String? name,
     String? email,
     String? address,
     String? phone,
     String? avatarUrl,
-    Faculty? faculty,
-    String? roleId,
   }) {
     return ProfileModel(
       name: name ?? this.name,
@@ -35,8 +27,6 @@ class ProfileModel {
       address: address ?? this.address,
       phone: phone ?? this.phone,
       avatarUrl: avatarUrl ?? this.avatarUrl,
-      faculty: faculty ?? this.faculty,
-      roleId: roleId ?? this.roleId,
     );
   }
 }
