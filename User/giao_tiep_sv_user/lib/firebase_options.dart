@@ -57,6 +57,8 @@ class DefaultFirebaseOptions {
     appId: '1:413570651576:android:c3cf0c2d89ad0606f06b4d',
     messagingSenderId: '413570651576',
     projectId: 'giaotiepsv-a6f9a',
+    databaseURL: 'https://giaotiepsv-a6f9a-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'giaotiepsv-a6f9a.firebasestorage.app',
   );
+
 }
