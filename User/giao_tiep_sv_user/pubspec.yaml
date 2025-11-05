@@ -10,13 +10,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # Plugin cơ bản
   image_picker: ^1.1.1
-  file_picker: ^10.3.3
+  file_picker: ^8.0.7   # 🔽 hạ xuống cho tương thích Flutter 3.9.x
   cupertino_icons: ^1.0.8
   top_snackbar_flutter: ^3.1.0
   flutter_screenutil: ^5.9.3
   url_launcher: ^6.3.0
-  firebase_core: ^4.2.0
+
+  # Firebase tương thích Flutter 3.9.x
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.16.0
+  cloud_firestore: ^4.15.10
+
 
 dev_dependencies:
   flutter_test:
