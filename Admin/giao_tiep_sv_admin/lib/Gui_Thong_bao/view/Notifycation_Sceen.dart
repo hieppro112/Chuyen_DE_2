@@ -1,12 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:giao_tiep_sv_admin/Data/Notifycation.dart';
 import 'package:giao_tiep_sv_admin/Data/Users.dart';
 import 'package:giao_tiep_sv_admin/Data/faculty.dart';
+import 'package:giao_tiep_sv_admin/FirebaseFirestore/NotifycationFirebase.dart';
 import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/view/Screen_uyquyen.dart';
 import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/widget/custom_all_khoa.dart';
 import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/widget/selected.dart';
 import 'package:giao_tiep_sv_admin/widget/MyButton.dart';
+import 'package:uuid/uuid.dart';
 
 class ScreenNotify extends StatefulWidget {
   const ScreenNotify({super.key});
@@ -16,176 +19,15 @@ class ScreenNotify extends StatefulWidget {
 }
 
 class _ScreenNotify extends State<ScreenNotify> {
+  //firestore notify
+  final Notifycationfirebase notifyService  = Notifycationfirebase();
   File? avt_group = null;
   List<String> khoa = ["CNTT", "Kế Toán", "Điện", "Ô Tô", "Cơ khí"];
   TextEditingController nameGroup = TextEditingController();
   TextEditingController descriptionGroup = TextEditingController();
   List<Users> listSelected_uyquyen = [];
   List<Faculty> listSelected_khoa = [];
-
-  List<Users> ListMember = [
-    // Users(
-    //   id_user: "23211TT3598@mail.tdc.edu.vn",
-    //   email: "23211TT3598@mail.tdc.edu.vn",
-    //   pass: "123456",
-    //   fullname: "Lê Đại Hiệp",
-    //   phone: "0898415185",
-    //   url_avt: "assets/images/avatar.png",
-    //   role: 1,
-    //   faculty_id: 1,
-    // ),
-    // Users(
-    //   id_user: "23211TT3599@mail.tdc.edu.vn",
-    //   email: "23211TT3599@mail.tdc.edu.vn",
-    //   pass: "123456",
-    //   fullname: "Lê Đình Thuận",
-    //   phone: "0898415185",
-    //   url_avt: "assets/images/avatar.png",
-    //   role: 1,
-    //   faculty_id: 1,
-    // ),
-    // Users(
-    //   id_user: "23211TT3597@mail.tdc.edu.vn",
-    //   email: "23211TT3597@mail.tdc.edu.vn",
-    //   pass: "123456",
-    //   fullname: "Cao Quang Khánh",
-    //   phone: "0898415185",
-    //   url_avt: "assets/images/avatar.png",
-    //   role: 0,
-    //   faculty_id: 1,
-    // ),
-    // Users(
-    //   id_user: "23211TT3596@mail.tdc.edu.vn",
-    //   email: "23211TT3596@mail.tdc.edu.vn",
-    //   pass: "123456",
-    //   fullname: "Phạm Thắng",
-    //   phone: "0898415185",
-    //   url_avt: "assets/images/avatar.png",
-    //   role: 0,
-    //   faculty_id: 1,
-    // ),
-    // Users(
-    //   id_user: "23211TT3595@mail.tdc.edu.vn",
-    //   email: "23211TT3595@mail.tdc.edu.vn",
-    //   pass: "123456",
-    //   fullname: "Lê Van Tủn",
-    //   phone: "0898415185",
-    //   url_avt: "assets/images/avatar.png",
-    //   role: 1,
-    //   faculty_id: 1,
-    // ),
-    // Users(
-    //   id_user: "23211TT3595@mail.tdc.edu.vn",
-    //   email: "23211TT3595@mail.tdc.edu.vn",
-    //   pass: "123456",
-    //   fullname: "Lê Van Tủn",
-    //   phone: "0898415185",
-    //   url_avt: "assets/images/avatar.png",
-    //   role: 1,
-    //   faculty_id: 1,
-    // ),
-    // Users(
-    //   id_user: "23211TT3595@mail.tdc.edu.vn",
-    //   email: "23211TT3595@mail.tdc.edu.vn",
-    //   pass: "123456",
-    //   fullname: "Lê Van Tủn",
-    //   phone: "0898415185",
-    //   url_avt: "assets/images/avatar.png",
-    //   role: 1,
-    //   faculty_id: 1,
-    // ),
-
-    // Users(
-    //   id_user: "23211TT3595@mail.tdc.edu.vn",
-    //   email: "23211TT3595@mail.tdc.edu.vn",
-    //   pass: "123456",
-    //   fullname: "Lê Van Tủn",
-    //   phone: "0898415185",
-    //   url_avt: "assets/images/avatar.png",
-    //   role: 1,
-    //   faculty_id: 1,
-    // ),
-    // Users(
-    //   id_user: "23211TT3595@mail.tdc.edu.vn",
-    //   email: "23211TT3595@mail.tdc.edu.vn",
-    //   pass: "123456",
-    //   fullname: "Lê Van Tủn",
-    //   phone: "0898415185",
-    //   url_avt: "assets/images/avatar.png",
-    //   role: 1,
-    //   faculty_id: 1,
-    // ),
-    // Users(
-    //   id_user: "23211TT3595@mail.tdc.edu.vn",
-    //   email: "23211TT3595@mail.tdc.edu.vn",
-    //   pass: "123456",
-    //   fullname: "Lê Van Tủn",
-    //   phone: "0898415185",
-    //   url_avt: "assets/images/avatar.png",
-    //   role: 1,
-    //   faculty_id: 1,
-    // ),
-    // Users(
-    //   id_user: "23211TT3595@mail.tdc.edu.vn",
-    //   email: "23211TT3595@mail.tdc.edu.vn",
-    //   pass: "123456",
-    //   fullname: "Lê Van Tủn",
-    //   phone: "0898415185",
-    //   url_avt: "assets/images/avatar.png",
-    //   role: 1,
-    //   faculty_id: 1,
-    // ),
-    // Users(
-    //   id_user: "23211TT3595@mail.tdc.edu.vn",
-    //   email: "23211TT3595@mail.tdc.edu.vn",
-    //   pass: "123456",
-    //   fullname: "Lê Van Tủn",
-    //   phone: "0898415185",
-    //   url_avt: "assets/images/avatar.png",
-    //   role: 1,
-    //   faculty_id: 1,
-    // ),
-    // Users(
-    //   id_user: "23211KS3595@mail.tdc.edu.vn",
-    //   email: "23211TT3595@mail.tdc.edu.vn",
-    //   pass: "123456",
-    //   fullname: "Lê Van Tủn",
-    //   phone: "0898415185",
-    //   url_avt: "assets/images/avatar.png",
-    //   role: 1,
-    //   faculty_id: 1,
-    // ),
-    // Users(
-    //   id_user: "23211QT3595@mail.tdc.edu.vn",
-    //   email: "23211TT3595@mail.tdc.edu.vn",
-    //   pass: "123456",
-    //   fullname: "Lê Van Tủn",
-    //   phone: "0898415185",
-    //   url_avt: "assets/images/avatar.png",
-    //   role: 1,
-    //   faculty_id: 1,
-    // ),
-    // Users(
-    //   id_user: "23211PC3595@mail.tdc.edu.vn",
-    //   email: "23211TT3595@mail.tdc.edu.vn",
-    //   pass: "123456",
-    //   fullname: "Lê Van Tủn",
-    //   phone: "0898415185",
-    //   url_avt: "assets/images/avatar.png",
-    //   role: 1,
-    //   faculty_id: 1,
-    // ),
-    // Users(
-    //   id_user: "23211KT3595@mail.tdc.edu.vn",
-    //   email: "23211TT3595@mail.tdc.edu.vn",
-    //   pass: "123456",
-    //   fullname: "Anh Thu",
-    //   phone: "0898415185",
-    //   url_avt: "assets/images/avatar.png",
-    //   role: 1,
-    //   faculty_id: 1,
-    // ),
-  ];
+  List<Users> ListMember = [];
 
   @override
   void initState() {
@@ -242,7 +84,7 @@ class _ScreenNotify extends State<ScreenNotify> {
   Widget complate_create() {
     return InkWell(
        onTap: () async{
-          if(nameGroup.text.trim().isEmpty||descriptionGroup.text.trim().isEmpty||avt_group==null||listSelected_khoa.length<=0||listSelected_uyquyen.length<=0){
+          if(nameGroup.text.trim().isEmpty||descriptionGroup.text.trim().isEmpty||listSelected_khoa.length<=0||listSelected_uyquyen.length<=0){
             ScaffoldMessenger.of(context).showSnackBar(
              const SnackBar(
               content: Text('Vui lòng đưa đầy đủ thông tin!'),
@@ -251,6 +93,25 @@ class _ScreenNotify extends State<ScreenNotify> {
           );
           }
           else{
+            final String id = const Uuid().v4();
+            final String title = nameGroup.text;
+            final String content = descriptionGroup.text;
+            final int type_notify = 1;
+            Map<String,dynamic> selectedReps = {};
+           if(listSelected_uyquyen.length>0){
+              for(var item in listSelected_uyquyen){
+              selectedReps[item.id_user] = item.fullname;
+            }
+           } 
+           if(listSelected_khoa.length>0){
+            for(var item in listSelected_khoa){
+              selectedReps[item.id] = item.name_faculty;
+            }
+           }
+
+            
+            Notifycation notifyAdd = Notifycation(title, id: id, type_notify: type_notify, content: content, user_recipient_ID: selectedReps);
+            notifyService.createNotifycation(notifyAdd);
             Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(
              const SnackBar(
@@ -291,6 +152,7 @@ class _ScreenNotify extends State<ScreenNotify> {
             context,
             MaterialPageRoute(
               builder: (context) => Screen_uyquyen(
+                throwss: 2,
                 GetList: (value) {
                   setState(() {
                     listSelected_uyquyen = value;
