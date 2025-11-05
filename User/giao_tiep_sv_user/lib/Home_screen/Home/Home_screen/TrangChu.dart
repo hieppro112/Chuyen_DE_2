@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../FireBase_Service/get_posts.dart';
 import 'port_card.dart';
 import 'dang_bai_dialog.dart';
 import 'left_panel.dart';
 import 'group_info_dialog.dart';
 import 'search_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TrangChu extends StatefulWidget {
   const TrangChu({super.key});
@@ -14,8 +14,6 @@ class TrangChu extends StatefulWidget {
 }
 
 class _TrangChuState extends State<TrangChu> {
-  final GetPosts _postService = GetPosts();
-
   bool _isOpen = false; // trạng thái mở menu trái
   String currentGroup = "Tất cả";
   List<Map<String, dynamic>> allPosts = [];
@@ -30,15 +28,39 @@ class _TrangChuState extends State<TrangChu> {
   }
 
   Future<void> _fetchPosts() async {
-    final fetchedPosts = await _postService.fetchPosts();
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('Post')
+          .orderBy('date_created', descending: true)
+          .get();
 
-    setState(() {
-      allPosts = fetchedPosts;
-      _filterPosts();
-    });
+      allPosts = snapshot.docs.map((doc) {
+        final data = doc.data();
+
+        return {
+          "id": doc.id,
+          "user": data["user_id"] ?? "Ẩn danh",
+          "group": data["group_id"] ?? "Không rõ",
+          "title": data["content"] ?? "Không có nội dung",
+          "date": (data["date_created"] != null)
+              ? data["date_created"].toDate().toString()
+              : null,
+          "image": data["file_url"],
+          "likes": 0,
+          "isLiked": false,
+          "comments": [],
+        };
+      }).toList();
+
+      setState(() {
+        _filterPosts();
+      });
+    } catch (e) {
+      print("🔥 Lỗi tải bài viết: $e");
+    }
   }
 
-  //  HÀM LỌC BÀI VIẾT DỰA TRÊN currentGroup
+  //  HÀM LỌC BÀI VIẾT DỰA TRÊN currentGroup
   void _filterPosts() {
     if (currentGroup == "Tất cả") {
       filteredPosts = allPosts;
@@ -65,6 +87,70 @@ class _TrangChuState extends State<TrangChu> {
   @override
   void initState() {
     super.initState();
+
+    // //  Tạo dữ liệu mẫu
+    // allPosts = [
+    //   {
+    //     "user": "Cao Quang Khánh",
+    //     "group": "CNTT",
+    //     "title": "Em xin tài liệu tiếng anh như này",
+    //     "images": [
+    //       "https://picsum.photos/seed/1a/400/200",
+    //       "https://picsum.photos/seed/1b/400/200",
+    //       "https://picsum.photos/seed/1c/400/200",
+    //     ],
+    //     "likes": 3,
+    //     "isLiked": false,
+    //     "comments": [
+    //       {
+    //         "name": "Nguyễn Văn A",
+    //         "text": "Bạn thử tìm trên trang web của trường xem sao.",
+    //       },
+    //       {
+    //         "name": "Lê Thị B",
+    //         "text": "Mình có một số tài liệu, bạn gửi email cho mình nhé.",
+    //       },
+    //     ],
+    //   },
+    //   {
+    //     "user": "Trần Văn Dũng",
+    //     "group": "DEV - vui vẻ",
+    //     "title": "Chia sẻ kinh nghiệm làm việc với Flutter",
+    //     "images": [
+    //       "https://picsum.photos/seed/2a/400/200",
+    //       "https://picsum.photos/seed/2b/400/200",
+    //     ],
+    //     "likes": 5,
+    //     "isLiked": false,
+    //     "comments": [
+    //       {"name": "Phan Thị E", "text": "Cảm ơn bài viết hữu ích!"},
+    //     ],
+    //   },
+    //   {
+    //     "user": "Phạm Văn F",
+    //     "group": "CNTT",
+    //     "title": "Cần người làm chung project cuối kì",
+    //     "images": ["https://picsum.photos/seed/3a/400/200"],
+    //     "likes": 2,
+    //     "isLiked": false,
+    //     "comments": [],
+    //   },
+    //   {
+    //     "user": "Lý Văn G",
+    //     "group": "Thiết kế đồ họa",
+    //     "title": "Mẫu thiết kế UI mới nhất 2024",
+    //     "images": [
+    //       "https://picsum.photos/seed/4a/400/200",
+    //       "https://picsum.photos/seed/4b/400/200",
+    //       "https://picsum.photos/seed/4c/400/200",
+    //       "https://picsum.photos/seed/4d/400/200",
+    //     ],
+    //     "likes": 1,
+    //     "isLiked": false,
+    //     "comments": [],
+    //   },
+    // ];
+
     _filterPosts();
     _fetchPosts();
   }
@@ -80,6 +166,7 @@ class _TrangChuState extends State<TrangChu> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  //Thanh trên cùng
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Row(
@@ -203,7 +290,7 @@ class _TrangChuState extends State<TrangChu> {
                           ],
                         ),
 
-                        //  Chỉ hiện nút info nếu KHÔNG phải "Tất cả"
+                        //  Chỉ hiện nút info nếu KHÔNG phải "Tất cả"
                         if (currentGroup != "Tất cả")
                           IconButton(
                             icon: const Icon(
@@ -283,13 +370,12 @@ class _TrangChuState extends State<TrangChu> {
     );
   }
 
-  // ... (Các hàm _openDangBaiDialog và _showCommentSheet không thay đổi)
   // Mở dialog đăng bài
   void _openDangBaiDialog() async {
     final newPost = await showDialog<Map<String, dynamic>>(
       context: context,
       builder: (_) => DangBaiDialog(
-        availableGroups: const [
+        availableGroups: [
           "Tất cả",
           "Mobile - (Flutter, Kotlin)",
           "Thiết kế đồ họa",
