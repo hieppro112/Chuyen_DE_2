@@ -1,9 +1,11 @@
+import 'package:giao_tiep_sv_admin/Data/faculty.dart';
+
 enum PostStatus { pending, approved, rejected }
 
 class Post {
   final String id;
   final String author;
-  final String group;
+  late final Faculty faculty;
   final String title;
   final String content;
   final String? imageUrl; // Thêm trường ảnh
@@ -13,7 +15,7 @@ class Post {
   Post({
     required this.id,
     required this.author,
-    required this.group,
+    required this.faculty,
     required this.title,
     required this.content,
     this.imageUrl, // Ảnh có thể null
@@ -25,7 +27,7 @@ class Post {
     return {
       'id': id,
       'author': author,
-      'group': group,
+      'faculty': faculty,
       'title': title,
       'content': content,
       'imageUrl': imageUrl, // Thêm imageUrl
@@ -39,7 +41,7 @@ class Post {
     return Post(
       id: map['id'],
       author: map['author'],
-      group: map['group'],
+      faculty: map['faculty'],
       title: map['title'],
       content: map['content'],
       imageUrl: map['imageUrl'], // Thêm imageUrl
@@ -63,6 +65,7 @@ class Post {
   Post copyWith({
     String? id,
     String? author,
+    Faculty? faculty,
     String? group,
     String? title,
     String? content,
@@ -73,7 +76,7 @@ class Post {
     return Post(
       id: id ?? this.id,
       author: author ?? this.author,
-      group: group ?? this.group,
+      faculty: faculty ?? this.faculty,
       title: title ?? this.title,
       content: content ?? this.content,
       imageUrl: imageUrl ?? this.imageUrl, // Thêm imageUrl
@@ -84,7 +87,7 @@ class Post {
 
   @override
   String toString() {
-    return 'Post(id: $id, author: $author, group: $group, title: $title, imageUrl: $imageUrl, status: $status)';
+    return 'Post(id: $id, author: $author, group: $faculty, title: $title, imageUrl: $imageUrl, status: $status)';
   }
 
   @override
@@ -94,7 +97,7 @@ class Post {
     return other is Post &&
         other.id == id &&
         other.author == author &&
-        other.group == group &&
+        other.faculty == faculty &&
         other.title == title &&
         other.content == content &&
         other.imageUrl == imageUrl && // Thêm imageUrl
@@ -106,7 +109,7 @@ class Post {
   int get hashCode {
     return id.hashCode ^
         author.hashCode ^
-        group.hashCode ^
+        faculty.hashCode ^
         title.hashCode ^
         content.hashCode ^
         imageUrl.hashCode ^ // Thêm imageUrl

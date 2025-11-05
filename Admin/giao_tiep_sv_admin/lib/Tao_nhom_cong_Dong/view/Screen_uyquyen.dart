@@ -2,11 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:giao_tiep_sv_admin/Data/Users.dart';
 import 'package:giao_tiep_sv_admin/Data/faculty.dart';
+import 'package:giao_tiep_sv_admin/FirebaseFirestore/UserFirebase.dart.dart';
 import 'package:giao_tiep_sv_admin/Tao_nhom_cong_Dong/widget/customMemberUyquyen.dart';
 import 'package:giao_tiep_sv_admin/widget/customSearch.dart';
 
 class Screen_uyquyen extends StatefulWidget {
-  final ValueChanged<List<String>>? GetList;
+  final ValueChanged<List<Users>>? GetList;
 
   const Screen_uyquyen({super.key, this.GetList});
 
@@ -17,24 +18,13 @@ class Screen_uyquyen extends StatefulWidget {
 class _Screen_uyquyenState extends State<Screen_uyquyen> {
   List<Users> listUyQuyen = [];
   bool isLoading = false;
+  final firestoreService = FirestoreServiceUser();
   String selectedKhoa = "all";
-  List<String> listUyQuyen_out = [];
+  List<Users> listUyQuyen_out = [];
   List<Users> Listsearch = [];
+  Map<String, bool> selectedMember = {};
 
-  List<Faculty> dsKhoa = [
-    // Faculty(id: "TT", name_faculty: "Công nghệ thông tin"),
-    // Faculty(id: "KT", name_faculty: "Kế toán"),
-    // Faculty(id: "DT", name_faculty: "Điện"),
-    // Faculty(id: "OT", name_faculty: "Ô tô"),
-    // Faculty(id: "CK", name_faculty: "Cơ Khí"),
-    // Faculty(id: "DL", name_faculty: "Du lich"),
-    // Faculty(id: "DP", name_faculty: "Đông phương học"),
-    // Faculty(id: "PC", name_faculty: "Bartender"),
-    // Faculty(id: "TD", name_faculty: "Tự động hóa"),
-    // Faculty(id: "KS", name_faculty: "khách sạn"),
-    // Faculty(id: "NA", name_faculty: "Nấu ăn"),
-    // Faculty(id: "QT", name_faculty: "Quản trị kinh doanh"),
-  ];
+  List<Faculty> dsKhoa = [];
 
   @override
   void initState() {
@@ -73,7 +63,17 @@ class _Screen_uyquyenState extends State<Screen_uyquyen> {
       body: Container(
         child: Column(
           children: [
-            Customsearch(),
+            Customsearch(
+              onTap: (value) {
+                setState(() {
+                  Listsearch = listUyQuyen.where((element) {
+                    return element.fullname.toLowerCase().contains(
+                      value.toLowerCase(),
+                    );
+                  }).toList();
+                });
+              },
+            ),
             SizedBox(height: 8),
             search(),
             SizedBox(height: 8),
@@ -171,33 +171,36 @@ class _Screen_uyquyenState extends State<Screen_uyquyen> {
 
   //hiển thị toàn bộ người dùng
   Widget createListmember() {
-    return (isLoading==false)
-    ?ListView.builder(
-      shrinkWrap: true,
-      //physics: NeverScrollableScrollPhysics(),
-      itemCount: Listsearch.length,
-      itemBuilder: (context, index) {
-        var value = Listsearch[index];
-        return CustommemberUyQuyen(
-          id: value.id_user,
-          url: value.url_avt,
-          fullname: value.fullname,
-          ontap: (value) {
-            //print("key = ${value.keys}, value =${value.values} ");
-            // print("hiepaaa : $value");
-            if (value.values.first == true) {
-              listUyQuyen_out += [value.keys.toString()];
-            } else {
-              listUyQuyen_out.removeWhere(
-                (element) => element.contains(value.keys.toString()),
+    return (isLoading == false)
+        ? ListView.builder(
+            shrinkWrap: true,
+            //physics: NeverScrollableScrollPhysics(),
+            itemCount: Listsearch.length,
+            itemBuilder: (context, index) {
+              var valueItem = Listsearch[index];
+              bool selectMember = selectedMember[valueItem.id_user] ?? false;
+              return CustommemberUyQuyen(
+                selectedMember: selectMember,
+                user: valueItem,
+                ontap: (value) {
+                  print("tap email: ${valueItem.email}");
+                  setState(() {
+                    selectedMember[valueItem.id_user] = value ?? false;
+                    if (value == true) {
+                      listUyQuyen_out.add(valueItem);
+                    } else {
+                      listUyQuyen_out.removeWhere((element) {
+                        return element.id_user.contains(valueItem.id_user);
+                      });
+                    }
+                  });
+
+                  print("ds uy quyen = ${listUyQuyen_out.length}");
+                },
               );
-            }
-          },
-        );
-      },
-    ):
-    Center(child: CircularProgressIndicator(),);
-  
+            },
+          )
+        : Center(child: CircularProgressIndicator());
   }
 
   //lấy danh sách khoa vào
@@ -218,26 +221,59 @@ class _Screen_uyquyenState extends State<Screen_uyquyen> {
 
   //lay dach sach nguoi dung vao list uy quyen
   Future<void> featchMembers() async {
-    isLoading =true;
-    final snap = await FirebaseFirestore.instance.collection("Users").get();
-    
-    final data = snap.docs.map((e) {
-      final mapData = e.data();
-      return Users(
-        id_user: mapData["email"] ?? "",
-        email: mapData["mail"] ?? "",
-        pass: mapData["pass"] ?? "",
-        fullname: mapData["fullname"] ?? "",
-        url_avt: mapData["avt"] ?? "",
-        role: mapData["role"] ?? 0,
-        faculty_id: mapData["faculty_id"] ?? "",
-      );
-    }).toList();
+    isLoading = true;
+    // final snap = await FirebaseFirestore.instance.collection("Users").get();
 
-    setState(() {
-      listUyQuyen = data;
-      Listsearch =data;
-      isLoading =false;
-    });
+    // final data = snap.docs.map((e) {
+    //   final mapData = e.data();
+    //   return Users(
+    //     id_user: e.id,
+    //     email: mapData["email"] ?? "",
+    //     pass: mapData["pass"] ?? "",
+    //     fullname: mapData["fullname"] ?? "",
+    //     url_avt: mapData["avt"] ?? "",
+    //     role: mapData["role"] ?? 0,
+    //     faculty_id: mapData["faculty_id"] ?? "",
+    //   );
+    // }).toList();
+
+    // setState(() {
+    //   listUyQuyen = data;
+    //   Listsearch =data;
+    //   isLoading =false;
+    // });
+
+    try {
+      // FirebaseFirestore.instance.collection("Users").snapshots().listen((
+      //   event,
+      // ) {
+      //   final data = event.docs.map((e) {
+      //     final mapData = e.data();
+      //     return Users(
+      //       id_user: e.id,
+      //       email: mapData["email"] ?? "",
+      //       pass: mapData["pass"] ?? "",
+      //       fullname: mapData["fullname"] ?? "",
+      //       url_avt: mapData["avt"] ?? "",
+      //       role: mapData["role"] ?? 0,
+      //       faculty_id: mapData["faculty_id"] ?? "",
+      //     );
+      //   }).toList();
+
+      firestoreService.streamBuilder().listen((data) {
+        
+        setState(() {
+          listUyQuyen = data;
+          Listsearch = data;
+          isLoading = false;
+        });
+      },);
+
+      
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => isLoading = false);
+      debugPrint(" Lỗi khi load Faculty: $e");
+    }
   }
 }
